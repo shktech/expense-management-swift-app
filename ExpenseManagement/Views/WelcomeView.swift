@@ -47,7 +47,7 @@ struct WelcomeView: View {
                     .background(Color.blue)
                     .cornerRadius(14)
             }
-            NavigationLink(destination: SignInView()) {
+            NavigationLink(destination: SignUpView()) {
                 Text("Register")
                     .font(.system(size: 17).weight(.semibold))
                     .foregroundColor(.black)
