@@ -14,10 +14,10 @@ struct PFULogo: View {
                 Spacer()
                 Image("pfuLogo")
                     .padding(.top, 60)
-                    .padding(.trailing, 40)
+                    .padding(.trailing, 20)
             }
             Spacer()
-        }
+        }.ignoresSafeArea()
     }
 }
 

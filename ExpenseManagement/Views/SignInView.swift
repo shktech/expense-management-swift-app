@@ -15,6 +15,8 @@ struct SignInView: View {
     
     @State private var keyboardHeight: CGFloat = 0
     
+    @State var signedIn: Int = -1
+    
     var body: some View {
         ZStack {
             BackgroundImage()
@@ -26,6 +28,11 @@ struct SignInView: View {
     var content: some View {
         VStack(spacing: 50) {
             signInText
+            if signedIn == 0 {
+                Text("Incorrect email or password")
+                    .foregroundStyle(.red)
+                    .font(.system(size: 14).weight(.semibold))
+            }
             fields
             bottomContent
         }.padding()
@@ -116,6 +123,7 @@ struct SignInView: View {
         VStack {
             Button(action: {
                 // Sign In
+                self.signedIn = dao.authentication(email: emailField, password: passwordField)
             }, label: {
                 Text("Sign In")
                     .font(.system(size: 17).weight(.semibold))
