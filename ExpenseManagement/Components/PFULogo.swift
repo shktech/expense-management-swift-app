@@ -13,7 +13,7 @@ struct PFULogo: View {
             HStack {
                 Spacer()
                 Image("pfuLogo")
-                    .padding(.top, 60)
+                    .padding(.top, UIScreen.main.bounds.height / 10)
                     .padding(.trailing, 20)
             }
             Spacer()

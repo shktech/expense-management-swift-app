@@ -16,7 +16,7 @@ struct TabViewContainer: View {
                     Text("Home")
                 }
             
-            UserView()
+            UserView(user: dao.user)
                 .tabItem {
                     Image(systemName: "person.circle.fill")
                     Text("User")

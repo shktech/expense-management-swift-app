@@ -17,5 +17,5 @@ struct ReportsDetailView: View {
 }
 
 #Preview {
-    ReportsDetailView(report: Reports(name: "", type: .Hotel, date: Date(), purpose: "", value: 0, status: false))
+    ReportsDetailView(report: Reports(name: "", date: Date(), purpose: "", value: 0, status: false))
 }

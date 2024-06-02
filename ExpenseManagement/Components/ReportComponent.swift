@@ -51,5 +51,5 @@ struct ReportComponent: View {
 }
 
 #Preview {
-    ReportComponent(report: Reports(name: "Exp 1019", type: .Hotel, date: Date(), purpose: "LA Conference", value: 120.89, status: false))
+    ReportComponent(report: Reports(name: "Exp 1019", date: Date(), purpose: "LA Conference", value: 120.89, status: false))
 }

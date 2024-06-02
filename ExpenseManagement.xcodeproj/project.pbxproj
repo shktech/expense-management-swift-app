@@ -25,6 +25,8 @@
 		0FCD00D72C0A403900A49C62 /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00D62C0A403900A49C62 /* UserView.swift */; };
 		0FCD00D92C0A51AB00A49C62 /* ReportComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00D82C0A51AB00A49C62 /* ReportComponent.swift */; };
 		0FCD00DB2C0A53E900A49C62 /* ReportsDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00DA2C0A53E900A49C62 /* ReportsDetailView.swift */; };
+		0FCD00DD2C0BE28200A49C62 /* ManagePaymentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00DC2C0BE28200A49C62 /* ManagePaymentView.swift */; };
+		0FCD00DF2C0CD5A800A49C62 /* NewCreditCardForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00DE2C0CD5A800A49C62 /* NewCreditCardForm.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +48,8 @@
 		0FCD00D62C0A403900A49C62 /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		0FCD00D82C0A51AB00A49C62 /* ReportComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportComponent.swift; sourceTree = "<group>"; };
 		0FCD00DA2C0A53E900A49C62 /* ReportsDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportsDetailView.swift; sourceTree = "<group>"; };
+		0FCD00DC2C0BE28200A49C62 /* ManagePaymentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagePaymentView.swift; sourceTree = "<group>"; };
+		0FCD00DE2C0CD5A800A49C62 /* NewCreditCardForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCreditCardForm.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +114,8 @@
 				0FCD00D42C0A3FE100A49C62 /* TabViewContainer.swift */,
 				0FCD00D62C0A403900A49C62 /* UserView.swift */,
 				0FCD00DA2C0A53E900A49C62 /* ReportsDetailView.swift */,
+				0FCD00DC2C0BE28200A49C62 /* ManagePaymentView.swift */,
+				0FCD00DE2C0CD5A800A49C62 /* NewCreditCardForm.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -230,6 +236,8 @@
 				0FCD00A92C08CAAF00A49C62 /* ContentView.swift in Sources */,
 				0FCD00BA2C08D92000A49C62 /* SignUpView.swift in Sources */,
 				0FCD00B62C08D90900A49C62 /* WelcomeView.swift in Sources */,
+				0FCD00DF2C0CD5A800A49C62 /* NewCreditCardForm.swift in Sources */,
+				0FCD00DD2C0BE28200A49C62 /* ManagePaymentView.swift in Sources */,
 				0FCD00DB2C0A53E900A49C62 /* ReportsDetailView.swift in Sources */,
 				0FCD00BF2C08E69300A49C62 /* PFULogo.swift in Sources */,
 				0FCD00D92C0A51AB00A49C62 /* ReportComponent.swift in Sources */,

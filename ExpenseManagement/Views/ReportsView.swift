@@ -84,7 +84,7 @@ struct ReportsView: View {
                     .font(.system(size: 17).weight(.semibold))
             }
         })
-        .frame(width: .infinity, height: 45)
+        .frame(height: 45)
     }
     
     var datePickerContainer: some View {
@@ -118,10 +118,10 @@ struct ReportsView: View {
 
 
 #Preview {
-    ReportsView(user: User(name: "John Doe", email: "john.doe@example.com", password: "password123", department: "IT Department", reports: [
-        Reports(name: "Exp 1019", type: .Hotel, date: Calendar.current.date(byAdding: .day, value: -31, to: Date())!, purpose: "LA Conference", value: 120.89, status: false),
-        Reports(name: "Exp 1020", type: .Hotel, date: Date(), purpose: "LA Conference", value: 120.89, status: true),
-        Reports(name: "Exp 1021", type: .Hotel, date: Calendar.current.date(byAdding: .day, value: -15, to: Date())!, purpose: "LA Conference", value: 120.89, status: true),
-        Reports(name: "Exp 1022", type: .Hotel, date: Date(), purpose: "LA Conference", value: 120.89, status: false)
-    ]))
+    ReportsView(user: User(name: "John Doe", username: "johnDoe", email: "john.doe@example.com", password: "password123", department: "IT Department", reports: [
+        Reports(name: "Exp 1019", date: Calendar.current.date(byAdding: .day, value: -31, to: Date())!, purpose: "LA Conference", value: 120.89, status: false),
+        Reports(name: "Exp 1020", date: Date(), purpose: "LA Conference", value: 120.89, status: true),
+        Reports(name: "Exp 1021", date: Calendar.current.date(byAdding: .day, value: -15, to: Date())!, purpose: "LA Conference", value: 120.89, status: true),
+        Reports(name: "Exp 1022", date: Date(), purpose: "LA Conference", value: 120.89, status: false)
+    ], paymentMethods: []))
 }

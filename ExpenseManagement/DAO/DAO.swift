@@ -28,16 +28,16 @@ let dao = DAO.instance
     
     func addReports() {
         let reports = [
-            Reports(name: "Exp 1019", type: .Hotel, date: Calendar.current.date(byAdding: .day, value: -31, to: Date())!, purpose: "LA Conference", value: 120.89, status: false),
-            Reports(name: "Exp 1020", type: .Hotel, date: Date(), purpose: "LA Conference", value: 120.89, status: true),
-            Reports(name: "Exp 1021", type: .Hotel, date: Calendar.current.date(byAdding: .day, value: -15, to: Date())!, purpose: "LA Conference", value: 120.89, status: true),
-            Reports(name: "Exp 1022", type: .Hotel, date: Date(), purpose: "LA Conference", value: 120.89, status: false)
+            Reports(name: "Exp 1019", date: Calendar.current.date(byAdding: .day, value: -31, to: Date())!, purpose: "LA Conference", value: 120.89, status: false),
+            Reports(name: "Exp 1020", date: Date(), purpose: "LA Conference", value: 120.89, status: true),
+            Reports(name: "Exp 1021", date: Calendar.current.date(byAdding: .day, value: -15, to: Date())!, purpose: "LA Conference", value: 120.89, status: true),
+            Reports(name: "Exp 1022", date: Date(), purpose: "LA Conference", value: 120.89, status: false)
         ]
         
         for report in reports {
             user?.reports.append(report)
         }
-        print(user!.reports.count)
+        
         return
     }
 }

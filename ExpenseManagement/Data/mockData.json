@@ -2,10 +2,12 @@
   "users": [
     {
       "name": "John Doe",
+      "username": "johnDoe",
       "email": "john.doe@example.com",
       "password": "password123",
       "department": "IT Department",
-      "reports": []
+      "reports": [],
+      "paymentMethods": []
     }
   ]
 }
