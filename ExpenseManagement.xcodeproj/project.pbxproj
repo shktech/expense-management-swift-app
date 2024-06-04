@@ -34,6 +34,9 @@
 		0FFCC9832C0FA0A0003CBEC1 /* reports.json in Resources */ = {isa = PBXBuildFile; fileRef = 0FFCC9822C0FA0A0003CBEC1 /* reports.json */; };
 		0FFCC9852C0FA0A8003CBEC1 /* report_items.json in Resources */ = {isa = PBXBuildFile; fileRef = 0FFCC9842C0FA0A8003CBEC1 /* report_items.json */; };
 		0FFCC9872C0FA0B0003CBEC1 /* commons.json in Resources */ = {isa = PBXBuildFile; fileRef = 0FFCC9862C0FA0B0003CBEC1 /* commons.json */; };
+		0FFCC9892C0FD4C1003CBEC1 /* rates.json in Resources */ = {isa = PBXBuildFile; fileRef = 0FFCC9882C0FD4C1003CBEC1 /* rates.json */; };
+		0FFCC98B2C0FD4F6003CBEC1 /* citiesAmounts.json in Resources */ = {isa = PBXBuildFile; fileRef = 0FFCC98A2C0FD4F6003CBEC1 /* citiesAmounts.json */; };
+		0FFCC98D2C0FD50D003CBEC1 /* allCities.json in Resources */ = {isa = PBXBuildFile; fileRef = 0FFCC98C2C0FD50D003CBEC1 /* allCities.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,6 +67,9 @@
 		0FFCC9822C0FA0A0003CBEC1 /* reports.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reports.json; sourceTree = "<group>"; };
 		0FFCC9842C0FA0A8003CBEC1 /* report_items.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = report_items.json; sourceTree = "<group>"; };
 		0FFCC9862C0FA0B0003CBEC1 /* commons.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = commons.json; sourceTree = "<group>"; };
+		0FFCC9882C0FD4C1003CBEC1 /* rates.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rates.json; sourceTree = "<group>"; };
+		0FFCC98A2C0FD4F6003CBEC1 /* citiesAmounts.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = citiesAmounts.json; sourceTree = "<group>"; };
+		0FFCC98C2C0FD50D003CBEC1 /* allCities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = allCities.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +169,9 @@
 				0FFCC9822C0FA0A0003CBEC1 /* reports.json */,
 				0FFCC9842C0FA0A8003CBEC1 /* report_items.json */,
 				0FFCC9862C0FA0B0003CBEC1 /* commons.json */,
+				0FFCC9882C0FD4C1003CBEC1 /* rates.json */,
+				0FFCC98A2C0FD4F6003CBEC1 /* citiesAmounts.json */,
+				0FFCC98C2C0FD50D003CBEC1 /* allCities.json */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -241,10 +250,13 @@
 			files = (
 				0FFCC9872C0FA0B0003CBEC1 /* commons.json in Resources */,
 				0FCD00D02C0A362B00A49C62 /* mockData.json in Resources */,
+				0FFCC98B2C0FD4F6003CBEC1 /* citiesAmounts.json in Resources */,
 				0FCD00AE2C08CAB000A49C62 /* Preview Assets.xcassets in Resources */,
 				0FFCC9852C0FA0A8003CBEC1 /* report_items.json in Resources */,
 				0FCD00AB2C08CAB000A49C62 /* Assets.xcassets in Resources */,
 				0FFCC9832C0FA0A0003CBEC1 /* reports.json in Resources */,
+				0FFCC98D2C0FD50D003CBEC1 /* allCities.json in Resources */,
+				0FFCC9892C0FD4C1003CBEC1 /* rates.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

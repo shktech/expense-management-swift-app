@@ -25,25 +25,6 @@ struct CreditCard: Codable, Identifiable {
     var expirationDate: Date
 }
 
-//struct Reports: Codable, Identifiable {
-//    var id: UUID = UUID()
-//    var name: String
-//    var date: Date
-//    var purpose: String
-//    var status: Bool
-//    var expenseItems: [ExpenseItem]
-//    
-//    var value: Double {
-//        var value: Double = 0
-//        for expenseItem in expenseItems {
-//            value += expenseItem.value
-//        }
-//        return value
-//    }
-//}
-
-
-// MARK: - WelcomeElementstruct Reports: Codable {
 struct Reports: Codable {
     let id: Int
     let user: String
@@ -86,16 +67,6 @@ struct Reports: Codable {
 struct AllReports: Codable {
     let reports: [Reports]
 }
-
-//struct ExpenseItem: Codable, Identifiable {
-//    var id = UUID()
-//    var type: Types
-//    var date: Date
-//    var value: Double
-//    var purpose: String
-//    var preferredPaymentMethod: CreditCard
-//    var currency: String
-//}
 
 struct ExpenseItem: Codable {
     let id, report: Int
@@ -163,3 +134,9 @@ enum Types: Codable {
 struct AllUsers: Codable {
     var users: [User]
 }
+
+struct City: Codable {
+    var id: Int
+    var value: String
+}
+

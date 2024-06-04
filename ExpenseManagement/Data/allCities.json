@@ -1,0 +1,346 @@
+[
+    {
+        "id": 1,
+        "value": "Alberta"
+    },
+    {
+        "id": 2,
+        "value": "Barrie"
+    },
+    {
+        "id": 3,
+        "value": "Bellevue"
+    },
+    {
+        "id": 4,
+        "value": "Boston"
+    },
+    {
+        "id": 5,
+        "value": "British Columbia"
+    },
+    {
+        "id": 6,
+        "value": "CAN-Other Cities"
+    },
+    {
+        "id": 7,
+        "value": "CAN-Toronto, Vancouver, and Calgary"
+    },
+    {
+        "id": 8,
+        "value": "CANADA-Calgary"
+    },
+    {
+        "id": 9,
+        "value": "CANADA-Other"
+    },
+    {
+        "id": 10,
+        "value": "CANADA-Toronto"
+    },
+    {
+        "id": 11,
+        "value": "CANADA-Vancouver"
+    },
+    {
+        "id": 12,
+        "value": "Calgary"
+    },
+    {
+        "id": 13,
+        "value": "Canada"
+    },
+    {
+        "id": 14,
+        "value": "Chandler"
+    },
+    {
+        "id": 15,
+        "value": "Chicago"
+    },
+    {
+        "id": 16,
+        "value": "Chicoutimi-Jonquiere"
+    },
+    {
+        "id": 17,
+        "value": "Edmonton"
+    },
+    {
+        "id": 18,
+        "value": "Fredericton"
+    },
+    {
+        "id": 19,
+        "value": "Gatineau"
+    },
+    {
+        "id": 20,
+        "value": "Guelph"
+    },
+    {
+        "id": 21,
+        "value": "Halifax"
+    },
+    {
+        "id": 22,
+        "value": "JAPAN-Other"
+    },
+    {
+        "id": 23,
+        "value": "JAPAN-Tokyo"
+    },
+    {
+        "id": 24,
+        "value": "JAPAN-Yokohama"
+    },
+    {
+        "id": 25,
+        "value": "Japan-Other Cities"
+    },
+    {
+        "id": 26,
+        "value": "Japan-Yokohama, Tokyo"
+    },
+    {
+        "id": 27,
+        "value": "Kanata"
+    },
+    {
+        "id": 28,
+        "value": "Kingston"
+    },
+    {
+        "id": 29,
+        "value": "Lethbridge"
+    },
+    {
+        "id": 30,
+        "value": "London"
+    },
+    {
+        "id": 31,
+        "value": "Los Angeles"
+    },
+    {
+        "id": 32,
+        "value": "Manitoba"
+    },
+    {
+        "id": 33,
+        "value": "Moncton"
+    },
+    {
+        "id": 34,
+        "value": "Nanaimo"
+    },
+    {
+        "id": 35,
+        "value": "New York City"
+    },
+    {
+        "id": 36,
+        "value": "Ontario"
+    },
+    {
+        "id": 37,
+        "value": "Other"
+    },
+    {
+        "id": 38,
+        "value": "Ottawa"
+    },
+    {
+        "id": 39,
+        "value": "Peterborough"
+    },
+    {
+        "id": 40,
+        "value": "Philadelphia"
+    },
+    {
+        "id": 41,
+        "value": "Quebec City"
+    },
+    {
+        "id": 42,
+        "value": "Red Deer"
+    },
+    {
+        "id": 43,
+        "value": "Regina"
+    },
+    {
+        "id": 44,
+        "value": "San Francisco"
+    },
+    {
+        "id": 45,
+        "value": "San Jose"
+    },
+    {
+        "id": 46,
+        "value": "Santa Clara"
+    },
+    {
+        "id": 47,
+        "value": "Saskatoon"
+    },
+    {
+        "id": 48,
+        "value": "Scottsdale"
+    },
+    {
+        "id": 49,
+        "value": "Seattle"
+    },
+    {
+        "id": 50,
+        "value": "Sherbrooke"
+    },
+    {
+        "id": 51,
+        "value": "St. Catharines-Niagara Falls"
+    },
+    {
+        "id": 52,
+        "value": "St. John's"
+    },
+    {
+        "id": 53,
+        "value": "Sudbury"
+    },
+    {
+        "id": 54,
+        "value": "Sunnyvale"
+    },
+    {
+        "id": 55,
+        "value": "Tokyo"
+    },
+    {
+        "id": 56,
+        "value": "Toronto"
+    },
+    {
+        "id": 57,
+        "value": "Trois-Rivieres"
+    },
+    {
+        "id": 58,
+        "value": "USA-Bellevue"
+    },
+    {
+        "id": 59,
+        "value": "USA-Bellevue/Seattle, WA"
+    },
+    {
+        "id": 60,
+        "value": "USA-Boston"
+    },
+    {
+        "id": 61,
+        "value": "USA-Boston, MA"
+    },
+    {
+        "id": 62,
+        "value": "USA-Chicago"
+    },
+    {
+        "id": 63,
+        "value": "USA-Chicago, IL"
+    },
+    {
+        "id": 64,
+        "value": "USA-El Segundo"
+    },
+    {
+        "id": 65,
+        "value": "USA-El Segundo/Los Angeles/Irvine, CA"
+    },
+    {
+        "id": 66,
+        "value": "USA-Irvine"
+    },
+    {
+        "id": 67,
+        "value": "USA-Los Angeles"
+    },
+    {
+        "id": 68,
+        "value": "USA-New York City"
+    },
+    {
+        "id": 69,
+        "value": "USA-New York City, NY"
+    },
+    {
+        "id": 70,
+        "value": "USA-Other"
+    },
+    {
+        "id": 71,
+        "value": "USA-Other Cities"
+    },
+    {
+        "id": 72,
+        "value": "USA-Philadelphia"
+    },
+    {
+        "id": 73,
+        "value": "USA-San Francisco Bay Area"
+    },
+    {
+        "id": 74,
+        "value": "USA-San Jose"
+    },
+    {
+        "id": 75,
+        "value": "USA-Santa Clara"
+    },
+    {
+        "id": 76,
+        "value": "USA-Seattle"
+    },
+    {
+        "id": 77,
+        "value": "USA-Sunnyvale"
+    },
+    {
+        "id": 78,
+        "value": "USA-Sunnyvale/San Jose/Santa Clara, San Francisco, CA and Bay Area"
+    },
+    {
+        "id": 79,
+        "value": "USA-Washington DC"
+    },
+    {
+        "id": 80,
+        "value": "USA-Washington, DC"
+    },
+    {
+        "id": 81,
+        "value": "Vancouver"
+    },
+    {
+        "id": 82,
+        "value": "Victoria"
+    },
+    {
+        "id": 83,
+        "value": "Washington DC"
+    },
+    {
+        "id": 84,
+        "value": "Windsor"
+    },
+    {
+        "id": 85,
+        "value": "Winnipeg"
+    },
+    {
+        "id": 86,
+        "value": "Yokohoma"
+    }
+]

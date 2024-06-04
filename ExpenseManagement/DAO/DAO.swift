@@ -21,6 +21,8 @@ let dao = DAO.instance
     
     var isAuthenticated: Bool = false
     
+    var cities: [City]?
+    
     func mockCall() async {
         isPassed = false
         do {
@@ -40,6 +42,12 @@ let dao = DAO.instance
                 for i in 0..<reports.count {
                     self.user?.reports[i].expenseItems = items
                 }
+                
+                let citiesJson: [City] = try! Bundle.main.decode(file: "allCities.json") as [City]
+                cities = citiesJson
+                
+                
+                
                 isPassed = true
                 print("Returned the mock data")
                 return

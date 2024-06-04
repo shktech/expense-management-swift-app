@@ -19,29 +19,6 @@ struct NewExpenseForm: View {
         .Traveling
     ]
     
-    let cities = [
-        "USA-Washington,DC",
-        "USA-New York,NY",
-        "USA-Los Angeles,CA",
-        "USA-Chicago,IL",
-        "USA-Houston,TX",
-        "USA-Phoenix,AZ",
-        "USA-Philadelphia,PA",
-        "USA-San Antonio,TX",
-        "USA-San Diego,CA",
-        "USA-Dallas,TX",
-        "CAN-Toronto,ON",
-        "CAN-Vancouver,BC",
-        "CAN-Montreal,QC",
-        "CAN-Calgary,AB",
-        "CAN-Ottawa,ON",
-        "CAN-Edmonton,AB",
-        "CAN-Winnipeg,MB",
-        "CAN-Quebec City,QC",
-        "CAN-Hamilton,ON",
-        "CAN-Kitchener,ON"
-    ]
-    
     let countries: [String] = [
         "USD",
         "CAD"
@@ -158,11 +135,11 @@ struct NewExpenseForm: View {
             Text("City")
                 .foregroundStyle(.gray)
                 Menu {
-                    ForEach(cities, id:\.self) {city in
+                    ForEach(dao.cities ?? [], id:\.self.id) {city in
                         Button(action: {
-                            selectedCity = city
+                            selectedCity = city.value
                         }, label: {
-                            Text(city)
+                            Text(city.value)
                         })
                     }
                 } label: {

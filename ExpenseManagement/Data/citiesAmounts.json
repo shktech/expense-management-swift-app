@@ -1,0 +1,93 @@
+[
+    {
+        "id": 1,
+        "country": "Japan",
+        "city": "Other Cities",
+        "amount": 16000,
+        "currency": "YEN"
+    },
+    {
+        "id": 2,
+        "country": "USA",
+        "city": "Other Cities",
+        "amount": 175,
+        "currency": "USD"
+    },
+    {
+        "id": 3,
+        "country": "USA",
+        "city": "Bellevue/Seattle, WA",
+        "amount": 185,
+        "currency": "USD"
+    },
+    {
+        "id": 4,
+        "country": "USA",
+        "city": "El Segundo/Los Angeles/Irvine, CA",
+        "amount": 200,
+        "currency": "USD"
+    },
+    {
+        "id": 5,
+        "country": "USA",
+        "city": "Philadelphia",
+        "amount": 200,
+        "currency": "USD"
+    },
+    {
+        "id": 6,
+        "country": "USA",
+        "city": "Washington, DC",
+        "amount": 210,
+        "currency": "USD"
+    },
+    {
+        "id": 7,
+        "country": "USA",
+        "city": "Chicago, IL",
+        "amount": 225,
+        "currency": "USD"
+    },
+    {
+        "id": 8,
+        "country": "CAN",
+        "city": "Other Cities",
+        "amount": 230,
+        "currency": "CAD"
+    },
+    {
+        "id": 9,
+        "country": "CAN",
+        "city": "Toronto, Vancouver, and Calgary",
+        "amount": 245,
+        "currency": "CAD"
+    },
+    {
+        "id": 10,
+        "country": "Japan",
+        "city": "Yokohama, Tokyo",
+        "amount": 0,
+        "currency": ""
+    },
+    {
+        "id": 11,
+        "country": "USA",
+        "city": "Boston, MA",
+        "amount": 265,
+        "currency": "USD"
+    },
+    {
+        "id": 12,
+        "country": "USA",
+        "city": "New York City, NY",
+        "amount": 300,
+        "currency": "USD"
+    },
+    {
+        "id": 13,
+        "country": "USA",
+        "city": "Sunnyvale/San Jose/Santa Clara, San Francisco, CA and Bay Area",
+        "amount": 309,
+        "currency": "USD"
+    }
+]
