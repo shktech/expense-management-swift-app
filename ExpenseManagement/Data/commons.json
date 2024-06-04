@@ -1,0 +1,576 @@
+[
+    {
+        "id": 1,
+        "rate": 0.67,
+        "title": "PAI"
+    },
+    {
+        "id": 2,
+        "rate": 0.70,
+        "title": "PCI"
+    }
+]
+
+
+[
+    {
+        "id": 1,
+        "country": "Japan",
+        "city": "Other Cities",
+        "amount": 16000,
+        "currency": "YEN"
+    },
+    {
+        "id": 2,
+        "country": "USA",
+        "city": "Other Cities",
+        "amount": 175,
+        "currency": "USD"
+    },
+    {
+        "id": 3,
+        "country": "USA",
+        "city": "Bellevue/Seattle, WA",
+        "amount": 185,
+        "currency": "USD"
+    },
+    {
+        "id": 4,
+        "country": "USA",
+        "city": "El Segundo/Los Angeles/Irvine, CA",
+        "amount": 200,
+        "currency": "USD"
+    },
+    {
+        "id": 5,
+        "country": "USA",
+        "city": "Philadelphia",
+        "amount": 200,
+        "currency": "USD"
+    },
+    {
+        "id": 6,
+        "country": "USA",
+        "city": "Washington, DC",
+        "amount": 210,
+        "currency": "USD"
+    },
+    {
+        "id": 7,
+        "country": "USA",
+        "city": "Chicago, IL",
+        "amount": 225,
+        "currency": "USD"
+    },
+    {
+        "id": 8,
+        "country": "CAN",
+        "city": "Other Cities",
+        "amount": 230,
+        "currency": "CAD"
+    },
+    {
+        "id": 9,
+        "country": "CAN",
+        "city": "Toronto, Vancouver, and Calgary",
+        "amount": 245,
+        "currency": "CAD"
+    },
+    {
+        "id": 10,
+        "country": "Japan",
+        "city": "Yokohama, Tokyo",
+        "amount": 0,
+        "currency": ""
+    },
+    {
+        "id": 11,
+        "country": "USA",
+        "city": "Boston, MA",
+        "amount": 265,
+        "currency": "USD"
+    },
+    {
+        "id": 12,
+        "country": "USA",
+        "city": "New York City, NY",
+        "amount": 300,
+        "currency": "USD"
+    },
+    {
+        "id": 13,
+        "country": "USA",
+        "city": "Sunnyvale/San Jose/Santa Clara, San Francisco, CA and Bay Area",
+        "amount": 309,
+        "currency": "USD"
+    }
+]
+
+
+[
+    {
+        "id": 1,
+        "value": "Alberta"
+    },
+    {
+        "id": 2,
+        "value": "Barrie"
+    },
+    {
+        "id": 3,
+        "value": "Bellevue"
+    },
+    {
+        "id": 4,
+        "value": "Boston"
+    },
+    {
+        "id": 5,
+        "value": "British Columbia"
+    },
+    {
+        "id": 6,
+        "value": "CAN-Other Cities"
+    },
+    {
+        "id": 7,
+        "value": "CAN-Toronto, Vancouver, and Calgary"
+    },
+    {
+        "id": 8,
+        "value": "CANADA-Calgary"
+    },
+    {
+        "id": 9,
+        "value": "CANADA-Other"
+    },
+    {
+        "id": 10,
+        "value": "CANADA-Toronto"
+    },
+    {
+        "id": 11,
+        "value": "CANADA-Vancouver"
+    },
+    {
+        "id": 12,
+        "value": "Calgary"
+    },
+    {
+        "id": 13,
+        "value": "Canada"
+    },
+    {
+        "id": 14,
+        "value": "Chandler"
+    },
+    {
+        "id": 15,
+        "value": "Chicago"
+    },
+    {
+        "id": 16,
+        "value": "Chicoutimi-Jonquiere"
+    },
+    {
+        "id": 17,
+        "value": "Edmonton"
+    },
+    {
+        "id": 18,
+        "value": "Fredericton"
+    },
+    {
+        "id": 19,
+        "value": "Gatineau"
+    },
+    {
+        "id": 20,
+        "value": "Guelph"
+    },
+    {
+        "id": 21,
+        "value": "Halifax"
+    },
+    {
+        "id": 22,
+        "value": "JAPAN-Other"
+    },
+    {
+        "id": 23,
+        "value": "JAPAN-Tokyo"
+    },
+    {
+        "id": 24,
+        "value": "JAPAN-Yokohama"
+    },
+    {
+        "id": 25,
+        "value": "Japan-Other Cities"
+    },
+    {
+        "id": 26,
+        "value": "Japan-Yokohama, Tokyo"
+    },
+    {
+        "id": 27,
+        "value": "Kanata"
+    },
+    {
+        "id": 28,
+        "value": "Kingston"
+    },
+    {
+        "id": 29,
+        "value": "Lethbridge"
+    },
+    {
+        "id": 30,
+        "value": "London"
+    },
+    {
+        "id": 31,
+        "value": "Los Angeles"
+    },
+    {
+        "id": 32,
+        "value": "Manitoba"
+    },
+    {
+        "id": 33,
+        "value": "Moncton"
+    },
+    {
+        "id": 34,
+        "value": "Nanaimo"
+    },
+    {
+        "id": 35,
+        "value": "New York City"
+    },
+    {
+        "id": 36,
+        "value": "Ontario"
+    },
+    {
+        "id": 37,
+        "value": "Other"
+    },
+    {
+        "id": 38,
+        "value": "Ottawa"
+    },
+    {
+        "id": 39,
+        "value": "Peterborough"
+    },
+    {
+        "id": 40,
+        "value": "Philadelphia"
+    },
+    {
+        "id": 41,
+        "value": "Quebec City"
+    },
+    {
+        "id": 42,
+        "value": "Red Deer"
+    },
+    {
+        "id": 43,
+        "value": "Regina"
+    },
+    {
+        "id": 44,
+        "value": "San Francisco"
+    },
+    {
+        "id": 45,
+        "value": "San Jose"
+    },
+    {
+        "id": 46,
+        "value": "Santa Clara"
+    },
+    {
+        "id": 47,
+        "value": "Saskatoon"
+    },
+    {
+        "id": 48,
+        "value": "Scottsdale"
+    },
+    {
+        "id": 49,
+        "value": "Seattle"
+    },
+    {
+        "id": 50,
+        "value": "Sherbrooke"
+    },
+    {
+        "id": 51,
+        "value": "St. Catharines-Niagara Falls"
+    },
+    {
+        "id": 52,
+        "value": "St. John's"
+    },
+    {
+        "id": 53,
+        "value": "Sudbury"
+    },
+    {
+        "id": 54,
+        "value": "Sunnyvale"
+    },
+    {
+        "id": 55,
+        "value": "Tokyo"
+    },
+    {
+        "id": 56,
+        "value": "Toronto"
+    },
+    {
+        "id": 57,
+        "value": "Trois-Rivieres"
+    },
+    {
+        "id": 58,
+        "value": "USA-Bellevue"
+    },
+    {
+        "id": 59,
+        "value": "USA-Bellevue/Seattle, WA"
+    },
+    {
+        "id": 60,
+        "value": "USA-Boston"
+    },
+    {
+        "id": 61,
+        "value": "USA-Boston, MA"
+    },
+    {
+        "id": 62,
+        "value": "USA-Chicago"
+    },
+    {
+        "id": 63,
+        "value": "USA-Chicago, IL"
+    },
+    {
+        "id": 64,
+        "value": "USA-El Segundo"
+    },
+    {
+        "id": 65,
+        "value": "USA-El Segundo/Los Angeles/Irvine, CA"
+    },
+    {
+        "id": 66,
+        "value": "USA-Irvine"
+    },
+    {
+        "id": 67,
+        "value": "USA-Los Angeles"
+    },
+    {
+        "id": 68,
+        "value": "USA-New York City"
+    },
+    {
+        "id": 69,
+        "value": "USA-New York City, NY"
+    },
+    {
+        "id": 70,
+        "value": "USA-Other"
+    },
+    {
+        "id": 71,
+        "value": "USA-Other Cities"
+    },
+    {
+        "id": 72,
+        "value": "USA-Philadelphia"
+    },
+    {
+        "id": 73,
+        "value": "USA-San Francisco Bay Area"
+    },
+    {
+        "id": 74,
+        "value": "USA-San Jose"
+    },
+    {
+        "id": 75,
+        "value": "USA-Santa Clara"
+    },
+    {
+        "id": 76,
+        "value": "USA-Seattle"
+    },
+    {
+        "id": 77,
+        "value": "USA-Sunnyvale"
+    },
+    {
+        "id": 78,
+        "value": "USA-Sunnyvale/San Jose/Santa Clara, San Francisco, CA and Bay Area"
+    },
+    {
+        "id": 79,
+        "value": "USA-Washington DC"
+    },
+    {
+        "id": 80,
+        "value": "USA-Washington, DC"
+    },
+    {
+        "id": 81,
+        "value": "Vancouver"
+    },
+    {
+        "id": 82,
+        "value": "Victoria"
+    },
+    {
+        "id": 83,
+        "value": "Washington DC"
+    },
+    {
+        "id": 84,
+        "value": "Windsor"
+    },
+    {
+        "id": 85,
+        "value": "Winnipeg"
+    },
+    {
+        "id": 86,
+        "value": "Yokohoma"
+    }
+]
+
+
+[
+    {
+        "id": 1,
+        "value": "Air Canada"
+    },
+    {
+        "id": 2,
+        "value": "Air Transat"
+    },
+    {
+        "id": 3,
+        "value": "American Airlines"
+    },
+    {
+        "id": 4,
+        "value": "Delta Airlines"
+    },
+    {
+        "id": 5,
+        "value": "Japan Airlines"
+    },
+    {
+        "id": 6,
+        "value": "OTHER"
+    },
+    {
+        "id": 7,
+        "value": "Porter"
+    },
+    {
+        "id": 8,
+        "value": "Sunwing"
+    },
+    {
+        "id": 9,
+        "value": "Westjet"
+    }
+]
+
+[
+    {
+        "id": 1,
+        "value": "AVIS"
+    },
+    {
+        "id": 2,
+        "value": "Hertz"
+    },
+    {
+        "id": 3,
+        "value": "Other"
+    }
+]
+
+
+[
+    {
+        "id": 1,
+        "value": "1) Midsize/Intermediate/Compact",
+        "description": "Midsize car"
+    },
+    {
+        "id": 2,
+        "value": "2) Premium - multiple passengers",
+        "description": "Premium car for multiple passengers"
+    },
+    {
+        "id": 3,
+        "value": "3) Premium - larger vehicle-transporting equipment",
+        "description": "Premium car for transporting equipment"
+    },
+    {
+        "id": 4,
+        "value": "4) Premium - Other",
+        "description": "Other premium cars"
+    }
+]
+
+
+[
+    {
+        "id": 1,
+        "value": "Breakfast"
+    },
+    {
+        "id": 2,
+        "value": "Lunch"
+    },
+    {
+        "id": 3,
+        "value": "Dinner"
+    }
+]
+
+
+[
+    {
+        "id": 1,
+        "value": "None"
+    },
+    {
+        "id": 2,
+        "value": "Customer/Potential Customer"
+    },
+    {
+        "id": 3,
+        "value": "Others - Please specify in Justification Field"
+    },
+    {
+        "id": 4,
+        "value": "PFU / Ricoh Group Company Employees"
+    },
+    {
+        "id": 5,
+        "value": "Suppliers"
+    }
+]
+
+

@@ -27,6 +27,13 @@
 		0FCD00DB2C0A53E900A49C62 /* ReportsDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00DA2C0A53E900A49C62 /* ReportsDetailView.swift */; };
 		0FCD00DD2C0BE28200A49C62 /* ManagePaymentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00DC2C0BE28200A49C62 /* ManagePaymentView.swift */; };
 		0FCD00DF2C0CD5A800A49C62 /* NewCreditCardForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00DE2C0CD5A800A49C62 /* NewCreditCardForm.swift */; };
+		0FCD00E12C0CE91600A49C62 /* ExpenseComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00E02C0CE91600A49C62 /* ExpenseComponent.swift */; };
+		0FCD00E32C0D28B800A49C62 /* NewExpenseForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00E22C0D28B800A49C62 /* NewExpenseForm.swift */; };
+		0FCD00E52C0D2B1400A49C62 /* NewReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00E42C0D2B1400A49C62 /* NewReportView.swift */; };
+		0FFCC97B2C0F2AD1003CBEC1 /* ExpenseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FFCC97A2C0F2AD1003CBEC1 /* ExpenseDetailView.swift */; };
+		0FFCC9832C0FA0A0003CBEC1 /* reports.json in Resources */ = {isa = PBXBuildFile; fileRef = 0FFCC9822C0FA0A0003CBEC1 /* reports.json */; };
+		0FFCC9852C0FA0A8003CBEC1 /* report_items.json in Resources */ = {isa = PBXBuildFile; fileRef = 0FFCC9842C0FA0A8003CBEC1 /* report_items.json */; };
+		0FFCC9872C0FA0B0003CBEC1 /* commons.json in Resources */ = {isa = PBXBuildFile; fileRef = 0FFCC9862C0FA0B0003CBEC1 /* commons.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +57,13 @@
 		0FCD00DA2C0A53E900A49C62 /* ReportsDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportsDetailView.swift; sourceTree = "<group>"; };
 		0FCD00DC2C0BE28200A49C62 /* ManagePaymentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagePaymentView.swift; sourceTree = "<group>"; };
 		0FCD00DE2C0CD5A800A49C62 /* NewCreditCardForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCreditCardForm.swift; sourceTree = "<group>"; };
+		0FCD00E02C0CE91600A49C62 /* ExpenseComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseComponent.swift; sourceTree = "<group>"; };
+		0FCD00E22C0D28B800A49C62 /* NewExpenseForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewExpenseForm.swift; sourceTree = "<group>"; };
+		0FCD00E42C0D2B1400A49C62 /* NewReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewReportView.swift; sourceTree = "<group>"; };
+		0FFCC97A2C0F2AD1003CBEC1 /* ExpenseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseDetailView.swift; sourceTree = "<group>"; };
+		0FFCC9822C0FA0A0003CBEC1 /* reports.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reports.json; sourceTree = "<group>"; };
+		0FFCC9842C0FA0A8003CBEC1 /* report_items.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = report_items.json; sourceTree = "<group>"; };
+		0FFCC9862C0FA0B0003CBEC1 /* commons.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = commons.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +130,9 @@
 				0FCD00DA2C0A53E900A49C62 /* ReportsDetailView.swift */,
 				0FCD00DC2C0BE28200A49C62 /* ManagePaymentView.swift */,
 				0FCD00DE2C0CD5A800A49C62 /* NewCreditCardForm.swift */,
+				0FCD00E22C0D28B800A49C62 /* NewExpenseForm.swift */,
+				0FCD00E42C0D2B1400A49C62 /* NewReportView.swift */,
+				0FFCC97A2C0F2AD1003CBEC1 /* ExpenseDetailView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -126,6 +143,7 @@
 				0FCD00BC2C08E66500A49C62 /* BackgroundImage.swift */,
 				0FCD00BE2C08E69300A49C62 /* PFULogo.swift */,
 				0FCD00D82C0A51AB00A49C62 /* ReportComponent.swift */,
+				0FCD00E02C0CE91600A49C62 /* ExpenseComponent.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -142,6 +160,9 @@
 			isa = PBXGroup;
 			children = (
 				0FCD00CF2C0A362B00A49C62 /* mockData.json */,
+				0FFCC9822C0FA0A0003CBEC1 /* reports.json */,
+				0FFCC9842C0FA0A8003CBEC1 /* report_items.json */,
+				0FFCC9862C0FA0B0003CBEC1 /* commons.json */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -218,9 +239,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0FFCC9872C0FA0B0003CBEC1 /* commons.json in Resources */,
 				0FCD00D02C0A362B00A49C62 /* mockData.json in Resources */,
 				0FCD00AE2C08CAB000A49C62 /* Preview Assets.xcassets in Resources */,
+				0FFCC9852C0FA0A8003CBEC1 /* report_items.json in Resources */,
 				0FCD00AB2C08CAB000A49C62 /* Assets.xcassets in Resources */,
+				0FFCC9832C0FA0A0003CBEC1 /* reports.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,11 +259,15 @@
 				0FCD00C22C0A33DA00A49C62 /* DAO.swift in Sources */,
 				0FCD00A92C08CAAF00A49C62 /* ContentView.swift in Sources */,
 				0FCD00BA2C08D92000A49C62 /* SignUpView.swift in Sources */,
+				0FCD00E52C0D2B1400A49C62 /* NewReportView.swift in Sources */,
 				0FCD00B62C08D90900A49C62 /* WelcomeView.swift in Sources */,
 				0FCD00DF2C0CD5A800A49C62 /* NewCreditCardForm.swift in Sources */,
+				0FCD00E12C0CE91600A49C62 /* ExpenseComponent.swift in Sources */,
 				0FCD00DD2C0BE28200A49C62 /* ManagePaymentView.swift in Sources */,
 				0FCD00DB2C0A53E900A49C62 /* ReportsDetailView.swift in Sources */,
+				0FCD00E32C0D28B800A49C62 /* NewExpenseForm.swift in Sources */,
 				0FCD00BF2C08E69300A49C62 /* PFULogo.swift in Sources */,
+				0FFCC97B2C0F2AD1003CBEC1 /* ExpenseDetailView.swift in Sources */,
 				0FCD00D92C0A51AB00A49C62 /* ReportComponent.swift in Sources */,
 				0FCD00BD2C08E66500A49C62 /* BackgroundImage.swift in Sources */,
 				0FCD00D72C0A403900A49C62 /* UserView.swift in Sources */,

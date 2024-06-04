@@ -18,6 +18,8 @@ struct ReportsView: View {
             return calendar.date(byAdding: DateComponents(day: 1, second: -1), to: startOfDay)!
         }()
     
+    @State var isShowingAddReport: Bool = false
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -28,6 +30,9 @@ struct ReportsView: View {
                     content
                 }.padding()
             }
+            .sheet(isPresented: $isShowingAddReport, content: {
+                NewReportView(isSHowing: $isShowingAddReport, user: user)
+            })
         }
     }
     
@@ -74,7 +79,8 @@ struct ReportsView: View {
     var newReportButton: some View {
         Button(action: {
             // Add new Report
-            dao.addReports()
+//            dao.addReports()
+            isShowingAddReport.toggle()
         }, label: {
             ZStack {
                 RoundedRectangle(cornerRadius: 14)
@@ -102,7 +108,7 @@ struct ReportsView: View {
     
     var scrollViewReports: some View {
         ScrollView {
-            ForEach(filteredReports) { report in
+            ForEach(filteredReports, id:\.self.id) { report in
                 ReportComponent(report: report)
             }
         }
@@ -111,17 +117,17 @@ struct ReportsView: View {
     var filteredReports: [Reports] {
         guard let reports = user?.reports else { return [] }
         return reports.filter { report in
-            report.date >= initialDate && report.date <= finalDate
+            report.createdAt >= initialDate && report.createdAt <= finalDate
         }
     }
 }
 
 
-#Preview {
-    ReportsView(user: User(name: "John Doe", username: "johnDoe", email: "john.doe@example.com", password: "password123", department: "IT Department", reports: [
-        Reports(name: "Exp 1019", date: Calendar.current.date(byAdding: .day, value: -31, to: Date())!, purpose: "LA Conference", value: 120.89, status: false),
-        Reports(name: "Exp 1020", date: Date(), purpose: "LA Conference", value: 120.89, status: true),
-        Reports(name: "Exp 1021", date: Calendar.current.date(byAdding: .day, value: -15, to: Date())!, purpose: "LA Conference", value: 120.89, status: true),
-        Reports(name: "Exp 1022", date: Date(), purpose: "LA Conference", value: 120.89, status: false)
-    ], paymentMethods: []))
-}
+//#Preview {
+//    ReportsView(user: User(name: "John Doe", username: "johnDoe", email: "john.doe@example.com", password: "password123", department: "IT Department", reports: [
+//        Reports(name: "Exp 1019", date: Calendar.current.date(byAdding: .day, value: -31, to: Date())!, purpose: "LA Conference", status: false, expenseItems: []),
+//        Reports(name: "Exp 1020", date: Date(), purpose: "LA Conference", status: true, expenseItems: []),
+//        Reports(name: "Exp 1021", date: Calendar.current.date(byAdding: .day, value: -15, to: Date())!, purpose: "LA Conference", status: true, expenseItems: []),
+//        Reports(name: "Exp 1022", date: Date(), purpose: "LA Conference", status: false, expenseItems: [])
+//    ], paymentMethods: []))
+//}

@@ -8,6 +8,11 @@
 import SwiftUI
 
 struct TabViewContainer: View {
+
+    init() {
+        UITabBar.appearance().backgroundColor = UIColor.white
+    }
+
     var body: some View {
         TabView {
             ReportsView(user: dao.user)

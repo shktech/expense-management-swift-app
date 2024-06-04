@@ -12,26 +12,26 @@ struct ReportComponent: View {
     let report: Reports
     
     var body: some View {
-        NavigationLink(destination: ReportsDetailView(report: report)) {
+        NavigationLink(destination: ReportsDetailView(report: report, user: dao.user)) {
             ZStack {
                 Color.white
                     .ignoresSafeArea()
                 HStack {
                     VStack(alignment: .leading) {
-                        Text(report.name)
+                        Text("\(report.id)")
                             .font(.system(size: 17))
                             .foregroundStyle(.black)
-                        Text(report.date.formatted(date: .numeric, time: .omitted))
+                        Text(report.createdAt.formatted(date: .numeric, time: .omitted))
                             .font(.system(size: 15))
                             .foregroundStyle(.gray)
                         Text(report.purpose)
                             .font(.system(size: 15))
                             .foregroundStyle(.gray)
-                        Text("\(report.value.formatted())")
-                            .font(.system(size: 15))
-                            .foregroundStyle(.gray)
-                        Text(report.status ? "Submitted" : "Open")
-                            .foregroundStyle(report.status ? .green : .red)
+//                        Text("\(report.value.formatted())")
+//                            .font(.system(size: 15))
+//                            .foregroundStyle(.gray)
+                        Text(report.reportStatus)
+                            .foregroundStyle(report.reportStatus == "Submitted" ? .green : .red)
                             .font(.system(size: 15))
                     }
                     Spacer()
@@ -40,6 +40,7 @@ struct ReportComponent: View {
                             .foregroundStyle(.black.opacity(0.5))
                         Image(systemName: "chevron.right")
                             .foregroundStyle(.black.opacity(0.3))
+                            .fontWeight(.semibold)
                     }
                 }.padding()
             }
@@ -50,6 +51,6 @@ struct ReportComponent: View {
     }
 }
 
-#Preview {
-    ReportComponent(report: Reports(name: "Exp 1019", date: Date(), purpose: "LA Conference", value: 120.89, status: false))
-}
+//#Preview {
+//    ReportComponent(report: Reports(name: "Exp 1019", date: Date(), purpose: "LA Conference", status: false, expenseItems: []))
+//}

@@ -14,10 +14,20 @@ struct ExpenseManagementApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if dao.user != nil {
-                TabViewContainer()
-            } else {
-                ContentView()
+            ZStack {
+                if dao.user == nil || dao.isPassed == false {
+                    ProgressView()
+                } else if dao.isAuthenticated == true {
+                    TabViewContainer()
+                } else {
+                    ContentView()
+                }
+            }
+            .task {
+                await dao.mockCall()
+            }
+            .onAppear {
+                dao.hasThirtyMinutesPassed(since: Date())
             }
         }
         .onChange(of: scenePhase) {
@@ -27,7 +37,7 @@ struct ExpenseManagementApp: App {
                 do {
                     try DAO.instance.save()
                 } catch {
-                    print("Se ferrou!", error)
+                    print("Failed to save DAO", error)
                 }
             case .inactive:
                 break
