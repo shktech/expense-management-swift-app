@@ -1,19 +1,14 @@
-//
-//  ReportsDetailView.swift
-//  ExpenseManagement
-//
-//  Created by infra on 31/05/24.
-//
-
 import SwiftUI
 
 struct ReportsDetailView: View {
     
-    let report: Reports
-    
-    let user: User?
+    let report: Report
     
     @State var isShowingForm: Bool = false
+    @State var isLoading: Bool = false
+    @State var expenseItems: [ExpenseItem] = []
+    
+    @EnvironmentObject var authManager: AuthenticationManager
     
     var body: some View {
         NavigationStack {
@@ -22,12 +17,16 @@ struct ReportsDetailView: View {
                     .ignoresSafeArea()
                 ZStack {
                     ourPfu
-                    content
+                    content.loadingOverlay(isLoading: $isLoading)
                 }.padding()
             }
         }.sheet(isPresented: $isShowingForm, content: {
             NewExpenseForm(isShowingSelf: $isShowingForm, report: report)
         })
+        .onChange(of: isShowingForm) {
+            loadData()
+        }
+        .onAppear(perform: loadData)
     }
     
     var ourPfu: some View {
@@ -46,7 +45,7 @@ struct ReportsDetailView: View {
             line
             reportHeader
             addNewButton
-            expenseItems
+            expenseItemsList
             Spacer()
         }.padding()
     }
@@ -54,9 +53,9 @@ struct ReportsDetailView: View {
     var headerContent: some View {
         HStack {
             VStack(alignment: .leading, spacing: 10) {
-                Text(user?.name ?? "")
+                Text(authManager.user?.first_name ?? "")
                     .font(.system(size: 17).weight(.semibold))
-                Text(user?.department ?? "")
+                Text(authManager.user?.department ?? "")
                     .font(.system(size: 17).weight(.semibold))
                     .foregroundStyle(Color.black.opacity(0.5))
             }
@@ -74,14 +73,15 @@ struct ReportsDetailView: View {
     var reportHeader: some View {
         HStack {
             VStack(alignment: .leading, spacing: 3) {
-                Text("\(report.id)")
+                Text(report.reportNumber)
                     .font(.system(size: 32).weight(.semibold))
-                Text(report.createdAt.formatted(date: .numeric, time: .omitted))
-                    .font(.system(size: 17).weight(.semibold))
+                if let date = DateFormatter.apiDate.date(from: report.reportDate) {
+                    Text(DateFormatter.userFriendly.string(from: date))
+                        .font(.system(size: 17))
+                        .foregroundStyle(.gray)
+                }
                 Text(report.purpose)
                     .font(.system(size: 17).weight(.semibold))
-//                Text("\(report.value.formatted()) USD")
-//                    .font(.system(size: 17).weight(.semibold))
                 Text(report.reportStatus)
                     .foregroundStyle(report.reportStatus == "Submitted" ? .green : .red)
                     .font(.system(size: 15))
@@ -92,7 +92,6 @@ struct ReportsDetailView: View {
     
     var addNewButton: some View {
         Button(action: {
-            // Add new expense
             isShowingForm.toggle()
         }, label: {
             ZStack {
@@ -104,16 +103,35 @@ struct ReportsDetailView: View {
             }
         }).frame(height: 45)
     }
-    
-    var expenseItems: some View {
+
+    var expenseItemsList: some View {
         VStack {
             ScrollView {
-                ForEach(report.expenseItems, id: \.self.id) { expense in
-                    ExpenseComponent(expense: expense, report: report)
+                ForEach(expenseItems, id:\.id) { expenseItem in
+                    ExpenseComponent(expense: expenseItem)
                 }
             }
         }.padding(.top)
     }
+    
+    private func loadData() {
+        self.isLoading = true
+        guard let accessToken = authManager.accessToken else {
+            print("Access token not found")
+            return
+        }
+        dao.fetchReportItems(reportId: report.id, accessToken: accessToken) { result in
+            switch result {
+            case .success(let items):
+                print(items)
+                self.expenseItems = items
+            case .failure(let error):
+                print("Failed to fetch items: \(error)")
+            }
+            self.isLoading = false
+        }
+    }
+
 }
 
 //#Preview {

@@ -11,13 +11,14 @@ struct NewCreditCardForm: View {
     
     @Environment(\.dismiss) var dismiss
     
-    let user: User?
+//    let user: User?
     
     @State var creditCardNumberField: String = ""
     
     @State var expDate: String = ""
     
     @State var cvv: String = ""
+    @EnvironmentObject var authManager: AuthenticationManager
     
     var body: some View {
         ZStack {
@@ -60,9 +61,9 @@ struct NewCreditCardForm: View {
     var headerContent: some View {
         HStack {
             VStack(alignment: .leading, spacing: 10) {
-                Text(user?.name ?? "")
+                Text(authManager.user?.first_name ?? "")
                     .font(.system(size: 17).weight(.semibold))
-                Text(user?.department ?? "")
+                Text(authManager.user?.department ?? "")
                     .font(.system(size: 17).weight(.semibold))
                     .foregroundStyle(Color.black.opacity(0.5))
             }
@@ -156,8 +157,5 @@ struct NewCreditCardForm: View {
 }
 
 #Preview {
-    NewCreditCardForm(user: User(name: "John Doe", username: "johnDoe", email: "john.doe@example.com", password: "password123", department: "IT Department", reports: [], paymentMethods: [
-        CreditCard(cardNumber: "1234123412341234", expirationDate: Date().addingTimeInterval(-3600)),
-        CreditCard(cardNumber: "1234123412341234", expirationDate: Date())
-    ]))
+    NewCreditCardForm()
 }

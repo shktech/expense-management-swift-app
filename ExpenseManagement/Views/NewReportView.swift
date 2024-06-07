@@ -1,50 +1,23 @@
-//
-//  NewReportView.swift
-//  ExpenseManagement
-//
-//  Created by infra on 02/06/24.
-//
-
 import SwiftUI
 
 struct NewReportView: View {
     
-    @Binding var isSHowing: Bool
-    
-    let user: User?
-    
+    @Binding var isShowing: Bool
     @State var newReportName: String = "New Report"
     @FocusState private var isTextFieldFocused: Bool
+    @FocusState private var isPurposeFieldFocused: Bool
     
+    @State var isLoading: Bool = false
     @State var date: Date = Date()
-    
+    @State var expenseType: String = ""
     @State var purposeField: String = ""
+    @State var selectedPaymentMethod: String = "Cash"
+    @State var selectedCurrency: String = "USD"
+    
+    @EnvironmentObject var authManager: AuthenticationManager
+    
     let allCurrency: [String] = [
-        "USD", // Dólar Americano
-        "BRL", // Real Brasileiro
-        "EUR", // Euro
-        "GBP", // Libra Esterlina
-        "JPY", // Iene Japonês
-        "CNY", // Yuan Chinês
-        "AUD", // Dólar Australiano
-        "CAD", // Dólar Canadense
-        "CHF", // Franco Suíço
-        "INR", // Rúpia Indiana
-        "RUB", // Rublo Russo
-        "ZAR", // Rand Sul-Africano
-        "HKD", // Dólar de Hong Kong
-        "SGD", // Dólar de Singapura
-        "KRW", // Won Sul-Coreano
-        "MXN", // Peso Mexicano
-        "TRY", // Lira Turca
-        "SAR", // Rial Saudita
-        "AED", // Dirham dos Emirados
-        "NOK", // Coroa Norueguesa
-        "SEK", // Coroa Sueca
-        "DKK", // Coroa Dinamarquesa
-        "PLN", // Zloty Polonês
-        "NZD", // Dólar Neozelandês
-        "THB"  // Baht Tailandês
+        "USD", "EUR", "JPY", "CAD"
     ]
     
     var body: some View {
@@ -53,7 +26,7 @@ struct NewReportView: View {
                 .ignoresSafeArea()
             ZStack {
                 ourPfu
-                content
+                content.loadingOverlay(isLoading: $isLoading)
             }.padding()
         }
     }
@@ -74,6 +47,7 @@ struct NewReportView: View {
             line
             newReportNameField
             dateField
+            expenseTypeField
             purposeFieldContainer
             preferredPaymentMethodContainer
             currencyField
@@ -85,9 +59,9 @@ struct NewReportView: View {
     var headerContent: some View {
         HStack {
             VStack(alignment: .leading, spacing: 10) {
-                Text(user?.name ?? "")
+                Text(authManager.user?.first_name ?? "")
                     .font(.system(size: 17).weight(.semibold))
-                Text(user?.department ?? "")
+                Text(authManager.user?.department ?? "")
                     .font(.system(size: 17).weight(.semibold))
                     .foregroundStyle(Color.black.opacity(0.5))
             }
@@ -104,18 +78,19 @@ struct NewReportView: View {
     
     var newReportNameField: some View {
         HStack {
-            Text(newReportName)
+            TextField("New Report", text: $newReportName)
+                .focused($isTextFieldFocused)
                 .font(.system(size: 32).weight(.semibold))
             Spacer()
         }.padding(.top)
+        .onAppear {
+            isTextFieldFocused = true
+        }
     }
     
     var dateField: some View {
         VStack(alignment: .leading, spacing: 0) {
-            
             Text("Date")
-                .foregroundStyle(.gray)
-            
             ZStack {
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(Color.gray, lineWidth: 2)
@@ -125,49 +100,32 @@ struct NewReportView: View {
                     Spacer()
                     Image(systemName: "calendar")
                         .font(.title3)
-                        .overlay{ //MARK: Place the DatePicker in the overlay extension
+                        .overlay {
                             DatePicker(
                                 "",
                                 selection: $date,
                                 displayedComponents: [.date]
                             )
-                            .blendMode(.destinationOver) //MARK: use this extension to keep the clickable functionality
+                            .blendMode(.destinationOver)
                         }
                 }.padding()
             }
         }.padding(.top)
     }
     
-    var purposeFieldContainer: some View {
+    var expenseTypeField: some View {
         VStack(alignment: .leading, spacing: 0) {
-            
-            Text("Purpose")
-                .foregroundStyle(.gray)
-            
-            ZStack {
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray, lineWidth: 2)
-                    .frame(height: 41)
-                TextField("ex: New Conference", text: $purposeField)
-                    .padding()
-            }
-        }.padding(.top)
-    }
-    
-    var preferredPaymentMethodContainer: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text("Preferred Payment Method")
-                .foregroundStyle(.gray)
+            Text("Expense Type")
             Menu {
                 Button(action: {
-                    
+                    expenseType = "Domestic"
                 }, label: {
-                    Text("Card ending in 1111")
+                    Text("Domestic")
                 })
                 Button(action: {
-                    
+                    expenseType = "International"
                 }, label: {
-                    Text("Card ending in 2222")
+                    Text("International")
                 })
             } label: {
                 ZStack {
@@ -176,13 +134,57 @@ struct NewReportView: View {
                         .frame(height: 41)
                         .foregroundStyle(Color(uiColor: .systemGray6))
                     HStack {
-                        if user?.defaultPaymentMethod != nil {
-                            Text("Card ending in xxx")
-                                .foregroundStyle(Color.gray)
-                        } else {
-                            Text("---")
-                                .foregroundStyle(Color.gray)
-                        }
+                        Text(expenseType)
+                            .foregroundStyle(Color.black)
+                        Spacer()
+                        Image(systemName: "chevron.down")
+                            .foregroundStyle(Color.gray)
+                    }.padding()
+                }
+            }
+        }.padding(.top)
+    }
+    
+    var purposeFieldContainer: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text("Purpose")
+            ZStack {
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.gray, lineWidth: 2)
+                    .frame(height: 41)
+                TextField("ex: New Conference", text: $purposeField)
+                    .focused($isPurposeFieldFocused)
+                    .padding()
+            }
+        }.padding(.top)
+        .onAppear {
+            isPurposeFieldFocused = true
+        }
+    }
+    
+    var preferredPaymentMethodContainer: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text("Preferred Payment Method")
+            Menu {
+                Button(action: {
+                    selectedPaymentMethod = "Cash"
+                }, label: {
+                    Text("Cash")
+                })
+                Button(action: {
+                    selectedPaymentMethod = "Credit card"
+                }, label: {
+                    Text("Credit card")
+                })
+            } label: {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.gray, lineWidth: 2)
+                        .frame(height: 41)
+                        .foregroundStyle(Color(uiColor: .systemGray6))
+                    HStack {
+                        Text(selectedPaymentMethod)
+                            .foregroundStyle(Color.black)
                         Spacer()
                         Image(systemName: "chevron.down")
                             .foregroundStyle(Color.gray)
@@ -195,11 +197,10 @@ struct NewReportView: View {
     var currencyField: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Currency")
-                .foregroundStyle(.gray)
             Menu {
                 ForEach(allCurrency, id: \.self) { currency in
                     Button(action: {
-                        
+                        selectedCurrency = currency
                     }, label: {
                         Text(currency)
                     })
@@ -207,17 +208,12 @@ struct NewReportView: View {
             } label: {
                 ZStack {
                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.black.opacity(0.5), lineWidth: 2)
+                        .stroke(Color.gray, lineWidth: 2)
                         .frame(height: 41)
                         .foregroundStyle(Color(uiColor: .systemGray6))
                     HStack {
-                        if user?.defaultPaymentMethod != nil {
-                            Text("Card ending in xxx")
-                                .foregroundStyle(Color.gray)
-                        } else {
-                            Text("USD")
-                                .foregroundStyle(Color.gray)
-                        }
+                        Text(selectedCurrency)
+                            .foregroundStyle(Color.black)
                         Spacer()
                         Image(systemName: "chevron.down")
                             .foregroundStyle(Color.gray)
@@ -229,8 +225,8 @@ struct NewReportView: View {
     
     var addButton: some View {
         Button(action: {
-            // add new reports
-            isSHowing.toggle()
+            isLoading = true
+            submitReport()
         }, label: {
             ZStack {
                 RoundedRectangle(cornerRadius: 14)
@@ -242,11 +238,38 @@ struct NewReportView: View {
             }
         }).frame(height: 41)
     }
-}
-
-#Preview {
-    NewReportView(isSHowing: .constant(false), user: User(name: "John Doe", username: "johnDoe", email: "john.doe@example.com", password: "password123", department: "IT Department", reports: [], paymentMethods: [
-        CreditCard(cardNumber: "1234123412341234", expirationDate: Date().addingTimeInterval(-3600)),
-        CreditCard(cardNumber: "1234123412341234", expirationDate: Date())
-    ]))
+    
+    func submitReport() {
+        guard let accessToken = authManager.accessToken else {
+            print("Access token not found")
+            return
+        }
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let formattedDate = dateFormatter.string(from: date)
+        
+        let newReport = CreateReportRequest(
+            reportDate: formattedDate,
+            expenseType: expenseType,
+            purpose: purposeField,
+            paymentMethod: selectedPaymentMethod,
+            reportAmount: 0,
+            reportCurrency: selectedCurrency
+        )
+        
+        print(newReport)
+        
+        dao.createReport(reportData: newReport, accessToken: accessToken) { result in
+            switch result {
+            case .success(let createdReport):
+                print("Created report: \(createdReport)")
+                isLoading = false
+                isShowing.toggle()
+            case .failure(let error):
+                print("Failed to create report: \(error.localizedDescription)")
+                isLoading = false
+            }
+        }
+    }
 }

@@ -9,9 +9,10 @@ import SwiftUI
 
 struct UserView: View {
     
-    let user: User?
+//    let user: User?
     
     @State var isShowingSheet: Bool = false
+    @EnvironmentObject var authManager: AuthenticationManager
     
     var body: some View {
         ZStack {
@@ -22,7 +23,7 @@ struct UserView: View {
                 content
             }.padding()
         }.sheet(isPresented: $isShowingSheet, content: {
-            ManagePaymentView(user: user, isShowing: $isShowingSheet)
+            ManagePaymentView(isShowing: $isShowingSheet)
         })
     }
     
@@ -30,7 +31,6 @@ struct UserView: View {
         VStack {
             headerContent
             line
-            usernameField
             emailField
             changePassword
             Spacer()
@@ -41,9 +41,9 @@ struct UserView: View {
     var headerContent: some View {
         HStack {
             VStack(alignment: .leading, spacing: 10) {
-                Text(user?.name ?? "")
+                Text(authManager.user?.first_name ?? "")
                     .font(.system(size: 17).weight(.semibold))
-                Text(user?.department ?? "")
+                Text(authManager.user?.department ?? "")
                     .font(.system(size: 17).weight(.semibold))
                     .foregroundStyle(Color.black.opacity(0.5))
             }
@@ -58,27 +58,6 @@ struct UserView: View {
             .foregroundStyle(Color.gray.opacity(0.4))
     }
     
-    var usernameField: some View {
-        VStack(alignment: .leading, spacing: 3) {
-            Text("Username")
-                .foregroundStyle(.gray)
-                .fontWeight(.semibold)
-            ZStack {
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.black.opacity(0.5), lineWidth: 2)
-                    .frame(height: 41)
-                    .foregroundStyle(Color(uiColor: .systemGray6))
-                HStack {
-                    Text(user?.username ?? "")
-                        .fontWeight(.semibold)
-                    Spacer()
-                    Image(systemName: "rectangle.and.pencil.and.ellipsis")
-                        .foregroundStyle(Color.blue)
-                }.padding()
-            }
-        }
-    }
-    
     var emailField: some View {
         VStack(alignment: .leading, spacing: 3) {
             Text("Email")
@@ -90,7 +69,7 @@ struct UserView: View {
                     .frame(height: 41)
                     .foregroundStyle(Color(uiColor: .systemGray6))
                 HStack {
-                    Text(user?.email ?? "")
+                    Text(authManager.user?.email ?? "")
                         .fontWeight(.semibold)
                     Spacer()
                     Image(systemName: "rectangle.and.pencil.and.ellipsis")
@@ -123,8 +102,5 @@ struct UserView: View {
 }
 
 #Preview {
-    UserView(user: User(name: "John Doe", username: "johnDoe", email: "john.doe@example.com", password: "password123", department: "IT Department", reports: [], paymentMethods: [
-        CreditCard(cardNumber: "1234123412341234", expirationDate: Date().addingTimeInterval(-3600)),
-        CreditCard(cardNumber: "1234123412341234", expirationDate: Date())
-    ]))
+    UserView()
 }

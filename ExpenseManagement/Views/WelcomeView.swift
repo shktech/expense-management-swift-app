@@ -40,7 +40,7 @@ struct WelcomeView: View {
         VStack(spacing: 16) {
             Spacer()
             NavigationLink(destination: SignInView()) {
-                Text("Sign In")
+                Text("Sign in")
                     .font(.system(size: 17).weight(.semibold))
                     .foregroundColor(.white)
                     .frame(width: 349, height: 55)
@@ -48,7 +48,7 @@ struct WelcomeView: View {
                     .cornerRadius(14)
             }
             NavigationLink(destination: SignUpView()) {
-                Text("Register")
+                Text("Sign up")
                     .font(.system(size: 17).weight(.semibold))
                     .foregroundColor(.black)
                     .frame(width: 349, height: 55)

@@ -1,24 +1,19 @@
-//
-//  ReportsView.swift
-//  ExpenseManagement
-//
-//  Created by infra on 31/05/24.
-//
-
 import SwiftUI
 struct ReportsView: View {
     
-    var user: User?
-    
-    @State var initialDate: Date = Calendar.current.date(byAdding: .day, value: -30, to: Date())!
+    @State var initialDate: Date = Calendar.current.date(byAdding: .day, value: -180, to: Date())!
     @State private var finalDate: Date = {
-            let calendar = Calendar.current
-            let now = Date()
-            let startOfDay = calendar.startOfDay(for: now)
-            return calendar.date(byAdding: DateComponents(day: 1, second: -1), to: startOfDay)!
-        }()
+        let calendar = Calendar.current
+        let now = Date()
+        let startOfDay = calendar.startOfDay(for: now)
+        return calendar.date(byAdding: DateComponents(day: 1, second: -1), to: startOfDay)!
+    }()
     
     @State var isShowingAddReport: Bool = false
+    @State private var isLoading = false
+    @State private var reports: [Report] = []
+    
+    @EnvironmentObject var authManager: AuthenticationManager
     
     var body: some View {
         NavigationStack {
@@ -27,13 +22,17 @@ struct ReportsView: View {
                     .ignoresSafeArea()
                 PFULogo()
                 ZStack {
-                    content
+                    content.loadingOverlay(isLoading: $isLoading)
                 }.padding()
             }
             .sheet(isPresented: $isShowingAddReport, content: {
-                NewReportView(isSHowing: $isShowingAddReport, user: user)
+                NewReportView(isShowing: $isShowingAddReport)
             })
-        }
+            .onChange(of: isShowingAddReport) {
+                loadData()
+            }
+        }.onAppear(perform: loadData)
+            .refreshable(action: loadData)
     }
     
     var content: some View {
@@ -51,9 +50,9 @@ struct ReportsView: View {
     var headerContent: some View {
         HStack {
             VStack(alignment: .leading, spacing: 10) {
-                Text(user?.name ?? "")
+                Text(authManager.user?.first_name ?? "")
                     .font(.system(size: 17).weight(.semibold))
-                Text(user?.department ?? "")
+                Text(authManager.user?.department ?? "")
                     .font(.system(size: 17).weight(.semibold))
                     .foregroundStyle(Color.black.opacity(0.5))
             }
@@ -78,8 +77,6 @@ struct ReportsView: View {
     
     var newReportButton: some View {
         Button(action: {
-            // Add new Report
-//            dao.addReports()
             isShowingAddReport.toggle()
         }, label: {
             ZStack {
@@ -108,26 +105,40 @@ struct ReportsView: View {
     
     var scrollViewReports: some View {
         ScrollView {
-            ForEach(filteredReports, id:\.self.id) { report in
+            ForEach(filteredReports, id: \.id) { report in
                 ReportComponent(report: report)
             }
         }
     }
     
-    var filteredReports: [Reports] {
-        guard let reports = user?.reports else { return [] }
-        return reports.filter { report in
-            report.createdAt >= initialDate && report.createdAt <= finalDate
+    var filteredReports: [Report] {
+        let filtered = reports.filter { report in
+            if let date = DateFormatter.apiDate.date(from: report.reportDate) {
+                return date >= initialDate && date <= finalDate
+            }
+            return false
+        }
+        
+        return filtered.sorted { report1, report2 in
+            if let date1 = DateFormatter.iso8601Full.date(from: report1.createdAt),
+               let date2 = DateFormatter.iso8601Full.date(from: report2.createdAt) {
+                return date1 > date2
+            }
+            return false
+        }
+    }
+    
+    private func loadData() {
+        self.isLoading = true
+        dao.fetchReports(accessToken: authManager.accessToken ?? "") { result in
+            switch result {
+            case .success(let reports):
+                print(reports)
+                self.reports = reports
+            case .failure(let error):
+                print("Failed to fetch reports: \(error)")
+            }
+            self.isLoading = false
         }
     }
 }
-
-
-//#Preview {
-//    ReportsView(user: User(name: "John Doe", username: "johnDoe", email: "john.doe@example.com", password: "password123", department: "IT Department", reports: [
-//        Reports(name: "Exp 1019", date: Calendar.current.date(byAdding: .day, value: -31, to: Date())!, purpose: "LA Conference", status: false, expenseItems: []),
-//        Reports(name: "Exp 1020", date: Date(), purpose: "LA Conference", status: true, expenseItems: []),
-//        Reports(name: "Exp 1021", date: Calendar.current.date(byAdding: .day, value: -15, to: Date())!, purpose: "LA Conference", status: true, expenseItems: []),
-//        Reports(name: "Exp 1022", date: Date(), purpose: "LA Conference", status: false, expenseItems: [])
-//    ], paymentMethods: []))
-//}

@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ManagePaymentView: View {
     
-    let user: User?
     let allCurrency: [String] = [
         "USD", // Dólar Americano
         "BRL", // Real Brasileiro
@@ -39,6 +38,7 @@ struct ManagePaymentView: View {
     ]
     
     @Binding var isShowing: Bool
+    @EnvironmentObject var authManager: AuthenticationManager
     
     var body: some View {
         NavigationStack {
@@ -81,9 +81,9 @@ struct ManagePaymentView: View {
     var headerContent: some View {
         HStack {
             VStack(alignment: .leading, spacing: 10) {
-                Text(user?.name ?? "")
+                Text(authManager.user?.first_name ?? "")
                     .font(.system(size: 17).weight(.semibold))
-                Text(user?.department ?? "")
+                Text(authManager.user?.department ?? "")
                     .font(.system(size: 17).weight(.semibold))
                     .foregroundStyle(Color.black.opacity(0.5))
             }
@@ -120,7 +120,7 @@ struct ManagePaymentView: View {
                         .frame(height: 41)
                         .foregroundStyle(Color(uiColor: .systemGray6))
                     HStack {
-                        if user?.defaultPaymentMethod != nil {
+                        if authManager.user?.defaultPaymentMethod != nil {
                             Text("Card ending in xxx")
                                 .foregroundStyle(Color.gray)
                         } else {
@@ -140,9 +140,9 @@ struct ManagePaymentView: View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Credit Cards")
                 .foregroundStyle(.gray)
-            if user?.defaultPaymentMethod != nil {
+            if authManager.user?.defaultPaymentMethod != nil {
                 VStack(spacing: 0) {
-                    ForEach(user?.paymentMethods ?? []) { card in
+                    ForEach(authManager.user?.paymentMethods ?? []) { card in
                         ZStack {
                             RoundedRectangle(cornerRadius: 8)
                                 .stroke(Color.black.opacity(0.5), lineWidth: 2)
@@ -164,7 +164,7 @@ struct ManagePaymentView: View {
                     }
                 }
             } else {
-                NavigationLink(destination: NewCreditCardForm(user: user)) {
+                NavigationLink(destination: NewCreditCardForm()) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 8)
                             .frame(height: 41)
@@ -203,7 +203,7 @@ struct ManagePaymentView: View {
                         .frame(height: 41)
                         .foregroundStyle(Color(uiColor: .systemGray6))
                     HStack {
-                        if user?.defaultPaymentMethod != nil {
+                        if authManager.user?.defaultPaymentMethod != nil {
                             Text("Card ending in xxx")
                                 .foregroundStyle(Color.gray)
                         } else {
@@ -259,8 +259,5 @@ struct ManagePaymentView: View {
 }
 
 #Preview {
-    ManagePaymentView(user: User(name: "John Doe", username: "johnDoe", email: "john.doe@example.com", password: "password123", department: "IT Department", reports: [], paymentMethods: [
-        CreditCard(cardNumber: "1234123412341234", expirationDate: Date().addingTimeInterval(-3600)),
-        CreditCard(cardNumber: "1234123412341234", expirationDate: Date())
-    ]), isShowing: .constant(false))
+    ManagePaymentView(isShowing: .constant(false))
 }

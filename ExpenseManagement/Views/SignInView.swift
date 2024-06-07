@@ -1,10 +1,3 @@
-//
-//  SignInView.swift
-//  ExpenseManagement
-//
-//  Created by infra on 30/05/24.
-//
-
 import SwiftUI
 
 struct SignInView: View {
@@ -12,23 +5,28 @@ struct SignInView: View {
     @State var passwordField: String = ""
     @State var isPasswordVisible: Bool = false
     @State var rememberMe: Bool = false
-    
     @State private var keyboardHeight: CGFloat = 0
-    
-    @State var signedIn: Int = -1
+    @State private var isLoading = false
+    @EnvironmentObject var authManager: AuthenticationManager
     
     var body: some View {
-        ZStack {
-            BackgroundImage()
-            PFULogo()
-            content
+        NavigationView {
+            ZStack {
+                BackgroundImage(opacity: 0.3)
+                PFULogo()
+                content.loadingOverlay(isLoading: $isLoading)
+            }
+            .navigationBarHidden(true)
+            .navigationDestination(isPresented: $authManager.isSignedIn) {
+                TabViewContainer()
+            }
         }
     }
     
     var content: some View {
         VStack(spacing: 50) {
             signInText
-            if signedIn == 0 {
+            if authManager.loginFailed {
                 Text("Incorrect email or password")
                     .foregroundStyle(.red)
                     .font(.system(size: 14).weight(.semibold))
@@ -84,7 +82,7 @@ struct SignInView: View {
                         .foregroundStyle(rememberMe ? .white : Color.secondary, Color(UIColor.systemBlue))
                 }
                 .buttonStyle(PlainButtonStyle())
-
+                
                 Text("Remember Me")
                     .fontWeight(.medium)
                     .foregroundColor(.primary)
@@ -122,8 +120,16 @@ struct SignInView: View {
     var bottomContent: some View {
         VStack {
             Button(action: {
-                // Sign In
-                self.signedIn = dao.authentication(email: emailField, password: passwordField)
+                isLoading = true
+                authManager.signIn(email: emailField, password: passwordField) { result in
+                    isLoading = false
+                    switch result {
+                    case .success(_):
+                        break
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
             }, label: {
                 Text("Sign In")
                     .font(.system(size: 17).weight(.semibold))
@@ -154,7 +160,7 @@ struct KeyboardProvider: ViewModifier {
                        perform: { notification in
                 guard let userInfo = notification.userInfo,
                       let keyboardRect = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
-                                                            
+                
                 self.keyboardHeight.wrappedValue = keyboardRect.height
                 
             }).onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification),
@@ -172,5 +178,5 @@ public extension View {
 }
 
 #Preview {
-    SignInView()
+    SignInView().environmentObject(AuthenticationManager())
 }

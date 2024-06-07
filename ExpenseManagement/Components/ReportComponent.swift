@@ -9,27 +9,33 @@ import SwiftUI
 
 struct ReportComponent: View {
     
-    let report: Reports
+    let report: Report
     
     var body: some View {
-        NavigationLink(destination: ReportsDetailView(report: report, user: dao.user)) {
+        NavigationLink(destination: ReportsDetailView(report: report)) {
             ZStack {
                 Color.white
                     .ignoresSafeArea()
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("\(report.id)")
+                        Text(report.reportNumber)
                             .font(.system(size: 17))
                             .foregroundStyle(.black)
-                        Text(report.createdAt.formatted(date: .numeric, time: .omitted))
-                            .font(.system(size: 15))
-                            .foregroundStyle(.gray)
+                        if let date = DateFormatter.apiDate.date(from: report.reportDate) {
+                            Text(DateFormatter.userFriendly.string(from: date))
+                                .font(.system(size: 15))
+                                .foregroundColor(.gray)
+                        } else {
+                            Text("Unknown")
+                                .font(.system(size: 15))
+                                .foregroundColor(.gray)
+                        }
                         Text(report.purpose)
                             .font(.system(size: 15))
                             .foregroundStyle(.gray)
-//                        Text("\(report.value.formatted())")
-//                            .font(.system(size: 15))
-//                            .foregroundStyle(.gray)
+                        Text("\(Utilities.CurrencyFormatter.formatCurrency(amount: report.reportAmount, currencyCode: report.reportCurrency)) \(report.reportCurrency)")
+                            .font(.system(size: 15))
+                            .foregroundStyle(.gray)
                         Text(report.reportStatus)
                             .foregroundStyle(report.reportStatus == "Submitted" ? .green : .red)
                             .font(.system(size: 15))

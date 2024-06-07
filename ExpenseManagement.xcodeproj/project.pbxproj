@@ -37,6 +37,18 @@
 		0FFCC9892C0FD4C1003CBEC1 /* rates.json in Resources */ = {isa = PBXBuildFile; fileRef = 0FFCC9882C0FD4C1003CBEC1 /* rates.json */; };
 		0FFCC98B2C0FD4F6003CBEC1 /* citiesAmounts.json in Resources */ = {isa = PBXBuildFile; fileRef = 0FFCC98A2C0FD4F6003CBEC1 /* citiesAmounts.json */; };
 		0FFCC98D2C0FD50D003CBEC1 /* allCities.json in Resources */ = {isa = PBXBuildFile; fileRef = 0FFCC98C2C0FD50D003CBEC1 /* allCities.json */; };
+		B559AD912C1116D100CE4CF1 /* LoadingOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = B559AD902C1116D100CE4CF1 /* LoadingOverlay.swift */; };
+		B59BD5EF2C112A900027E599 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD5EE2C112A900027E599 /* Auth.swift */; };
+		B59BD5F22C113CE90027E599 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD5F12C113CE90027E599 /* AuthManager.swift */; };
+		B59BD5F42C1154BC0027E599 /* CommonDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD5F32C1154BC0027E599 /* CommonDataManager.swift */; };
+		B59BD5F62C1163A80027E599 /* ExpenseDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD5F52C1163A80027E599 /* ExpenseDataManager.swift */; };
+		B59BD5F92C1172ED0027E599 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD5F82C1172ED0027E599 /* DateFormatter.swift */; };
+		B59BD5FC2C11837A0027E599 /* user.json in Resources */ = {isa = PBXBuildFile; fileRef = B59BD5FB2C11837A0027E599 /* user.json */; };
+		B59BD5FE2C1184110027E599 /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD5FD2C1184110027E599 /* DataLoader.swift */; };
+		B59BD6022C118CB90027E599 /* MockAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD6012C118CB90027E599 /* MockAuthManager.swift */; };
+		B59BD6042C11AFD20027E599 /* FilePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD6032C11AFD20027E599 /* FilePicker.swift */; };
+		B59BD6062C11B86C0027E599 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD6052C11B86C0027E599 /* ImagePicker.swift */; };
+		B59BD6082C123DE00027E599 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD6072C123DE00027E599 /* Utilities.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +82,22 @@
 		0FFCC9882C0FD4C1003CBEC1 /* rates.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rates.json; sourceTree = "<group>"; };
 		0FFCC98A2C0FD4F6003CBEC1 /* citiesAmounts.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = citiesAmounts.json; sourceTree = "<group>"; };
 		0FFCC98C2C0FD50D003CBEC1 /* allCities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = allCities.json; sourceTree = "<group>"; };
+		B559AD8B2C10162900CE4CF1 /* Local.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Local.xcconfig; sourceTree = "<group>"; };
+		B559AD8C2C10163400CE4CF1 /* Test.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Test.xcconfig; sourceTree = "<group>"; };
+		B559AD8D2C10164700CE4CF1 /* Prod.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Prod.xcconfig; sourceTree = "<group>"; };
+		B559AD902C1116D100CE4CF1 /* LoadingOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingOverlay.swift; sourceTree = "<group>"; };
+		B59BD5EE2C112A900027E599 /* Auth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Auth.swift; sourceTree = "<group>"; };
+		B59BD5F02C1130A90027E599 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B59BD5F12C113CE90027E599 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
+		B59BD5F32C1154BC0027E599 /* CommonDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonDataManager.swift; sourceTree = "<group>"; };
+		B59BD5F52C1163A80027E599 /* ExpenseDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseDataManager.swift; sourceTree = "<group>"; };
+		B59BD5F82C1172ED0027E599 /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
+		B59BD5FB2C11837A0027E599 /* user.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = user.json; sourceTree = "<group>"; };
+		B59BD5FD2C1184110027E599 /* DataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLoader.swift; sourceTree = "<group>"; };
+		B59BD6012C118CB90027E599 /* MockAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAuthManager.swift; sourceTree = "<group>"; };
+		B59BD6032C11AFD20027E599 /* FilePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilePicker.swift; sourceTree = "<group>"; };
+		B59BD6052C11B86C0027E599 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		B59BD6072C123DE00027E599 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +131,8 @@
 		0FCD00A52C08CAAF00A49C62 /* ExpenseManagement */ = {
 			isa = PBXGroup;
 			children = (
+				B59BD5F72C1172C00027E599 /* Utils */,
+				B59BD5F02C1130A90027E599 /* Info.plist */,
 				0FCD00D32C0A3E3600A49C62 /* Models */,
 				0FCD00CE2C0A361700A49C62 /* Data */,
 				0FCD00C02C0A33D100A49C62 /* DAO */,
@@ -111,6 +141,9 @@
 				0FCD00A62C08CAAF00A49C62 /* ExpenseManagementApp.swift */,
 				0FCD00AA2C08CAB000A49C62 /* Assets.xcassets */,
 				0FCD00AC2C08CAB000A49C62 /* Preview Content */,
+				B559AD8B2C10162900CE4CF1 /* Local.xcconfig */,
+				B559AD8C2C10163400CE4CF1 /* Test.xcconfig */,
+				B559AD8D2C10164700CE4CF1 /* Prod.xcconfig */,
 			);
 			path = ExpenseManagement;
 			sourceTree = "<group>";
@@ -139,6 +172,9 @@
 				0FCD00E22C0D28B800A49C62 /* NewExpenseForm.swift */,
 				0FCD00E42C0D2B1400A49C62 /* NewReportView.swift */,
 				0FFCC97A2C0F2AD1003CBEC1 /* ExpenseDetailView.swift */,
+				B559AD902C1116D100CE4CF1 /* LoadingOverlay.swift */,
+				B59BD6032C11AFD20027E599 /* FilePicker.swift */,
+				B59BD6052C11B86C0027E599 /* ImagePicker.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -158,6 +194,10 @@
 			isa = PBXGroup;
 			children = (
 				0FCD00C12C0A33DA00A49C62 /* DAO.swift */,
+				B59BD5F12C113CE90027E599 /* AuthManager.swift */,
+				B59BD5F32C1154BC0027E599 /* CommonDataManager.swift */,
+				B59BD5F52C1163A80027E599 /* ExpenseDataManager.swift */,
+				B59BD5FD2C1184110027E599 /* DataLoader.swift */,
 			);
 			path = DAO;
 			sourceTree = "<group>";
@@ -172,6 +212,7 @@
 				0FFCC9882C0FD4C1003CBEC1 /* rates.json */,
 				0FFCC98A2C0FD4F6003CBEC1 /* citiesAmounts.json */,
 				0FFCC98C2C0FD50D003CBEC1 /* allCities.json */,
+				B59BD5FB2C11837A0027E599 /* user.json */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -179,9 +220,20 @@
 		0FCD00D32C0A3E3600A49C62 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				B59BD5EE2C112A900027E599 /* Auth.swift */,
 				0FCD00CC2C0A350900A49C62 /* Models.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		B59BD5F72C1172C00027E599 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				B59BD5F82C1172ED0027E599 /* DateFormatter.swift */,
+				B59BD6012C118CB90027E599 /* MockAuthManager.swift */,
+				B59BD6072C123DE00027E599 /* Utilities.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -252,6 +304,7 @@
 				0FCD00D02C0A362B00A49C62 /* mockData.json in Resources */,
 				0FFCC98B2C0FD4F6003CBEC1 /* citiesAmounts.json in Resources */,
 				0FCD00AE2C08CAB000A49C62 /* Preview Assets.xcassets in Resources */,
+				B59BD5FC2C11837A0027E599 /* user.json in Resources */,
 				0FFCC9852C0FA0A8003CBEC1 /* report_items.json in Resources */,
 				0FCD00AB2C08CAB000A49C62 /* Assets.xcassets in Resources */,
 				0FFCC9832C0FA0A0003CBEC1 /* reports.json in Resources */,
@@ -267,24 +320,35 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B59BD5F42C1154BC0027E599 /* CommonDataManager.swift in Sources */,
 				0FCD00D52C0A3FE100A49C62 /* TabViewContainer.swift in Sources */,
+				B59BD5F22C113CE90027E599 /* AuthManager.swift in Sources */,
 				0FCD00C22C0A33DA00A49C62 /* DAO.swift in Sources */,
+				B59BD6082C123DE00027E599 /* Utilities.swift in Sources */,
+				B59BD5F92C1172ED0027E599 /* DateFormatter.swift in Sources */,
+				B59BD6042C11AFD20027E599 /* FilePicker.swift in Sources */,
 				0FCD00A92C08CAAF00A49C62 /* ContentView.swift in Sources */,
 				0FCD00BA2C08D92000A49C62 /* SignUpView.swift in Sources */,
 				0FCD00E52C0D2B1400A49C62 /* NewReportView.swift in Sources */,
+				B59BD5FE2C1184110027E599 /* DataLoader.swift in Sources */,
 				0FCD00B62C08D90900A49C62 /* WelcomeView.swift in Sources */,
 				0FCD00DF2C0CD5A800A49C62 /* NewCreditCardForm.swift in Sources */,
 				0FCD00E12C0CE91600A49C62 /* ExpenseComponent.swift in Sources */,
 				0FCD00DD2C0BE28200A49C62 /* ManagePaymentView.swift in Sources */,
 				0FCD00DB2C0A53E900A49C62 /* ReportsDetailView.swift in Sources */,
 				0FCD00E32C0D28B800A49C62 /* NewExpenseForm.swift in Sources */,
+				B559AD912C1116D100CE4CF1 /* LoadingOverlay.swift in Sources */,
 				0FCD00BF2C08E69300A49C62 /* PFULogo.swift in Sources */,
 				0FFCC97B2C0F2AD1003CBEC1 /* ExpenseDetailView.swift in Sources */,
 				0FCD00D92C0A51AB00A49C62 /* ReportComponent.swift in Sources */,
+				B59BD6022C118CB90027E599 /* MockAuthManager.swift in Sources */,
 				0FCD00BD2C08E66500A49C62 /* BackgroundImage.swift in Sources */,
 				0FCD00D72C0A403900A49C62 /* UserView.swift in Sources */,
+				B59BD5EF2C112A900027E599 /* Auth.swift in Sources */,
 				0FCD00D22C0A3AC400A49C62 /* ReportsView.swift in Sources */,
+				B59BD5F62C1163A80027E599 /* ExpenseDataManager.swift in Sources */,
 				0FCD00CD2C0A350900A49C62 /* Models.swift in Sources */,
+				B59BD6062C11B86C0027E599 /* ImagePicker.swift in Sources */,
 				0FCD00B82C08D91500A49C62 /* SignInView.swift in Sources */,
 				0FCD00A72C08CAAF00A49C62 /* ExpenseManagementApp.swift in Sources */,
 			);
@@ -295,6 +359,7 @@
 /* Begin XCBuildConfiguration section */
 		0FCD00AF2C08CAB000A49C62 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B559AD8B2C10162900CE4CF1 /* Local.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -358,6 +423,7 @@
 		};
 		0FCD00B02C08CAB000A49C62 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B559AD8D2C10164700CE4CF1 /* Prod.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -414,6 +480,7 @@
 		};
 		0FCD00B22C08CAB000A49C62 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B559AD8B2C10162900CE4CF1 /* Local.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -423,6 +490,7 @@
 				DEVELOPMENT_TEAM = 973F3TA6FW;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ExpenseManagement/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -434,16 +502,17 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.felipePeixoto.ExpenseManagement;
+				PRODUCT_BUNDLE_IDENTIFIER = "pfu.us.ricoh.expense-management";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		0FCD00B32C08CAB000A49C62 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B559AD8D2C10164700CE4CF1 /* Prod.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -453,6 +522,7 @@
 				DEVELOPMENT_TEAM = 973F3TA6FW;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ExpenseManagement/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -464,13 +534,109 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.felipePeixoto.ExpenseManagement;
+				PRODUCT_BUNDLE_IDENTIFIER = "pfu.us.ricoh.expense-management";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
+		};
+		B559AD8E2C10181B00CE4CF1 /* Test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B559AD8C2C10163400CE4CF1 /* Test.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Test;
+		};
+		B559AD8F2C10181B00CE4CF1 /* Test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B559AD8C2C10163400CE4CF1 /* Test.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"ExpenseManagement/Preview Content\"";
+				DEVELOPMENT_TEAM = 973F3TA6FW;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ExpenseManagement/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "pfu.us.ricoh.expense-management";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Test;
 		};
 /* End XCBuildConfiguration section */
 
@@ -479,19 +645,21 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0FCD00AF2C08CAB000A49C62 /* Debug */,
+				B559AD8E2C10181B00CE4CF1 /* Test */,
 				0FCD00B02C08CAB000A49C62 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		0FCD00B12C08CAB000A49C62 /* Build configuration list for PBXNativeTarget "ExpenseManagement" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0FCD00B22C08CAB000A49C62 /* Debug */,
+				B559AD8F2C10181B00CE4CF1 /* Test */,
 				0FCD00B32C08CAB000A49C62 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 

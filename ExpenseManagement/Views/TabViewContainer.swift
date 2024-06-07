@@ -1,35 +1,39 @@
-//
-//  TabView.swift
-//  ExpenseManagement
-//
-//  Created by infra on 31/05/24.
-//
-
 import SwiftUI
 
 struct TabViewContainer: View {
+    
+//    @EnvironmentObject var authManager: AuthenticationManager
+//    @EnvironmentObject var expenseDataManager: ExpenseDataManager
+//    @State private var isLoading = false
+//    @State private var reports: [Report] = []
 
     init() {
         UITabBar.appearance().backgroundColor = UIColor.white
     }
 
     var body: some View {
-        TabView {
-            ReportsView(user: dao.user)
-                .tabItem {
-                    Image(systemName: "house")
-                    Text("Home")
-                }
+        ZStack {
+            TabView {
+                ReportsView()
+                    .tabItem {
+                        Image(systemName: "house")
+                        Text("Home")
+                    }
+                
+                UserView()
+                    .tabItem {
+                        Image(systemName: "person.circle.fill")
+                        Text("User")
+                    }
+            }
             
-            UserView(user: dao.user)
-                .tabItem {
-                    Image(systemName: "person.circle.fill")
-                    Text("User")
-                }
+//            if isLoading {
+//                LoadingOverlayView()
+//            }
         }
     }
 }
 
-#Preview {
-    TabViewContainer()
-}
+//#Preview {
+//    TabViewContainer()
+//}
