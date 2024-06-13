@@ -49,6 +49,10 @@
 		B59BD6042C11AFD20027E599 /* FilePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD6032C11AFD20027E599 /* FilePicker.swift */; };
 		B59BD6062C11B86C0027E599 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD6052C11B86C0027E599 /* ImagePicker.swift */; };
 		B59BD6082C123DE00027E599 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD6072C123DE00027E599 /* Utilities.swift */; };
+		B59BD60A2C1B70A70027E599 /* VerifyMFAView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD6092C1B70A70027E599 /* VerifyMFAView.swift */; };
+		B59BD60C2C1B7B4B0027E599 /* Inter.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B59BD60B2C1B7B4B0027E599 /* Inter.ttf */; };
+		B59BD60E2C1B7BF30027E599 /* Poppins.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B59BD60D2C1B7BF30027E599 /* Poppins.ttf */; };
+		B59BD6102C1B7C540027E599 /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B59BD60F2C1B7C540027E599 /* Poppins-Bold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -98,6 +102,10 @@
 		B59BD6032C11AFD20027E599 /* FilePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilePicker.swift; sourceTree = "<group>"; };
 		B59BD6052C11B86C0027E599 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		B59BD6072C123DE00027E599 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		B59BD6092C1B70A70027E599 /* VerifyMFAView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyMFAView.swift; sourceTree = "<group>"; };
+		B59BD60B2C1B7B4B0027E599 /* Inter.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Inter.ttf; sourceTree = "<group>"; };
+		B59BD60D2C1B7BF30027E599 /* Poppins.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Poppins.ttf; sourceTree = "<group>"; };
+		B59BD60F2C1B7C540027E599 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Bold.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +152,9 @@
 				B559AD8B2C10162900CE4CF1 /* Local.xcconfig */,
 				B559AD8C2C10163400CE4CF1 /* Test.xcconfig */,
 				B559AD8D2C10164700CE4CF1 /* Prod.xcconfig */,
+				B59BD60B2C1B7B4B0027E599 /* Inter.ttf */,
+				B59BD60D2C1B7BF30027E599 /* Poppins.ttf */,
+				B59BD60F2C1B7C540027E599 /* Poppins-Bold.ttf */,
 			);
 			path = ExpenseManagement;
 			sourceTree = "<group>";
@@ -175,6 +186,7 @@
 				B559AD902C1116D100CE4CF1 /* LoadingOverlay.swift */,
 				B59BD6032C11AFD20027E599 /* FilePicker.swift */,
 				B59BD6052C11B86C0027E599 /* ImagePicker.swift */,
+				B59BD6092C1B70A70027E599 /* VerifyMFAView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -303,9 +315,12 @@
 				0FFCC9872C0FA0B0003CBEC1 /* commons.json in Resources */,
 				0FCD00D02C0A362B00A49C62 /* mockData.json in Resources */,
 				0FFCC98B2C0FD4F6003CBEC1 /* citiesAmounts.json in Resources */,
+				B59BD60E2C1B7BF30027E599 /* Poppins.ttf in Resources */,
 				0FCD00AE2C08CAB000A49C62 /* Preview Assets.xcassets in Resources */,
 				B59BD5FC2C11837A0027E599 /* user.json in Resources */,
+				B59BD60C2C1B7B4B0027E599 /* Inter.ttf in Resources */,
 				0FFCC9852C0FA0A8003CBEC1 /* report_items.json in Resources */,
+				B59BD6102C1B7C540027E599 /* Poppins-Bold.ttf in Resources */,
 				0FCD00AB2C08CAB000A49C62 /* Assets.xcassets in Resources */,
 				0FFCC9832C0FA0A0003CBEC1 /* reports.json in Resources */,
 				0FFCC98D2C0FD50D003CBEC1 /* allCities.json in Resources */,
@@ -338,6 +353,7 @@
 				0FCD00DB2C0A53E900A49C62 /* ReportsDetailView.swift in Sources */,
 				0FCD00E32C0D28B800A49C62 /* NewExpenseForm.swift in Sources */,
 				B559AD912C1116D100CE4CF1 /* LoadingOverlay.swift in Sources */,
+				B59BD60A2C1B70A70027E599 /* VerifyMFAView.swift in Sources */,
 				0FCD00BF2C08E69300A49C62 /* PFULogo.swift in Sources */,
 				0FFCC97B2C0F2AD1003CBEC1 /* ExpenseDetailView.swift in Sources */,
 				0FCD00D92C0A51AB00A49C62 /* ReportComponent.swift in Sources */,

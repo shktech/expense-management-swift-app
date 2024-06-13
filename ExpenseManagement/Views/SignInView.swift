@@ -1,5 +1,10 @@
 import SwiftUI
 
+enum NavigationDestination {
+    case mainView
+    case verifyMFAView
+}
+
 struct SignInView: View {
     @State var emailField: String = ""
     @State var passwordField: String = ""
@@ -7,19 +12,39 @@ struct SignInView: View {
     @State var rememberMe: Bool = false
     @State private var keyboardHeight: CGFloat = 0
     @State private var isLoading = false
+    @State private var navigationDestination: NavigationDestination? = nil
     @EnvironmentObject var authManager: AuthenticationManager
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 BackgroundImage(opacity: 0.3)
                 PFULogo()
                 content.loadingOverlay(isLoading: $isLoading)
+                NavigationLink(
+                    tag: NavigationDestination.mainView,
+                    selection: $navigationDestination,
+                    destination: { TabViewContainer() },
+                    label: { EmptyView() }
+                )
+                NavigationLink(
+                    tag: NavigationDestination.verifyMFAView,
+                    selection: $navigationDestination,
+                    destination: { VerifyMFAView() },
+                    label: { EmptyView() }
+                )
             }
             .navigationBarHidden(true)
-            .navigationDestination(isPresented: $authManager.isSignedIn) {
-                TabViewContainer()
-            }
+//            .navigationDestination(for: NavigationDestination?.self) { destination in
+//                switch destination {
+//                case .mainView:
+//                    TabViewContainer()
+//                case .verifyMFAView:
+//                    VerifyMFAView()
+//                default:
+//                    EmptyView()
+//                }
+//            }
         }
     }
     
@@ -122,12 +147,16 @@ struct SignInView: View {
             Button(action: {
                 isLoading = true
                 authManager.signIn(email: emailField, password: passwordField) { result in
+                    print("setting isloading to false")
                     isLoading = false
                     switch result {
                     case .success(_):
-                        break
+                        navigationDestination = .mainView
                     case .failure(let error):
-                        print(error)
+                        if let nsError = error as NSError?, nsError.code == -1, nsError.userInfo["code"] as? String == "second_factor_required" {
+                            print("Setting navigationDestination to verifyMFA")
+                            navigationDestination = .verifyMFAView                        }
+                        //                        print(error)
                     }
                 }
             }, label: {

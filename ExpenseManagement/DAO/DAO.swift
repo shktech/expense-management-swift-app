@@ -24,7 +24,57 @@ let dao = DAO.instance
         }
         self.apiBaseUrl = apiBaseUrl
     }
+    
+    func verifyMFA(email: String, mfaCode: String, completion: @escaping (Result<LoginResponseData, Error>) -> Void) {
+        let url = URL(string: "\(apiBaseUrl)/auth/verify-mfa/")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
+        let parameters = VerifyMFARequest(email: email, code: mfaCode)
+
+        guard let jsonData = try? JSONEncoder().encode(parameters) else {
+            print("Failed to encode parameters")
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to encode parameters"])))
+            return
+        }
+        request.httpBody = jsonData
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+                return
+            }
+
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data received"])))
+                }
+                return
+            }
+
+            let httpResponse = response as? HTTPURLResponse
+            if httpResponse?.statusCode == 200 {
+                do {
+                    let verifyMFAResponse = try JSONDecoder().decode(LoginResponseData.self, from: data)
+                    DispatchQueue.main.async {
+                        completion(.success(verifyMFAResponse))
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        completion(.failure(error))
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    let errorDescription = HTTPURLResponse.localizedString(forStatusCode: httpResponse?.statusCode ?? -1)
+                    completion(.failure(NSError(domain: "", code: httpResponse?.statusCode ?? -1, userInfo: [NSLocalizedDescriptionKey: errorDescription])))
+                }
+            }
+        }.resume()
+    }
     
     func authenticateUser(email: String, password: String, completion: @escaping (Result<LoginResponseData, Error>) -> Void) {
         let url = URL(string: "\(apiBaseUrl)/auth/login/")!
@@ -70,8 +120,25 @@ let dao = DAO.instance
                 }
             } else {
                 DispatchQueue.main.async {
-                    let errorDescription = HTTPURLResponse.localizedString(forStatusCode: httpResponse?.statusCode ?? -1)
-                    completion(.failure(NSError(domain: "", code: httpResponse?.statusCode ?? -1, userInfo: [NSLocalizedDescriptionKey: errorDescription])))
+                    do {
+                        if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                           let errorCode = json["code"] as? String {
+                            if errorCode == "second_factor_required" {
+                                print("Second Factor Required - DAO")
+                                let error = NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "MFA verification required", "code": errorCode])
+                                completion(.failure(error))
+                            } else {
+                                let errorDescription = json["error"] as? String ?? "Unknown error"
+                                completion(.failure(NSError(domain: "", code: httpResponse?.statusCode ?? -1, userInfo: [NSLocalizedDescriptionKey: errorDescription, "code": errorCode])))
+                            }
+                        } else {
+                            let errorDescription = HTTPURLResponse.localizedString(forStatusCode: httpResponse?.statusCode ?? -1)
+                            completion(.failure(NSError(domain: "", code: httpResponse?.statusCode ?? -1, userInfo: [NSLocalizedDescriptionKey: errorDescription])))
+                        }
+                    } catch {
+                        let errorDescription = HTTPURLResponse.localizedString(forStatusCode: httpResponse?.statusCode ?? -1)
+                        completion(.failure(NSError(domain: "", code: httpResponse?.statusCode ?? -1, userInfo: [NSLocalizedDescriptionKey: errorDescription])))
+                    }
                 }
             }
         }.resume()

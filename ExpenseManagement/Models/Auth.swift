@@ -12,6 +12,11 @@ struct LoginRequest: Encodable {
     var password: String
 }
 
+struct VerifyMFARequest: Codable {
+    let email: String
+    let code: String
+}
+
 struct LoginResponseData: Decodable {
     var refresh: String
     var access: String
