@@ -146,7 +146,7 @@ let dao = DAO.instance
     
     func hasThirtyMinutesPassed(since date: Date) {
         let currentDate = Date()
-        let thirtyMinutes: TimeInterval = 30 * 60 // 30 minutos em segundos
+        let thirtyMinutes: TimeInterval = 30 * 60
         
         let timeElapsed = currentDate.timeIntervalSince(date)
         

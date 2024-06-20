@@ -1,0 +1,38 @@
+[
+    {
+        "id": 1,
+        "value": "Air Canada"
+    },
+    {
+        "id": 2,
+        "value": "Air Transat"
+    },
+    {
+        "id": 3,
+        "value": "American Airlines"
+    },
+    {
+        "id": 4,
+        "value": "Delta Airlines"
+    },
+    {
+        "id": 5,
+        "value": "Japan Airlines"
+    },
+    {
+        "id": 6,
+        "value": "OTHER"
+    },
+    {
+        "id": 7,
+        "value": "Porter"
+    },
+    {
+        "id": 8,
+        "value": "Sunwing"
+    },
+    {
+        "id": 9,
+        "value": "Westjet"
+    }
+]
