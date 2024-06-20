@@ -6,7 +6,7 @@ struct NewExpenseForm: View {
     @Binding var isShowingSelf: Bool
     let report: Report
     let countries: [String] = ["USD", "CAD", "JPY"]
-    @State var selectedType: ExpenseType?
+    let selectedType: ExpenseType
     @State var selectedCity: String = ""
     @State var date: Date = Date()
     @State var selectedCurrency: String = "USD"
@@ -20,11 +20,29 @@ struct NewExpenseForm: View {
     @StateObject private var commonDataManager = CommonDataManager.instance
     @EnvironmentObject var authManager: AuthenticationManager
     
+    // Dynamic Fields
+    @State var airline: String = ""
+    @State var origin: String = ""
+    @State var destination: String = ""
+    @State var rentalAgency: String = ""
+    @State var carType: String = ""
+    @State var mealCategory: String = ""
+    @State var employeeNames: String = ""
+    @State var establishmentName: String = ""
+    @State var businessTopic: String = ""
+    @State var totalAttendees: Int = 0
+    @State var relationshipToPAI: String = ""
+    @State var hotelName: String = ""
+    @State var hotelDailyBaseRate: String = ""
+    @State var distance: String = ""
+    @State var mileageRate: String = ""
+    @State var carrier: String = ""
+
     var convertedAmount: Double {
         let amountValue = Double(amount) ?? 0
         return Utilities.CurrencyConverter.convert(amount: amountValue, from: selectedCurrency, to: authManager.user?.currency ?? "USD")
     }
-    
+
     var body: some View {
         ZStack {
             Color(uiColor: .systemGray6)
@@ -54,15 +72,17 @@ struct NewExpenseForm: View {
             ])
         }
     }
-    
+
     var content: some View {
         ScrollView {
             VStack {
                 ourPfu
                 line
                 reportHeader
-                expenseTypeContainer
-                cityContainer
+                specificFields
+                if selectedTypeRequiresCity {
+                    cityContainer
+                }
                 dateField
                 HStack {
                     VStack {
@@ -81,7 +101,132 @@ struct NewExpenseForm: View {
             }.padding()
         }
     }
-    
+
+    var specificFields: some View {
+        Group {
+            switch selectedType {
+                case .airFare:
+                    airFareFields
+                case .autoRental:
+                    autoRentalFields
+                case .businessMeals:
+                    businessMealsFields
+                case .entertainment, .entertainmentLevi:
+                    entertainmentFields
+                case .hotel:
+                    hotelFields
+                case .mileage:
+                    mileageFields
+                case .telephoneCell:
+                    telephoneCellFields
+                default:
+                    EmptyView()
+            }
+        }
+    }
+
+    var airFareFields: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text("Airline")
+            Menu {
+                ForEach(commonDataManager.airlines, id: \.value) { city in
+                    Button(action: {
+                        selectedCity = city.value
+                    }, label: {
+                        Text(city.value)
+                    })
+                }
+            } label: {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.gray, lineWidth: 1)
+                    HStack {
+                        Text(selectedCity)
+                            .foregroundStyle(.black)
+                        Spacer()
+                        Image(systemName: "chevron.down")
+                            .foregroundStyle(.gray)
+                            .fontWeight(.semibold)
+                    }.padding(.horizontal)
+                }
+            }.frame(height: 41)
+//            TextField("Origin", text: $origin)
+//            TextField("Destination", text: $destination)
+        }.padding(.top)
+    }
+
+    var autoRentalFields: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Picker("Rental Agency", selection: $rentalAgency) {
+                Text("Agency 1").tag("Agency 1")
+                Text("Agency 2").tag("Agency 2")
+            }
+            Picker("Car Type", selection: $carType) {
+                Text("SUV").tag("SUV")
+                Text("Sedan").tag("Sedan")
+            }
+        }
+    }
+
+    var businessMealsFields: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Picker("Meal Category", selection: $mealCategory) {
+                Text("Lunch").tag("Lunch")
+                Text("Dinner").tag("Dinner")
+            }
+            TextField("Employee Names", text: $employeeNames)
+        }
+    }
+
+    var entertainmentFields: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            TextField("Name of Establishment", text: $establishmentName)
+            TextField("City", text: $selectedCity)
+            TextField("Business Topic", text: $businessTopic)
+            TextField("Total Attendees", value: $totalAttendees, formatter: NumberFormatter())
+            if selectedType == .entertainment {
+                Picker("Relationship to PAI", selection: $relationshipToPAI) {
+                    Text("Business").tag("Business")
+                    Text("Personal").tag("Personal")
+                }
+            } else {
+                TextField("Attendees", text: $employeeNames)
+            }
+        }
+    }
+
+    var hotelFields: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Picker("Hotel Name", selection: $hotelName) {
+                Text("Hotel 1").tag("Hotel 1")
+                Text("Hotel 2").tag("Hotel 2")
+            }
+            TextField("City", text: $selectedCity)
+            Picker("Hotel Daily Base Rate", selection: $hotelDailyBaseRate) {
+                Text("Rate 1").tag("Rate 1")
+                Text("Rate 2").tag("Rate 2")
+            }
+        }
+    }
+
+    var mileageFields: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            TextField("Origin", text: $origin)
+            TextField("Destination", text: $destination)
+            TextField("Distance", text: $distance)
+            Picker("Mileage Rate", selection: $mileageRate) {
+                Text("Rate 1").tag("Rate 1")
+                Text("Rate 2").tag("Rate 2")
+            }
+        }
+    }
+
+    var telephoneCellFields: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            TextField("Carrier", text: $carrier)
+        }
+    }
+
     var filePickerButton: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text("Upload Receipt")
@@ -110,7 +255,7 @@ struct NewExpenseForm: View {
         }
         .padding(.top)
     }
-    
+
     var ourPfu: some View {
         VStack {
             HStack {
@@ -119,13 +264,13 @@ struct NewExpenseForm: View {
             }
         }.ignoresSafeArea()
     }
-    
+
     var line: some View {
         RoundedRectangle(cornerRadius: 10)
             .frame(height: 1)
             .foregroundStyle(Color.gray.opacity(0.4))
     }
-    
+
     var reportHeader: some View {
         HStack {
             VStack(alignment: .leading, spacing: 3) {
@@ -145,42 +290,13 @@ struct NewExpenseForm: View {
             Spacer()
         }
     }
-    
-    var expenseTypeContainer: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text("Expense Type")
-                .foregroundStyle(.gray)
-            Menu {
-                ForEach(ExpenseType.allCases) { type in
-                    Button(action: {
-                        selectedType = type
-                    }, label: {
-                        Text(type.displayName)
-                    })
-                }
-            } label: {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.gray, lineWidth: 1)
-                    HStack {
-                        Text("\(selectedType?.displayName ?? "")")
-                            .foregroundStyle(.black)
-                        Spacer()
-                        Image(systemName: "chevron.down")
-                            .foregroundStyle(.gray)
-                            .fontWeight(.semibold)
-                    }.padding(.horizontal)
-                }
-            }.frame(height: 41)
-        }.padding(.top)
-    }
-    
+
     var cityContainer: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text("City")
                 .foregroundStyle(.gray)
             Menu {
-                ForEach(commonDataManager.cities, id: \.value) {city in
+                ForEach(commonDataManager.cities, id: \.value) { city in
                     Button(action: {
                         selectedCity = city.value
                     }, label: {
@@ -201,10 +317,9 @@ struct NewExpenseForm: View {
                     }.padding(.horizontal)
                 }
             }.frame(height: 41)
-            
         }.padding(.top)
     }
-    
+
     var dateField: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Date")
@@ -232,14 +347,14 @@ struct NewExpenseForm: View {
             }
         }.padding(.top)
     }
-    
+
     var recieptAmountContainer: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text("Reciept Amount")
                 .foregroundStyle(.gray)
             HStack {
                 Menu {
-                    ForEach(countries, id:\.self) { currency in
+                    ForEach(countries, id: \.self) { currency in
                         Button(action: {
                             selectedCurrency = currency
                         }, label: {
@@ -271,7 +386,7 @@ struct NewExpenseForm: View {
         }
         .padding(.top)
     }
-    
+
     var convertedCurrency: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text("Converted Reporting Amount")
@@ -298,7 +413,7 @@ struct NewExpenseForm: View {
             }.frame(height: 41)
         }
     }
-    
+
     var justificationContainer: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text("Justification")
@@ -312,7 +427,7 @@ struct NewExpenseForm: View {
             
         }.padding(.top)
     }
-    
+
     var saveButton: some View {
         Button(action: {
             submitItem()
@@ -326,15 +441,10 @@ struct NewExpenseForm: View {
             }
         }).frame(height: 41)
     }
-    
+
     func submitItem() {
         guard let accessToken = authManager.accessToken else {
             print("Access token not found")
-            return
-        }
-        
-        guard let selectedType = selectedType else {
-            print("Expense type not selected")
             return
         }
         
@@ -376,4 +486,35 @@ struct NewExpenseForm: View {
         }
         isShowingImagePicker = true
     }
+
+    private var selectedTypeRequiresCity: Bool {
+        switch selectedType {
+        case .entertainment, .entertainmentLevi, .hotel:
+            return true
+        default:
+            return false
+        }
+    }
+}
+
+
+#Preview {
+    NewExpenseForm(isShowingSelf: .constant(true), report: Report(
+        id: 3,
+        user: (dao.user?.first_name ?? "") + (dao.user?.last_name ?? ""),
+        reportNumber: "RPT789012",
+        reportStatus: "Rejected",
+        reportSubmitDate: "2023-03-10",
+        integrationStatus: "Not Integrated",
+        integrationDate: nil,
+        reportDate: "2024-06-08",
+        expenseType: "Accommodation",
+        purpose: "Hotel stay during conference",
+        paymentMethod: "Debit Card",
+        reportAmount: "500.00",
+        reportCurrency: "USD",
+        createdAt: "2023-03-08T09:00:00Z",
+        updatedAt: "2023-03-10T14:00:00Z"
+    ), selectedType: .airFare)
+    .environmentObject(AuthenticationManager())
 }

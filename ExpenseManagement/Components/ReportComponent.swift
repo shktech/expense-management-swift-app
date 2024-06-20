@@ -57,6 +57,24 @@ struct ReportComponent: View {
     }
 }
 
-//#Preview {
-//    ReportComponent(report: Reports(name: "Exp 1019", date: Date(), purpose: "LA Conference", status: false, expenseItems: []))
-//}
+#Preview {
+    ReportComponent(report: 
+                        Report(
+                            id: 1,
+                            user: (dao.user?.first_name ?? "") + (dao.user?.last_name ?? ""),
+                            reportNumber: "RPT123456",
+                            reportStatus: "Pending",
+                            reportSubmitDate: "2023-01-15",
+                            integrationStatus: "Not Integrated",
+                            integrationDate: nil,
+                            reportDate: "2024-06-08",
+                            expenseType: "Travel",
+                            purpose: "Business trip to NYC",
+                            paymentMethod: "Credit Card",
+                            reportAmount: "1200.00",
+                            reportCurrency: "USD",
+                            createdAt: "2023-01-10T10:00:00Z",
+                            updatedAt: "2023-01-15T12:00:00Z"
+                        )
+    )
+}

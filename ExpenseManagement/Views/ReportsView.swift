@@ -1,4 +1,6 @@
 import SwiftUI
+
+
 struct ReportsView: View {
     
     @State var initialDate: Date = Calendar.current.date(byAdding: .day, value: -180, to: Date())!
@@ -12,6 +14,77 @@ struct ReportsView: View {
     @State var isShowingAddReport: Bool = false
     @State private var isLoading = false
     @State private var reports: [Report] = []
+    
+//    let reports: [Report] = [
+//        Report(
+//            id: 1,
+//            user: (dao.user?.first_name ?? "") + (dao.user?.last_name ?? ""),
+//            reportNumber: "RPT123456",
+//            reportStatus: "Pending",
+//            reportSubmitDate: "2023-01-15",
+//            integrationStatus: "Not Integrated",
+//            integrationDate: nil,
+//            reportDate: "2024-06-08",
+//            expenseType: "Travel",
+//            purpose: "Business trip to NYC",
+//            paymentMethod: "Credit Card",
+//            reportAmount: "1200.00",
+//            reportCurrency: "USD",
+//            createdAt: "2023-01-10T10:00:00Z",
+//            updatedAt: "2023-01-15T12:00:00Z"
+//        ),
+//        Report(
+//            id: 2,
+//            user: (dao.user?.first_name ?? "") + (dao.user?.last_name ?? ""),
+//            reportNumber: "RPT654321",
+//            reportStatus: "Approved",
+//            reportSubmitDate: "2023-02-20",
+//            integrationStatus: "Integrated",
+//            integrationDate: "2023-02-21",
+//            reportDate: "2024-06-08",
+//            expenseType: "Meals",
+//            purpose: "Client lunch meeting",
+//            paymentMethod: "Cash",
+//            reportAmount: "150.00",
+//            reportCurrency: "USD",
+//            createdAt: "2023-02-18T11:00:00Z",
+//            updatedAt: "2023-02-20T15:00:00Z"
+//        ),
+//        Report(
+//            id: 3,
+//            user: (dao.user?.first_name ?? "") + (dao.user?.last_name ?? ""),
+//            reportNumber: "RPT789012",
+//            reportStatus: "Rejected",
+//            reportSubmitDate: "2023-03-10",
+//            integrationStatus: "Not Integrated",
+//            integrationDate: nil,
+//            reportDate: "2024-06-08",
+//            expenseType: "Accommodation",
+//            purpose: "Hotel stay during conference",
+//            paymentMethod: "Debit Card",
+//            reportAmount: "500.00",
+//            reportCurrency: "USD",
+//            createdAt: "2023-03-08T09:00:00Z",
+//            updatedAt: "2023-03-10T14:00:00Z"
+//        )
+//    ]
+    
+    var filteredReports: [Report] {
+        let filtered = reports.filter { report in
+            if let date = DateFormatter.apiDate.date(from: report.reportDate) {
+                return date >= initialDate && date <= finalDate
+            }
+            return false
+        }
+        
+        return filtered.sorted { report1, report2 in
+            if let date1 = DateFormatter.iso8601Full.date(from: report1.createdAt),
+               let date2 = DateFormatter.iso8601Full.date(from: report2.createdAt) {
+                return date1 > date2
+            }
+            return false
+        }
+    }
     
     @EnvironmentObject var authManager: AuthenticationManager
     
@@ -111,22 +184,7 @@ struct ReportsView: View {
         }
     }
     
-    var filteredReports: [Report] {
-        let filtered = reports.filter { report in
-            if let date = DateFormatter.apiDate.date(from: report.reportDate) {
-                return date >= initialDate && date <= finalDate
-            }
-            return false
-        }
-        
-        return filtered.sorted { report1, report2 in
-            if let date1 = DateFormatter.iso8601Full.date(from: report1.createdAt),
-               let date2 = DateFormatter.iso8601Full.date(from: report2.createdAt) {
-                return date1 > date2
-            }
-            return false
-        }
-    }
+    
     
     private func loadData() {
         self.isLoading = true
@@ -141,4 +199,9 @@ struct ReportsView: View {
             self.isLoading = false
         }
     }
+}
+
+#Preview {
+    ReportsView()
+        .environmentObject(AuthenticationManager())
 }

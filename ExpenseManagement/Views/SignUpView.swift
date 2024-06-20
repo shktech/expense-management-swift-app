@@ -16,6 +16,14 @@ struct SignUpView: View {
     @State var rememberMe: Bool = false
     
     @State private var keyboardHeight: CGFloat = 0
+    @EnvironmentObject var authManager: AuthenticationManager
+    
+    @State private var email = "ex2@ex2.com"
+    @State private var password = "1234"
+    @State private var firstName = "John"
+    @State private var lastName = "Doe"
+    @State private var phoneNumber = "+1555123-4567"
+    @State private var registrationStatus = ""
     
     var body: some View {
         ZStack {
@@ -137,7 +145,15 @@ struct SignUpView: View {
     var bottomContent: some View {
         VStack {
             Button(action: {
-                // Sign In
+                // Sign Up
+                authManager.register(email: email, password: password, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber) { result in
+                    switch result {
+                    case .success:
+                        registrationStatus = "Registration successful"
+                    case .failure(let error):
+                        registrationStatus = "Registration failed: \(error.localizedDescription)"
+                    }
+                }
             }, label: {
                 Text("Sign Up")
                     .font(.system(size: 17).weight(.semibold))

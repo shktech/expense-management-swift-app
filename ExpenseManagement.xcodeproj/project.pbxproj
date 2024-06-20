@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F1AB6562C1CE3AA003DA6BE /* Nunito.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0F1AB6552C1CE3AA003DA6BE /* Nunito.ttf */; };
+		0F1AB65A2C1F9DE8003DA6BE /* airLines.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F1AB6592C1F9DE8003DA6BE /* airLines.json */; };
+		0FBD331C2C21E388000502B0 /* SelectTypeForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBD331B2C21E388000502B0 /* SelectTypeForm.swift */; };
 		0FCD00A72C08CAAF00A49C62 /* ExpenseManagementApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00A62C08CAAF00A49C62 /* ExpenseManagementApp.swift */; };
 		0FCD00A92C08CAAF00A49C62 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00A82C08CAAF00A49C62 /* ContentView.swift */; };
 		0FCD00AB2C08CAB000A49C62 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0FCD00AA2C08CAB000A49C62 /* Assets.xcassets */; };
@@ -56,6 +59,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0F1AB6552C1CE3AA003DA6BE /* Nunito.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Nunito.ttf; sourceTree = "<group>"; };
+		0F1AB6592C1F9DE8003DA6BE /* airLines.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = airLines.json; sourceTree = "<group>"; };
+		0FBD331B2C21E388000502B0 /* SelectTypeForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTypeForm.swift; sourceTree = "<group>"; };
 		0FCD00A32C08CAAF00A49C62 /* ExpenseManagement.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExpenseManagement.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FCD00A62C08CAAF00A49C62 /* ExpenseManagementApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseManagementApp.swift; sourceTree = "<group>"; };
 		0FCD00A82C08CAAF00A49C62 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -155,6 +161,7 @@
 				B59BD60B2C1B7B4B0027E599 /* Inter.ttf */,
 				B59BD60D2C1B7BF30027E599 /* Poppins.ttf */,
 				B59BD60F2C1B7C540027E599 /* Poppins-Bold.ttf */,
+				0F1AB6552C1CE3AA003DA6BE /* Nunito.ttf */,
 			);
 			path = ExpenseManagement;
 			sourceTree = "<group>";
@@ -187,6 +194,7 @@
 				B59BD6032C11AFD20027E599 /* FilePicker.swift */,
 				B59BD6052C11B86C0027E599 /* ImagePicker.swift */,
 				B59BD6092C1B70A70027E599 /* VerifyMFAView.swift */,
+				0FBD331B2C21E388000502B0 /* SelectTypeForm.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -225,6 +233,7 @@
 				0FFCC98A2C0FD4F6003CBEC1 /* citiesAmounts.json */,
 				0FFCC98C2C0FD50D003CBEC1 /* allCities.json */,
 				B59BD5FB2C11837A0027E599 /* user.json */,
+				0F1AB6592C1F9DE8003DA6BE /* airLines.json */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -322,8 +331,10 @@
 				0FFCC9852C0FA0A8003CBEC1 /* report_items.json in Resources */,
 				B59BD6102C1B7C540027E599 /* Poppins-Bold.ttf in Resources */,
 				0FCD00AB2C08CAB000A49C62 /* Assets.xcassets in Resources */,
+				0F1AB65A2C1F9DE8003DA6BE /* airLines.json in Resources */,
 				0FFCC9832C0FA0A0003CBEC1 /* reports.json in Resources */,
 				0FFCC98D2C0FD50D003CBEC1 /* allCities.json in Resources */,
+				0F1AB6562C1CE3AA003DA6BE /* Nunito.ttf in Resources */,
 				0FFCC9892C0FD4C1003CBEC1 /* rates.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -339,6 +350,7 @@
 				0FCD00D52C0A3FE100A49C62 /* TabViewContainer.swift in Sources */,
 				B59BD5F22C113CE90027E599 /* AuthManager.swift in Sources */,
 				0FCD00C22C0A33DA00A49C62 /* DAO.swift in Sources */,
+				0FBD331C2C21E388000502B0 /* SelectTypeForm.swift in Sources */,
 				B59BD6082C123DE00027E599 /* Utilities.swift in Sources */,
 				B59BD5F92C1172ED0027E599 /* DateFormatter.swift in Sources */,
 				B59BD6042C11AFD20027E599 /* FilePicker.swift in Sources */,
@@ -507,6 +519,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ExpenseManagement/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -539,6 +552,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ExpenseManagement/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -635,6 +649,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ExpenseManagement/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

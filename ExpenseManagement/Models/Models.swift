@@ -215,6 +215,7 @@ struct AllUsers: Codable {
 }
 
 struct Airline: Codable {
+    let id: Int
     let value: String
 }
 

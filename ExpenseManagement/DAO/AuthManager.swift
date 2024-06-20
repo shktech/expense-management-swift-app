@@ -101,4 +101,44 @@ class AuthenticationManager: ObservableObject {
             completion(.success(()))
         }
     }
+    
+    func register(email: String, password: String, firstName: String, lastName: String, phoneNumber: String, completion: @escaping (Result<Void, Error>) -> Void) {
+            guard let url = URL(string: "http://localhost:8000/api/auth/register/") else {
+                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
+                return
+            }
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            let parameters: [String: Any] = [
+                "email": email,
+                "password": password,
+                "first_name": firstName,
+                "last_name": lastName,
+                "phone_number": phoneNumber
+            ]
+            
+            do {
+                request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
+            } catch {
+                completion(.failure(error))
+                return
+            }
+            
+            URLSession.shared.dataTask(with: request) { data, response, error in
+                if let error = error {
+                    completion(.failure(error))
+                    return
+                }
+                
+                guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 201 else {
+                    completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to register user"])))
+                    return
+                }
+                
+                completion(.success(()))
+            }.resume()
+        }
 }
