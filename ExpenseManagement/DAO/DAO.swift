@@ -205,6 +205,8 @@ let dao = DAO.instance
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        
+//        print(request)
 
         guard let jsonData = try? JSONEncoder().encode(reportData) else {
             print("Failed to encode report data")
@@ -284,7 +286,7 @@ let dao = DAO.instance
         }.resume()
     }
 
-    func fetchReportItems(reportId: Int, accessToken: String, completion: @escaping (Result<[ExpenseItem], Error>) -> Void) {
+    func fetchReportItems(reportId: String, accessToken: String, completion: @escaping (Result<[ExpenseItem], Error>) -> Void) {
         let url = URL(string: "\(apiBaseUrl)/reports/\(reportId)/items/")!
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -318,7 +320,7 @@ let dao = DAO.instance
         }.resume()
     }
     
-    func addExpenseItemToReport(reportId: Int, expenseItemData: CreateExpenseItemRequest, accessToken: String, selectedFileURL: URL?, completion: @escaping (Result<ExpenseItem, Error>) -> Void) {
+    func addExpenseItemToReport(reportId: String, expenseItemData: CreateExpenseItemRequest, accessToken: String, selectedFileURL: URL?, completion: @escaping (Result<ExpenseItem, Error>) -> Void) {
         let url = URL(string: "\(apiBaseUrl)/reports/\(reportId)/items/")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"

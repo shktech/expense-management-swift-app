@@ -45,7 +45,7 @@ struct CreateReportRequest: Codable {
 }
 
 struct Report: Codable {
-    let id: Int
+    let id: String
     let user: String
     let reportNumber: String
     let reportStatus: String
@@ -102,7 +102,7 @@ struct CreateExpenseItemRequest: Codable {
 
 
 struct ExpenseItem: Codable {
-    let id: Int?
+    let id: String?
     let airline: String?
     let rentalAgency: String?
     let carType: String?
