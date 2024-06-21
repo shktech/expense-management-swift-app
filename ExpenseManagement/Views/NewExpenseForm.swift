@@ -42,6 +42,35 @@ struct NewExpenseForm: View {
         let amountValue = Double(amount) ?? 0
         return Utilities.CurrencyConverter.convert(amount: amountValue, from: selectedCurrency, to: authManager.user?.currency ?? "USD")
     }
+    
+    var warningMessage: String? {
+        switch selectedType {
+        case .airlineClubMembershipDues:
+            return "Approved Requisition is required for this expense type. Enter Requisition number in Justification Field"
+        case .autoRental, .automobile:
+            return "Approved Requisition is required for this expense type. Enter Requisition number in Justification Field"
+        case .companySponsorVPDF:
+            return "Pre-approval required, include approved form with receipts"
+        case .customerGifts:
+            return "Pre-approval required, include approved form with receipts"
+        case .dataProcessingDisksManual:
+            return "Pre-approval required, include approved form with receipts"
+        case .entertainment, .entertainmentLevi:
+            return "Approved Requisition is required for this expense type. Enter Requisition number in Justification Field"
+        case .fieldEngineerSupplies:
+            return "Approved Requisition is required for this expense type. Enter Requisition number in Justification Field"
+        case .officeSupplies:
+            return "Must include approved Purchase Requisition number"
+        case .otherMarketingExpenses:
+            return "Approved Requisition is required for this expense type. Enter Requisition number in Justification Field"
+        case .seminarsTraining:
+            return "Must include approved ETA number. Enter ETA number in Justification field"
+        case .marketingDevelopment:
+                return "Approved Requisition is required for this expense type. Enter Requisition number in Justification Field"
+        default:
+            return nil
+        }
+    }
 
     var body: some View {
         ZStack {
@@ -79,6 +108,13 @@ struct NewExpenseForm: View {
                 ourPfu
                 line
                 reportHeader
+                if let warningMessage = warningMessage {
+                    Text(warningMessage)
+                        .foregroundColor(.red)
+                        .font(Font.custom("Poppins", size: 17).weight(.semibold))
+                        .multilineTextAlignment(.center)
+                        .padding(.top)
+                }
                 specificFields
                 if selectedTypeRequiresCity {
                     cityContainer
@@ -150,8 +186,6 @@ struct NewExpenseForm: View {
                     }.padding(.horizontal)
                 }
             }.frame(height: 41)
-//            TextField("Origin", text: $origin)
-//            TextField("Destination", text: $destination)
         }.padding(.top)
     }
 
@@ -496,7 +530,6 @@ struct NewExpenseForm: View {
         }
     }
 }
-
 
 #Preview {
     NewExpenseForm(isShowingSelf: .constant(true), report: Report(
