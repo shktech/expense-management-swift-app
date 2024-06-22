@@ -382,6 +382,57 @@ let dao = DAO.instance
         }.resume()
     }
     
+    func updateExpenseItem(reportId: String, itemId: String, expenseItemData: CreateExpenseItemRequest, accessToken: String, completion: @escaping (Result<ExpenseItem, Error>) -> Void) {
+        let url = URL(string: "\(apiBaseUrl)/reports/\(reportId)/items/\(itemId)")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+
+        guard let jsonData = try? JSONEncoder().encode(expenseItemData) else {
+            print("Failed to encode expense item data")
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to encode expense item data"])))
+            return
+        }
+        request.httpBody = jsonData
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+                return
+            }
+
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data received"])))
+                }
+                return
+            }
+
+            let httpResponse = response as? HTTPURLResponse
+            if httpResponse?.statusCode == 200 {
+                do {
+                    let updatedExpenseItem = try JSONDecoder().decode(ExpenseItem.self, from: data)
+                    DispatchQueue.main.async {
+                        completion(.success(updatedExpenseItem))
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        completion(.failure(error))
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    let errorDescription = HTTPURLResponse.localizedString(forStatusCode: httpResponse?.statusCode ?? -1)
+                    completion(.failure(NSError(domain: "", code: httpResponse?.statusCode ?? -1, userInfo: [NSLocalizedDescriptionKey: errorDescription])))
+                }
+            }
+        }.resume()
+    }
+
+    
     func uploadFileToS3(presignedURL: URL, fileURL: URL, completion: @escaping (Result<Void, Error>) -> Void) {
         var request = URLRequest(url: presignedURL)
         request.httpMethod = "PUT"
