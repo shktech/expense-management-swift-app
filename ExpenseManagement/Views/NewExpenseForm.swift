@@ -44,6 +44,35 @@ struct NewExpenseForm: View {
         return Utilities.CurrencyConverter.convert(amount: amountValue, from: selectedCurrency, to: authManager.user?.currency ?? "USD")
     }
     
+    var warningMessage: String? {
+        switch selectedType {
+        case .airlineClubMembershipDues:
+            return "Approved Requisition is required for this expense type. Enter Requisition number in Justification Field"
+        case .autoRental, .automobile:
+            return "Approved Requisition is required for this expense type. Enter Requisition number in Justification Field"
+        case .companySponsorVPDF:
+            return "Pre-approval required, include approved form with receipts"
+        case .customerGifts:
+            return "Pre-approval required, include approved form with receipts"
+        case .dataProcessingDisksManual:
+            return "Pre-approval required, include approved form with receipts"
+        case .entertainment, .entertainmentLevi:
+            return "Approved Requisition is required for this expense type. Enter Requisition number in Justification Field"
+        case .fieldEngineerSupplies:
+            return "Approved Requisition is required for this expense type. Enter Requisition number in Justification Field"
+        case .officeSupplies:
+            return "Must include approved Purchase Requisition number"
+        case .otherMarketingExpenses:
+            return "Approved Requisition is required for this expense type. Enter Requisition number in Justification Field"
+        case .seminarsTraining:
+            return "Must include approved ETA number. Enter ETA number in Justification field"
+        case .marketingDevelopment:
+                return "Approved Requisition is required for this expense type. Enter Requisition number in Justification Field"
+        default:
+            return nil
+        }
+    }
+
     var body: some View {
         ZStack {
             Color(uiColor: .systemGray6)
@@ -77,10 +106,14 @@ struct NewExpenseForm: View {
     var content: some View {
         ScrollView {
             VStack {
-//                ourPfu
-//                line
                 reportHeader
-                line
+                if let warningMessage = warningMessage {
+                    Text(warningMessage)
+                        .foregroundColor(.red)
+                        .font(Font.custom("Poppins", size: 17).weight(.semibold))
+                        .multilineTextAlignment(.center)
+                        .padding(.top)
+                }
                 dateField
                 HStack {
                     VStack {
@@ -516,7 +549,6 @@ struct NewExpenseForm: View {
         }
     }
 }
-
 
 #Preview {
     NewExpenseForm(isShowingSelf: .constant(true), report: Report(
