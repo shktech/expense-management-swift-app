@@ -45,7 +45,7 @@ struct CreateReportRequest: Codable {
 }
 
 struct Report: Codable {
-    let id: Int
+    let id: String
     let user: String
     let reportNumber: String
     let reportStatus: String
@@ -81,13 +81,31 @@ struct Report: Codable {
 }
 
 struct CreateExpenseItemRequest: Codable {
-    let expenseType: String
-    let expenseDate: String
-    let receiptAmount: String
-    let receiptCurrency: String
-    let justification: String
-    let note: String
+    let expenseType: String?
+    let expenseDate: String?
+    let receiptAmount: String?
+    let receiptCurrency: String?
+    let justification: String?
+    let note: String?
     let fileName: String?
+    let airline: String?
+    let rentalAgency: String?
+    let carType: String?
+    let mealCategory: String?
+    let relationshipToPAI: String?
+    let city: String?
+    let hotelDailyBaseRate: String?
+    let mileageRate: String?
+    let originDestination: String?
+    let employeeNames: String?
+    let totalEmployees: Int?
+    let companyCustomerName: String?
+    let businessTopic: String?
+    let totalAttendees: Int?
+    let nameOfEstablishment: String?
+    let hotelName: String?
+    let carrier: String?
+    let distance: String?
 
     enum CodingKeys: String, CodingKey {
         case expenseType = "expense_type"
@@ -97,12 +115,112 @@ struct CreateExpenseItemRequest: Codable {
         case justification
         case note
         case fileName = "filename"
+        case airline
+        case rentalAgency = "rental_agency"
+        case carType = "car_type"
+        case mealCategory = "meal_category"
+        case relationshipToPAI = "relationship_to_pai"
+        case city
+        case hotelDailyBaseRate = "hotel_daily_base_rate"
+        case mileageRate = "mileage_rate"
+        case originDestination = "origin_destination"
+        case employeeNames = "employee_names"
+        case totalEmployees = "total_employees"
+        case companyCustomerName = "company_customer_name"
+        case businessTopic = "business_topic"
+        case totalAttendees = "total_attendees"
+        case nameOfEstablishment = "name_of_establishment"
+        case hotelName = "hotel_name"
+        case carrier
+        case distance
+    }
+
+    init(expenseType: String? = nil,
+         expenseDate: String? = nil,
+         receiptAmount: String? = nil,
+         receiptCurrency: String? = nil,
+         justification: String? = nil,
+         note: String? = nil,
+         fileName: String? = nil,
+         airline: String? = nil,
+         rentalAgency: String? = nil,
+         carType: String? = nil,
+         mealCategory: String? = nil,
+         relationshipToPAI: String? = nil,
+         city: String? = nil,
+         hotelDailyBaseRate: String? = nil,
+         mileageRate: String? = nil,
+         originDestination: String? = nil,
+         employeeNames: String? = nil,
+         totalEmployees: Int? = nil,
+         companyCustomerName: String? = nil,
+         businessTopic: String? = nil,
+         totalAttendees: Int? = nil,
+         nameOfEstablishment: String? = nil,
+         hotelName: String? = nil,
+         carrier: String? = nil,
+         distance: String? = nil) {
+        
+        self.expenseType = expenseType
+        self.expenseDate = expenseDate
+        self.receiptAmount = receiptAmount
+        self.receiptCurrency = receiptCurrency
+        self.justification = justification
+        self.note = note
+        self.fileName = fileName
+        self.airline = airline
+        self.rentalAgency = rentalAgency
+        self.carType = carType
+        self.mealCategory = mealCategory
+        self.relationshipToPAI = relationshipToPAI
+        self.city = city
+        self.hotelDailyBaseRate = hotelDailyBaseRate
+        self.mileageRate = mileageRate
+        self.originDestination = originDestination
+        self.employeeNames = employeeNames
+        self.totalEmployees = totalEmployees
+        self.companyCustomerName = companyCustomerName
+        self.businessTopic = businessTopic
+        self.totalAttendees = totalAttendees
+        self.nameOfEstablishment = nameOfEstablishment
+        self.hotelName = hotelName
+        self.carrier = carrier
+        self.distance = distance
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(expenseType, forKey: .expenseType)
+        try container.encodeIfPresent(expenseDate, forKey: .expenseDate)
+        try container.encodeIfPresent(receiptAmount, forKey: .receiptAmount)
+        try container.encodeIfPresent(receiptCurrency, forKey: .receiptCurrency)
+        try container.encodeIfPresent(justification, forKey: .justification)
+        try container.encodeIfPresent(note, forKey: .note)
+        try container.encodeIfPresent(fileName, forKey: .fileName)
+        try container.encodeIfPresent(airline, forKey: .airline)
+        try container.encodeIfPresent(rentalAgency, forKey: .rentalAgency)
+        try container.encodeIfPresent(carType, forKey: .carType)
+        try container.encodeIfPresent(mealCategory, forKey: .mealCategory)
+        try container.encodeIfPresent(relationshipToPAI, forKey: .relationshipToPAI)
+        try container.encodeIfPresent(city, forKey: .city)
+        try container.encodeIfPresent(hotelDailyBaseRate, forKey: .hotelDailyBaseRate)
+        try container.encodeIfPresent(mileageRate, forKey: .mileageRate)
+        try container.encodeIfPresent(originDestination, forKey: .originDestination)
+        try container.encodeIfPresent(employeeNames, forKey: .employeeNames)
+        try container.encodeIfPresent(totalEmployees, forKey: .totalEmployees)
+        try container.encodeIfPresent(companyCustomerName, forKey: .companyCustomerName)
+        try container.encodeIfPresent(businessTopic, forKey: .businessTopic)
+        try container.encodeIfPresent(totalAttendees, forKey: .totalAttendees)
+        try container.encodeIfPresent(nameOfEstablishment, forKey: .nameOfEstablishment)
+        try container.encodeIfPresent(hotelName, forKey: .hotelName)
+        try container.encodeIfPresent(carrier, forKey: .carrier)
+        try container.encodeIfPresent(distance, forKey: .distance)
     }
 }
 
 
 struct ExpenseItem: Codable {
-    let id: Int?
+    let id: String?
     let airline: String?
     let rentalAgency: String?
     let carType: String?
@@ -215,7 +333,6 @@ struct AllUsers: Codable {
 }
 
 struct Airline: Codable {
-    let id: Int
     let value: String
 }
 
@@ -229,6 +346,7 @@ struct City: Codable {
 }
 
 struct HotelDailyBaseRate: Codable {
+    let id: Int
     let country: String
     let city: String
     let amount: String
@@ -240,6 +358,7 @@ struct MealCategory: Codable {
 }
 
 struct MileageRate: Codable {
+    let id: Int
     let rate: String
     let title: String
 }

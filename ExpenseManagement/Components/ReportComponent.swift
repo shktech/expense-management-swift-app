@@ -60,7 +60,7 @@ struct ReportComponent: View {
 #Preview {
     ReportComponent(report: 
                         Report(
-                            id: 1,
+                            id: "1",
                             user: (dao.user?.first_name ?? "") + (dao.user?.last_name ?? ""),
                             reportNumber: "RPT123456",
                             reportStatus: "Pending",

@@ -25,6 +25,7 @@ class CommonDataManager: ObservableObject {
         dao.fetchData(endpoint: "common/airlines/", accessToken: accessToken) { (result: Result<[Airline], Error>) in
             switch result {
             case .success(let data):
+                print(data)
                 self.airlines = data
             case .failure(let error):
                 print("Failed to fetch airlines: \(error)")
