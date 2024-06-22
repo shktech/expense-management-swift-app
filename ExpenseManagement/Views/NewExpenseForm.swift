@@ -37,7 +37,8 @@ struct NewExpenseForm: View {
     @State var distance: String = ""
     @State var mileageRate: String = ""
     @State var carrier: String = ""
-
+    @State var companyCustomerName: String = ""
+    
     var convertedAmount: Double {
         let amountValue = Double(amount) ?? 0
         return Utilities.CurrencyConverter.convert(amount: amountValue, from: selectedCurrency, to: authManager.user?.currency ?? "USD")
@@ -101,12 +102,10 @@ struct NewExpenseForm: View {
             ])
         }
     }
-
+    
     var content: some View {
         ScrollView {
             VStack {
-                ourPfu
-                line
                 reportHeader
                 if let warningMessage = warningMessage {
                     Text(warningMessage)
@@ -115,55 +114,56 @@ struct NewExpenseForm: View {
                         .multilineTextAlignment(.center)
                         .padding(.top)
                 }
-                specificFields
-                if selectedTypeRequiresCity {
-                    cityContainer
-                }
                 dateField
                 HStack {
                     VStack {
                         recieptAmountContainer
+                        Image(systemName: "arrow.up.arrow.down")
+                            .foregroundStyle(.gray)
+                            .padding(.top, 2)
+                            .padding(.bottom, 2)
                         convertedCurrency
                     }
-                    Image(systemName: "arrow.up.arrow.down")
-                        .foregroundStyle(.gray)
-                        .padding(.top)
+                }.padding(.bottom, 3)
+                if selectedTypeRequiresCity {
+                    cityContainer
                 }
+                specificFields
                 justificationContainer
                 filePickerButton
                 Spacer()
                 saveButton
-                    .padding(.top)
+                    .padding(.bottom, 3)
             }.padding()
         }
     }
-
+    
     var specificFields: some View {
         Group {
             switch selectedType {
-                case .airFare:
-                    airFareFields
-                case .autoRental:
-                    autoRentalFields
-                case .businessMeals:
-                    businessMealsFields
-                case .entertainment, .entertainmentLevi:
-                    entertainmentFields
-                case .hotel:
-                    hotelFields
-                case .mileage:
-                    mileageFields
-                case .telephoneCell:
-                    telephoneCellFields
-                default:
-                    EmptyView()
+            case .airFare:
+                airFareFields
+            case .autoRental:
+                autoRentalFields
+            case .businessMeals:
+                businessMealsFields
+            case .entertainment, .entertainmentLevi:
+                entertainmentFields
+            case .hotel:
+                hotelFields
+            case .mileage:
+                mileageFields
+            case .telephoneCell:
+                telephoneCellFields
+            default:
+                EmptyView()
             }
         }
     }
-
+    
     var airFareFields: some View {
         VStack(alignment: .leading, spacing: 2) {
-            Text("Airline")
+            Text("Airline").foregroundStyle(.gray)
             Menu {
                 ForEach(commonDataManager.airlines, id: \.value) { city in
                     Button(action: {
@@ -186,9 +186,11 @@ struct NewExpenseForm: View {
                     }.padding(.horizontal)
                 }
             }.frame(height: 41)
-        }.padding(.top)
+                        TextField("Origin", text: $origin)
+                        TextField("Destination", text: $destination)
+        }.padding(.bottom, 3)
     }
-
+    
     var autoRentalFields: some View {
         VStack(alignment: .leading, spacing: 2) {
             Picker("Rental Agency", selection: $rentalAgency) {
@@ -201,7 +203,7 @@ struct NewExpenseForm: View {
             }
         }
     }
-
+    
     var businessMealsFields: some View {
         VStack(alignment: .leading, spacing: 2) {
             Picker("Meal Category", selection: $mealCategory) {
@@ -211,7 +213,7 @@ struct NewExpenseForm: View {
             TextField("Employee Names", text: $employeeNames)
         }
     }
-
+    
     var entertainmentFields: some View {
         VStack(alignment: .leading, spacing: 2) {
             TextField("Name of Establishment", text: $establishmentName)
@@ -228,21 +230,21 @@ struct NewExpenseForm: View {
             }
         }
     }
-
+    
     var hotelFields: some View {
         VStack(alignment: .leading, spacing: 2) {
-            Picker("Hotel Name", selection: $hotelName) {
-                Text("Hotel 1").tag("Hotel 1")
-                Text("Hotel 2").tag("Hotel 2")
-            }
-            TextField("City", text: $selectedCity)
+            //            Picker("Hotel Name", selection: $hotelName) {
+            //                Text("Hotel 1").tag("Hotel 1")
+            //                Text("Hotel 2").tag("Hotel 2")
+            //            }
+            //            TextField("City", text: $selectedCity)
             Picker("Hotel Daily Base Rate", selection: $hotelDailyBaseRate) {
                 Text("Rate 1").tag("Rate 1")
                 Text("Rate 2").tag("Rate 2")
             }
         }
     }
-
+    
     var mileageFields: some View {
         VStack(alignment: .leading, spacing: 2) {
             TextField("Origin", text: $origin)
@@ -254,13 +256,13 @@ struct NewExpenseForm: View {
             }
         }
     }
-
+    
     var telephoneCellFields: some View {
         VStack(alignment: .leading, spacing: 2) {
             TextField("Carrier", text: $carrier)
         }
     }
-
+    
     var filePickerButton: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text("Upload Receipt")
@@ -287,9 +289,9 @@ struct NewExpenseForm: View {
                 .fixedSize(horizontal: false, vertical: true)
             }
         }
-        .padding(.top)
+        .padding(.bottom, 3)
     }
-
+    
     var ourPfu: some View {
         VStack {
             HStack {
@@ -298,13 +300,13 @@ struct NewExpenseForm: View {
             }
         }.ignoresSafeArea()
     }
-
+    
     var line: some View {
         RoundedRectangle(cornerRadius: 10)
             .frame(height: 1)
             .foregroundStyle(Color.gray.opacity(0.4))
     }
-
+    
     var reportHeader: some View {
         HStack {
             VStack(alignment: .leading, spacing: 3) {
@@ -322,9 +324,9 @@ struct NewExpenseForm: View {
                     .font(.system(size: 17).weight(.semibold))
             }
             Spacer()
-        }
+        }.padding(.bottom, 3)
     }
-
+    
     var cityContainer: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text("City")
@@ -351,9 +353,9 @@ struct NewExpenseForm: View {
                     }.padding(.horizontal)
                 }
             }.frame(height: 41)
-        }.padding(.top)
+        }.padding(.bottom, 3)
     }
-
+    
     var dateField: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Date")
@@ -379,9 +381,9 @@ struct NewExpenseForm: View {
                         }
                 }.padding()
             }
-        }.padding(.top)
+        }.padding(.bottom, 3)
     }
-
+    
     var recieptAmountContainer: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text("Reciept Amount")
@@ -418,9 +420,8 @@ struct NewExpenseForm: View {
                 }
             }.frame(height: 41)
         }
-        .padding(.top)
     }
-
+    
     var convertedCurrency: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text("Converted Reporting Amount")
@@ -445,9 +446,9 @@ struct NewExpenseForm: View {
                     Text("\(convertedAmount.formatted(.number))")
                 }
             }.frame(height: 41)
-        }
+        }.disabled(true)
     }
-
+    
     var justificationContainer: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text("Justification")
@@ -459,9 +460,9 @@ struct NewExpenseForm: View {
                     .padding(.horizontal)
             }.frame(height: 41)
             
-        }.padding(.top)
+        }.padding(.bottom, 3)
     }
-
+    
     var saveButton: some View {
         Button(action: {
             submitItem()
@@ -475,7 +476,7 @@ struct NewExpenseForm: View {
             }
         }).frame(height: 41)
     }
-
+    
     func submitItem() {
         guard let accessToken = authManager.accessToken else {
             print("Access token not found")
@@ -494,9 +495,27 @@ struct NewExpenseForm: View {
             expenseDate: formattedDate,
             receiptAmount: amount,
             receiptCurrency: selectedCurrency,
-            justification: justification,
+            justification: justification.isEmpty ? nil : justification,
             note: "N/A",
-            fileName: fileName
+            fileName: fileName.isEmpty ? nil : fileName,
+            airline: airline.isEmpty ? nil : airline,
+            rentalAgency: rentalAgency.isEmpty ? nil : rentalAgency,
+            carType: carType.isEmpty ? nil : carType,
+            mealCategory: mealCategory.isEmpty ? nil : mealCategory,
+            relationshipToPAI: relationshipToPAI.isEmpty ? nil : relationshipToPAI,
+            city: selectedCity.isEmpty ? nil : selectedCity,
+            hotelDailyBaseRate: hotelDailyBaseRate.isEmpty ? nil : hotelDailyBaseRate,
+            mileageRate: mileageRate.isEmpty ? nil : mileageRate,
+            originDestination: origin.isEmpty ? nil : origin,
+            employeeNames: employeeNames.isEmpty ? nil : employeeNames,
+            totalEmployees: totalAttendees,
+            companyCustomerName: companyCustomerName.isEmpty ? nil : companyCustomerName,
+            businessTopic: businessTopic.isEmpty ? nil : businessTopic,
+            totalAttendees: totalAttendees,
+            nameOfEstablishment: establishmentName.isEmpty ? nil : establishmentName,
+            hotelName: hotelName.isEmpty ? nil : hotelName,
+            carrier: carrier.isEmpty ? nil : carrier,
+            distance: distance.isEmpty ? nil : distance
         )
         
         dao.addExpenseItemToReport(reportId: report.id, expenseItemData: newItem, accessToken: accessToken, selectedFileURL: selectedFileURL) { result in
@@ -520,7 +539,7 @@ struct NewExpenseForm: View {
         }
         isShowingImagePicker = true
     }
-
+    
     private var selectedTypeRequiresCity: Bool {
         switch selectedType {
         case .entertainment, .entertainmentLevi, .hotel:
@@ -533,7 +552,7 @@ struct NewExpenseForm: View {
 
 #Preview {
     NewExpenseForm(isShowingSelf: .constant(true), report: Report(
-        id: 3,
+        id: "3",
         user: (dao.user?.first_name ?? "") + (dao.user?.last_name ?? ""),
         reportNumber: "RPT789012",
         reportStatus: "Rejected",
@@ -541,7 +560,7 @@ struct NewExpenseForm: View {
         integrationStatus: "Not Integrated",
         integrationDate: nil,
         reportDate: "2024-06-08",
-        expenseType: "Accommodation",
+        expenseType: "Hotel",
         purpose: "Hotel stay during conference",
         paymentMethod: "Debit Card",
         reportAmount: "500.00",

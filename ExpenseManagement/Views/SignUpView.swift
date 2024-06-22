@@ -62,7 +62,7 @@ struct SignUpView: View {
                 .foregroundStyle(.black)
             TextField("", text: $emailField)
                 .autocapitalization(.none)
-                .autocorrectionDisabled(true) // Disable autocorrect
+                .autocorrectionDisabled(true)
                 .frame(height: 40)
                 .padding(.horizontal, 10)
                 .overlay(
@@ -95,11 +95,11 @@ struct SignUpView: View {
             if isPasswordVisible {
                 TextField("", text: $passwordField)
                     .autocapitalization(.none)
-                    .autocorrectionDisabled(true) // Disable autocorrect
+                    .autocorrectionDisabled(true)
             } else {
                 SecureField("", text: $passwordField)
                     .autocapitalization(.none)
-                    .autocorrectionDisabled(true) // Disable autocorrect
+                    .autocorrectionDisabled(true)
             }
             Button(action: {
                 isPasswordVisible.toggle()

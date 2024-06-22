@@ -23,7 +23,7 @@ class ExpenseDataManager: ObservableObject {
         }
     }
 
-    func fetchReportItems(reportId: Int, accessToken: String, completion: @escaping (Result<[ExpenseItem], Error>) -> Void) {
+    func fetchReportItems(reportId: String, accessToken: String, completion: @escaping (Result<[ExpenseItem], Error>) -> Void) {
         dao.fetchReportItems(reportId: reportId, accessToken: accessToken) { result in
             switch result {
             case .success(let items):

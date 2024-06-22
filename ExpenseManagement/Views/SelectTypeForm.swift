@@ -112,7 +112,7 @@ struct SelectTypeForm: View {
 
 #Preview {
     SelectTypeForm(isShowingSelf: .constant(true), report: Report(
-        id: 3,
+        id: "3",
         user: (dao.user?.first_name ?? "") + (dao.user?.last_name ?? ""),
         reportNumber: "RPT789012",
         reportStatus: "Rejected",
