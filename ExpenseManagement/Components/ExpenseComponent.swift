@@ -50,7 +50,7 @@ struct ExpenseComponent: View {
 
 #Preview {
     ExpenseComponent(expense: ExpenseItem(
-        id: 1,
+        id: "1",
         airline: "Example Airline",
         rentalAgency: "Example Rental Agency",
         carType: "SUV",

@@ -20,7 +20,6 @@
 		0FCD00BD2C08E66500A49C62 /* BackgroundImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00BC2C08E66500A49C62 /* BackgroundImage.swift */; };
 		0FCD00BF2C08E69300A49C62 /* PFULogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00BE2C08E69300A49C62 /* PFULogo.swift */; };
 		0FCD00C22C0A33DA00A49C62 /* DAO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00C12C0A33DA00A49C62 /* DAO.swift */; };
-		0FCD00CB2C0A34DD00A49C62 /* CodableExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 0FCD00CA2C0A34DD00A49C62 /* CodableExtensions */; };
 		0FCD00CD2C0A350900A49C62 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00CC2C0A350900A49C62 /* Models.swift */; };
 		0FCD00D02C0A362B00A49C62 /* mockData.json in Resources */ = {isa = PBXBuildFile; fileRef = 0FCD00CF2C0A362B00A49C62 /* mockData.json */; };
 		0FCD00D22C0A3AC400A49C62 /* ReportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00D12C0A3AC400A49C62 /* ReportsView.swift */; };
@@ -119,7 +118,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0FCD00CB2C0A34DD00A49C62 /* CodableExtensions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -274,7 +272,6 @@
 			);
 			name = ExpenseManagement;
 			packageProductDependencies = (
-				0FCD00CA2C0A34DD00A49C62 /* CodableExtensions */,
 			);
 			productName = ExpenseManagement;
 			productReference = 0FCD00A32C08CAAF00A49C62 /* ExpenseManagement.app */;
@@ -704,14 +701,6 @@
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		0FCD00CA2C0A34DD00A49C62 /* CodableExtensions */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 0FCD00C92C0A34DD00A49C62 /* XCRemoteSwiftPackageReference "CodableExtensions" */;
-			productName = CodableExtensions;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0FCD009B2C08CAAF00A49C62 /* Project object */;
 }

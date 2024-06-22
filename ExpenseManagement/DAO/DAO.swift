@@ -1,5 +1,5 @@
 import Foundation
-import CodableExtensions
+//import CodableExtensions
 
 let dao = DAO.instance
 
@@ -205,8 +205,6 @@ let dao = DAO.instance
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-        
-//        print(request)
 
         guard let jsonData = try? JSONEncoder().encode(reportData) else {
             print("Failed to encode report data")
@@ -252,7 +250,6 @@ let dao = DAO.instance
     }
     
     func fetchReports(accessToken: String, completion: @escaping (Result<[Report], Error>) -> Void) {
-        print("FETCHING REPORTS")
         let url = URL(string: "\(apiBaseUrl)/reports/")!
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
