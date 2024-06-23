@@ -273,3 +273,4 @@ struct NewReportView: View {
         }
     }
 }
+

@@ -12,8 +12,18 @@ struct SelectTypeForm: View {
     @StateObject private var commonDataManager = CommonDataManager.instance
     
     @State var selectedType: ExpenseType?
+    @State private var searchText = ""
+    
     @Binding var isShowingSelf: Bool
     let report: Report
+    
+    var filteredExpenseTypes: [ExpenseType] {
+            if searchText.isEmpty {
+                return ExpenseType.allCases
+            } else {
+                return ExpenseType.allCases.filter { $0.displayName.lowercased().contains(searchText.lowercased()) }
+            }
+        }
         
     var body: some View {
         NavigationView {
@@ -26,60 +36,95 @@ struct SelectTypeForm: View {
     
     var content: some View {
         VStack {
-            ourPfu
-            line
-            Spacer()
+            reportHeader
             expenseTypeContainer
-            Spacer()
             navigateContainer
         }.padding()
     }
     
-    var ourPfu: some View {
-        VStack {
-            HStack {
-                Spacer()
-                Image("pfuLogo")
+    var reportHeader: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 3) {
+                Text(report.reportNumber)
+                    .font(.system(size: 32).weight(.semibold))
+                if let date = DateFormatter.apiDate.date(from: report.reportDate) {
+                    Text(DateFormatter.userFriendly.string(from: date))
+                        .font(.system(size: 17).weight(.semibold))
+                } else {
+                    Text("Unknown Date")
+                        .font(.system(size: 17).weight(.semibold))
+                        .foregroundStyle(.gray)
+                }
+                Text(report.purpose)
+                    .font(.system(size: 17).weight(.semibold))
             }
-        }.ignoresSafeArea()
-    }
-
-    var line: some View {
-        RoundedRectangle(cornerRadius: 10)
-            .frame(height: 1)
-            .foregroundStyle(Color.gray.opacity(0.4))
+            Spacer()
+        }.padding(.bottom, 3)
     }
     
     var expenseTypeContainer: some View {
-        VStack(alignment: .leading, spacing: 2) {
+        VStack(alignment: .leading) {
             Text("Expense Type")
                 .font(Font.custom("Poppins", size: 18).weight(.semibold))
                 .foregroundStyle(.oceanBlue)
-            Menu {
-                ForEach(ExpenseType.allCases) { type in
-                    Button(action: {
-                        selectedType = type
-                    }, label: {
-                        Text(type.displayName)
-                    })
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .foregroundStyle(.ourMoreLightGray)
+                HStack {
+                    TextField("Search", text: $searchText)
+                        .foregroundStyle(.gray)
+                    Spacer()
+                    Image(systemName: "magnifyingglass")
+                        .foregroundStyle(.gray)
+                }.padding(.horizontal)
+            }.frame(height: 44)
+            ScrollView {
+                VStack(spacing: 15) {
+                    ForEach(Array(filteredExpenseTypes.enumerated()), id:\.element.id) { index, type in
+                        Button(action: {
+                            selectedType = type
+                        }, label: {
+                            if selectedType?.displayName == type.displayName {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .foregroundStyle(.oceanBlue)
+                                    HStack {
+                                        Text(type.displayName)
+                                            .foregroundStyle(.white)
+                                            .font(Font.custom("Poppins", size: 16))
+                                        Spacer()
+                                        Image(systemName: "checkmark")
+                                            .foregroundStyle(.white)
+                                    }.padding()
+                                }
+                            } else if index % 2 == 0 {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .foregroundStyle(.ourLightGray)
+                                    HStack {
+                                        Text(type.displayName)
+                                            .foregroundStyle(.black)
+                                            .font(Font.custom("Poppins", size: 16))
+                                        Spacer()
+                                    }.padding()
+                                }
+                            } else {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .foregroundStyle(.ourLightBlue)
+                                    HStack {
+                                        Text(type.displayName)
+                                            .foregroundStyle(.black)
+                                            .font(Font.custom("Poppins", size: 16))
+                                        Spacer()
+                                    }.padding()
+                                }
+                            }
+                        }).frame(height: 44)
+                    }
                 }
-            } label: {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(Color(uiColor: .systemGray6))
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(.oceanBlue, lineWidth: 1)
-                    HStack {
-                        Text("\(selectedType?.displayName ?? "---")")
-                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                            .foregroundStyle(selectedType?.displayName == nil ? .gray : .oceanBlue)
-                        Spacer()
-                        Image(systemName: "chevron.down")
-                            .foregroundStyle(.oceanBlue)
-                            .fontWeight(.semibold)
-                    }.padding(.horizontal)
-                }
-            }.frame(height: 41)
+                .padding(.top)
+            }
         }
     }
     

@@ -332,7 +332,8 @@ struct AllUsers: Codable {
     var users: [User]
 }
 
-struct Airline: Codable {
+struct Airline: Codable, Identifiable {
+    var id: String { value }
     let value: String
 }
 

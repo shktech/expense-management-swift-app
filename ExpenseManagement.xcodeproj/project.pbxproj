@@ -9,6 +9,13 @@
 /* Begin PBXBuildFile section */
 		0F1AB6562C1CE3AA003DA6BE /* Nunito.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0F1AB6552C1CE3AA003DA6BE /* Nunito.ttf */; };
 		0F1AB65A2C1F9DE8003DA6BE /* airLines.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F1AB6592C1F9DE8003DA6BE /* airLines.json */; };
+		0F4684D22C2874FB00406B9A /* AirlinePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4684D12C2874FB00406B9A /* AirlinePickerView.swift */; };
+		0F4684D52C28C6A900406B9A /* carRentalPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4684D42C28C6A900406B9A /* carRentalPickerView.swift */; };
+		0F4684D72C28C91100406B9A /* CarTypesPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4684D62C28C91100406B9A /* CarTypesPickerView.swift */; };
+		0F4684D92C28CA9100406B9A /* MealCategoriesPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4684D82C28CA9100406B9A /* MealCategoriesPickerView.swift */; };
+		0F4684DB2C28CDA700406B9A /* RelashionshipToPaiPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4684DA2C28CDA700406B9A /* RelashionshipToPaiPickerView.swift */; };
+		0F4684DD2C28D44100406B9A /* HotelBaseRatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4684DC2C28D44100406B9A /* HotelBaseRatePickerView.swift */; };
+		0F4684DF2C28D5C300406B9A /* MileageRatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4684DE2C28D5C300406B9A /* MileageRatePickerView.swift */; };
 		0FBD331C2C21E388000502B0 /* SelectTypeForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBD331B2C21E388000502B0 /* SelectTypeForm.swift */; };
 		0FCD00A72C08CAAF00A49C62 /* ExpenseManagementApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00A62C08CAAF00A49C62 /* ExpenseManagementApp.swift */; };
 		0FCD00A92C08CAAF00A49C62 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00A82C08CAAF00A49C62 /* ContentView.swift */; };
@@ -60,6 +67,13 @@
 /* Begin PBXFileReference section */
 		0F1AB6552C1CE3AA003DA6BE /* Nunito.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Nunito.ttf; sourceTree = "<group>"; };
 		0F1AB6592C1F9DE8003DA6BE /* airLines.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = airLines.json; sourceTree = "<group>"; };
+		0F4684D12C2874FB00406B9A /* AirlinePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirlinePickerView.swift; sourceTree = "<group>"; };
+		0F4684D42C28C6A900406B9A /* carRentalPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = carRentalPickerView.swift; sourceTree = "<group>"; };
+		0F4684D62C28C91100406B9A /* CarTypesPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarTypesPickerView.swift; sourceTree = "<group>"; };
+		0F4684D82C28CA9100406B9A /* MealCategoriesPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCategoriesPickerView.swift; sourceTree = "<group>"; };
+		0F4684DA2C28CDA700406B9A /* RelashionshipToPaiPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelashionshipToPaiPickerView.swift; sourceTree = "<group>"; };
+		0F4684DC2C28D44100406B9A /* HotelBaseRatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotelBaseRatePickerView.swift; sourceTree = "<group>"; };
+		0F4684DE2C28D5C300406B9A /* MileageRatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MileageRatePickerView.swift; sourceTree = "<group>"; };
 		0FBD331B2C21E388000502B0 /* SelectTypeForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTypeForm.swift; sourceTree = "<group>"; };
 		0FCD00A32C08CAAF00A49C62 /* ExpenseManagement.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExpenseManagement.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FCD00A62C08CAAF00A49C62 /* ExpenseManagementApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseManagementApp.swift; sourceTree = "<group>"; };
@@ -124,6 +138,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0F4684D32C28C68B00406B9A /* Pickers */ = {
+			isa = PBXGroup;
+			children = (
+				0F4684D12C2874FB00406B9A /* AirlinePickerView.swift */,
+				0F4684D42C28C6A900406B9A /* carRentalPickerView.swift */,
+				0F4684D62C28C91100406B9A /* CarTypesPickerView.swift */,
+				0F4684D82C28CA9100406B9A /* MealCategoriesPickerView.swift */,
+				0F4684DA2C28CDA700406B9A /* RelashionshipToPaiPickerView.swift */,
+				0F4684DC2C28D44100406B9A /* HotelBaseRatePickerView.swift */,
+				0F4684DE2C28D5C300406B9A /* MileageRatePickerView.swift */,
+			);
+			path = Pickers;
+			sourceTree = "<group>";
+		};
 		0FCD009A2C08CAAF00A49C62 = {
 			isa = PBXGroup;
 			children = (
@@ -143,6 +171,7 @@
 		0FCD00A52C08CAAF00A49C62 /* ExpenseManagement */ = {
 			isa = PBXGroup;
 			children = (
+				0F4684D32C28C68B00406B9A /* Pickers */,
 				B59BD5F72C1172C00027E599 /* Utils */,
 				B59BD5F02C1130A90027E599 /* Info.plist */,
 				0FCD00D32C0A3E3600A49C62 /* Models */,
@@ -350,6 +379,8 @@
 				0FBD331C2C21E388000502B0 /* SelectTypeForm.swift in Sources */,
 				B59BD6082C123DE00027E599 /* Utilities.swift in Sources */,
 				B59BD5F92C1172ED0027E599 /* DateFormatter.swift in Sources */,
+				0F4684D72C28C91100406B9A /* CarTypesPickerView.swift in Sources */,
+				0F4684D22C2874FB00406B9A /* AirlinePickerView.swift in Sources */,
 				B59BD6042C11AFD20027E599 /* FilePicker.swift in Sources */,
 				0FCD00A92C08CAAF00A49C62 /* ContentView.swift in Sources */,
 				0FCD00BA2C08D92000A49C62 /* SignUpView.swift in Sources */,
@@ -358,10 +389,13 @@
 				0FCD00B62C08D90900A49C62 /* WelcomeView.swift in Sources */,
 				0FCD00DF2C0CD5A800A49C62 /* NewCreditCardForm.swift in Sources */,
 				0FCD00E12C0CE91600A49C62 /* ExpenseComponent.swift in Sources */,
+				0F4684D92C28CA9100406B9A /* MealCategoriesPickerView.swift in Sources */,
+				0F4684DB2C28CDA700406B9A /* RelashionshipToPaiPickerView.swift in Sources */,
 				0FCD00DD2C0BE28200A49C62 /* ManagePaymentView.swift in Sources */,
 				0FCD00DB2C0A53E900A49C62 /* ReportsDetailView.swift in Sources */,
 				0FCD00E32C0D28B800A49C62 /* NewExpenseForm.swift in Sources */,
 				B559AD912C1116D100CE4CF1 /* LoadingOverlay.swift in Sources */,
+				0F4684DF2C28D5C300406B9A /* MileageRatePickerView.swift in Sources */,
 				B59BD60A2C1B70A70027E599 /* VerifyMFAView.swift in Sources */,
 				0FCD00BF2C08E69300A49C62 /* PFULogo.swift in Sources */,
 				0FFCC97B2C0F2AD1003CBEC1 /* ExpenseDetailView.swift in Sources */,
@@ -369,12 +403,14 @@
 				B59BD6022C118CB90027E599 /* MockAuthManager.swift in Sources */,
 				0FCD00BD2C08E66500A49C62 /* BackgroundImage.swift in Sources */,
 				0FCD00D72C0A403900A49C62 /* UserView.swift in Sources */,
+				0F4684DD2C28D44100406B9A /* HotelBaseRatePickerView.swift in Sources */,
 				B59BD5EF2C112A900027E599 /* Auth.swift in Sources */,
 				0FCD00D22C0A3AC400A49C62 /* ReportsView.swift in Sources */,
 				B59BD5F62C1163A80027E599 /* ExpenseDataManager.swift in Sources */,
 				0FCD00CD2C0A350900A49C62 /* Models.swift in Sources */,
 				B59BD6062C11B86C0027E599 /* ImagePicker.swift in Sources */,
 				0FCD00B82C08D91500A49C62 /* SignInView.swift in Sources */,
+				0F4684D52C28C6A900406B9A /* carRentalPickerView.swift in Sources */,
 				0FCD00A72C08CAAF00A49C62 /* ExpenseManagementApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

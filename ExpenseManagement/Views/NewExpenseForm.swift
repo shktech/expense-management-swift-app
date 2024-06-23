@@ -75,8 +75,6 @@ struct NewExpenseForm: View {
 
     var body: some View {
         ZStack {
-            Color(uiColor: .systemGray6)
-                .ignoresSafeArea()
             content
                 .padding()
                 .loadingOverlay(isLoading: $isLoading)
@@ -105,35 +103,24 @@ struct NewExpenseForm: View {
     
     var content: some View {
         ScrollView {
-            VStack {
+            VStack(spacing: 15) {
                 reportHeader
                 if let warningMessage = warningMessage {
                     Text(warningMessage)
                         .foregroundColor(.red)
                         .font(Font.custom("Poppins", size: 17).weight(.semibold))
                         .multilineTextAlignment(.center)
-                        .padding(.top)
                 }
                 dateField
-                HStack {
-                    VStack {
-                        recieptAmountContainer
-                        Image(systemName: "arrow.up.arrow.down")
-                            .foregroundStyle(.gray)
-                            .padding(.top, 2)
-                            .padding(.bottom, 2)
-                        convertedCurrency
-                    }
-                }.padding(.bottom, 3)
+                specificFields
+                allAmmounts
                 if selectedTypeRequiresCity {
                     cityContainer
                 }
-                specificFields
                 justificationContainer
                 filePickerButton
                 Spacer()
                 saveButton
-                    .padding(.bottom, 3)
             }.padding()
         }
     }
@@ -162,104 +149,400 @@ struct NewExpenseForm: View {
     }
     
     var airFareFields: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text("Airline").foregroundStyle(.gray)
-            Menu {
-                ForEach(commonDataManager.airlines, id: \.value) { city in
-                    Button(action: {
-                        selectedCity = city.value
-                    }, label: {
-                        Text(city.value)
-                    })
-                }
-            } label: {
+        VStack(alignment: .leading, spacing: 15) {
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Airline")
+                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                    .foregroundStyle(.oceanBlue)
+                NavigationLink(destination: AirlinePickerView(selectedAirline: $airline)) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 8)
+                            .foregroundStyle(.ourLightGray)
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.oceanBlue, lineWidth: 1)
+                        HStack {
+                            Text(airline == "" ? "Select your Airline" : airline)
+                                .foregroundStyle(airline == "" ? .gray : .oceanBlue)
+                                .font(Font.custom("Poppins", size: 16).weight(airline == "" ? .regular : .semibold))
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .foregroundStyle(.oceanBlue)
+                                .fontWeight(.semibold)
+                        }.padding(.horizontal)
+                    }
+                }.frame(height: 41)
+            }
+            
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Origin")
+                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                    .foregroundStyle(.oceanBlue)
                 ZStack {
                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.gray, lineWidth: 1)
+                        .foregroundStyle(.ourLightGray)
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(.oceanBlue, lineWidth: 1)
                     HStack {
-                        Text(selectedCity)
-                            .foregroundStyle(.black)
-                        Spacer()
-                        Image(systemName: "chevron.down")
-                            .foregroundStyle(.gray)
-                            .fontWeight(.semibold)
+                        TextField("---", text: $origin)
+                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                            .foregroundStyle(.oceanBlue)
                     }.padding(.horizontal)
+                        .frame(height: 41)
                 }
-            }.frame(height: 41)
-                        TextField("Origin", text: $origin)
-                        TextField("Destination", text: $destination)
-        }.padding(.bottom, 3)
+            }
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Destination")
+                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                    .foregroundStyle(.oceanBlue)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .foregroundStyle(.ourLightGray)
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(.oceanBlue, lineWidth: 1)
+                    HStack {
+                        TextField("---", text: $destination)
+                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                            .foregroundStyle(.oceanBlue)
+                    }.padding(.horizontal)
+                        .frame(height: 41)
+                }
+            }
+        }
     }
     
     var autoRentalFields: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Picker("Rental Agency", selection: $rentalAgency) {
-                Text("Agency 1").tag("Agency 1")
-                Text("Agency 2").tag("Agency 2")
+        VStack(alignment: .leading, spacing: 10) {
+            NavigationLink(destination: CarRentalPickerView(selectedRental: $rentalAgency)) {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("Rental Agency")
+                        .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                        .foregroundStyle(.oceanBlue)
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 8)
+                            .foregroundStyle(.ourLightGray)
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(.oceanBlue, lineWidth: 1)
+                        HStack {
+                            Text(rentalAgency == "" ? "---" : rentalAgency)
+                                .foregroundStyle(rentalAgency == "" ? .gray : .oceanBlue)
+                                .font(Font.custom("Poppins", size: 16))
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .foregroundStyle(.oceanBlue)
+                                .fontWeight(.semibold)
+                        }.padding(.horizontal)
+                    }
+                    .frame(height: 41)
+                }
             }
-            Picker("Car Type", selection: $carType) {
-                Text("SUV").tag("SUV")
-                Text("Sedan").tag("Sedan")
+            NavigationLink(destination: CarTypesPickerView(selectedCar: $carType)) {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("Car Type")
+                        .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                        .foregroundStyle(.oceanBlue)
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 8)
+                            .foregroundStyle(.ourLightGray)
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(.oceanBlue, lineWidth: 1)
+                        HStack {
+                            Text(carType == "" ? "---" : carType)
+                                .foregroundStyle(carType == "" ? .gray : .oceanBlue)
+                                .font(Font.custom("Poppins", size: 16))
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .foregroundStyle(.oceanBlue)
+                                .fontWeight(.semibold)
+                        }.padding(.horizontal)
+                    }
+                    .frame(height: 41)
+                }
             }
         }
     }
     
     var businessMealsFields: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Picker("Meal Category", selection: $mealCategory) {
-                Text("Lunch").tag("Lunch")
-                Text("Dinner").tag("Dinner")
+        NavigationLink(destination: MealCategoriesPickerView(selectedMeal: $mealCategory)) {
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Meal Category")
+                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                    .foregroundStyle(.oceanBlue)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .foregroundStyle(.ourLightGray)
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(.oceanBlue, lineWidth: 1)
+                    HStack {
+                        Text(mealCategory == "" ? "---" : mealCategory)
+                            .foregroundStyle(mealCategory == "" ? .gray : .oceanBlue)
+                            .font(Font.custom("Poppins", size: 16))
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(.oceanBlue)
+                            .fontWeight(.semibold)
+                    }.padding(.horizontal)
+                }
+                .frame(height: 41)
             }
-            TextField("Employee Names", text: $employeeNames)
         }
     }
     
     var entertainmentFields: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            TextField("Name of Establishment", text: $establishmentName)
-            TextField("City", text: $selectedCity)
-            TextField("Business Topic", text: $businessTopic)
-            TextField("Total Attendees", value: $totalAttendees, formatter: NumberFormatter())
+        VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Name of Establishment")
+                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                    .foregroundStyle(.oceanBlue)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .foregroundStyle(.ourLightGray)
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(.oceanBlue, lineWidth: 1)
+                    HStack {
+                        TextField("---", text: $establishmentName)
+                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                            .foregroundStyle(.oceanBlue)
+                    }.padding(.horizontal)
+                }.frame(height: 41)
+            }
+            VStack(alignment: .leading, spacing: 3) {
+                Text("City")
+                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                    .foregroundStyle(.oceanBlue)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .foregroundStyle(.ourLightGray)
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(.oceanBlue, lineWidth: 1)
+                    HStack {
+                        TextField("---", text: $selectedCity)
+                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                            .foregroundStyle(.oceanBlue)
+                    }.padding(.horizontal)
+                }.frame(height: 41)
+            }
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Business Topic")
+                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                    .foregroundStyle(.oceanBlue)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .foregroundStyle(.ourLightGray)
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(.oceanBlue, lineWidth: 1)
+                    HStack {
+                        TextField("---", text: $businessTopic)
+                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                            .foregroundStyle(.oceanBlue)
+                    }.padding(.horizontal)
+                }.frame(height: 41)
+            }
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Total Attendees")
+                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                    .foregroundStyle(.oceanBlue)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .foregroundStyle(.ourLightGray)
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(.oceanBlue, lineWidth: 1)
+                    HStack {
+                        TextField("---", value: $totalAttendees, formatter: NumberFormatter())
+                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                            .foregroundStyle(.oceanBlue)
+                    }.padding(.horizontal)
+                }.frame(height: 41)
+            }
             if selectedType == .entertainment {
-                Picker("Relationship to PAI", selection: $relationshipToPAI) {
-                    Text("Business").tag("Business")
-                    Text("Personal").tag("Personal")
+//                Picker("Relationship to PAI", selection: $relationshipToPAI) {
+//                    Text("Business").tag("Business")
+//                    Text("Personal").tag("Personal")
+//                }
+                NavigationLink(destination: RelashionshipToPaiPickerView(selectedRelation: $relationshipToPAI)) {
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text("Relationship to PAI")
+                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                            .foregroundStyle(.oceanBlue)
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 8)
+                                .foregroundStyle(.ourLightGray)
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(.oceanBlue, lineWidth: 1)
+                            HStack {
+                                Text(mealCategory == "" ? "---" : mealCategory)
+                                    .foregroundStyle(mealCategory == "" ? .gray : .oceanBlue)
+                                    .font(Font.custom("Poppins", size: 16))
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .foregroundStyle(.oceanBlue)
+                                    .fontWeight(.semibold)
+                            }.padding(.horizontal)
+                        }
+                        .frame(height: 41)
+                    }
                 }
             } else {
-                TextField("Attendees", text: $employeeNames)
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("Attendees (Names)")
+                        .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                        .foregroundStyle(.oceanBlue)
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 8)
+                            .foregroundStyle(.ourLightGray)
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(.oceanBlue, lineWidth: 1)
+                        HStack {
+                            TextField("---", text: $employeeNames)
+                                .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                                .foregroundStyle(.oceanBlue)
+                        }.padding(.horizontal)
+                    }.frame(height: 41)
+                }
             }
         }
     }
     
     var hotelFields: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            //            Picker("Hotel Name", selection: $hotelName) {
-            //                Text("Hotel 1").tag("Hotel 1")
-            //                Text("Hotel 2").tag("Hotel 2")
-            //            }
-            //            TextField("City", text: $selectedCity)
-            Picker("Hotel Daily Base Rate", selection: $hotelDailyBaseRate) {
-                Text("Rate 1").tag("Rate 1")
-                Text("Rate 2").tag("Rate 2")
+        VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Hotel Name")
+                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                    .foregroundStyle(.oceanBlue)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .foregroundStyle(.ourLightGray)
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(.oceanBlue, lineWidth: 1)
+                    HStack {
+                        TextField("---", text: $hotelName)
+                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                            .foregroundStyle(.oceanBlue)
+                    }.padding(.horizontal)
+                }.frame(height: 41)
             }
+            // The HotelBaseDailyRate model doen't make much sense like all the other attributes models
+//            VStack(alignment: .leading, spacing: 3) {
+//                Text("Hotel Daily Base Rate")
+//                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
+//                    .foregroundStyle(.oceanBlue)
+//                NavigationLink(destination: HotelBaseRatePickerView(selectedBaseRate: $hotelDailyBaseRate)) {
+//                    VStack(alignment: .leading, spacing: 3) {
+//                        ZStack {
+//                            RoundedRectangle(cornerRadius: 8)
+//                                .foregroundStyle(.ourLightGray)
+//                            RoundedRectangle(cornerRadius: 8)
+//                                .stroke(.oceanBlue, lineWidth: 1)
+//                            HStack {
+//                                Text(hotelDailyBaseRate == "" ? "---" : hotelDailyBaseRate)
+//                                    .foregroundStyle(hotelDailyBaseRate == "" ? .gray : .oceanBlue)
+//                                    .font(Font.custom("Poppins", size: 16))
+//                                Spacer()
+//                                Image(systemName: "chevron.right")
+//                                    .foregroundStyle(.oceanBlue)
+//                                    .fontWeight(.semibold)
+//                            }.padding(.horizontal)
+//                        }
+//                        .frame(height: 41)
+//                    }
+//                }
+//            }
         }
     }
     
     var mileageFields: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            TextField("Origin", text: $origin)
-            TextField("Destination", text: $destination)
-            TextField("Distance", text: $distance)
-            Picker("Mileage Rate", selection: $mileageRate) {
-                Text("Rate 1").tag("Rate 1")
-                Text("Rate 2").tag("Rate 2")
+        VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Origin")
+                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                    .foregroundStyle(.oceanBlue)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .foregroundStyle(.ourLightGray)
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(.oceanBlue, lineWidth: 1)
+                    HStack {
+                        TextField("---", text: $origin)
+                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                            .foregroundStyle(.oceanBlue)
+                    }.padding(.horizontal)
+                }.frame(height: 41)
+            }
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Destination")
+                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                    .foregroundStyle(.oceanBlue)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .foregroundStyle(.ourLightGray)
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(.oceanBlue, lineWidth: 1)
+                    HStack {
+                        TextField("---", text: $destination)
+                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                            .foregroundStyle(.oceanBlue)
+                    }.padding(.horizontal)
+                }.frame(height: 41)
+            }
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Distance")
+                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                    .foregroundStyle(.oceanBlue)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .foregroundStyle(.ourLightGray)
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(.oceanBlue, lineWidth: 1)
+                    HStack {
+                        TextField("---", text: $distance)
+                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                            .foregroundStyle(.oceanBlue)
+                    }.padding(.horizontal)
+                }.frame(height: 41)
+            }
+            NavigationLink(destination: MileageRatePickerView(selectedMileage: $mileageRate)) {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("Mileage Rate")
+                        .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                        .foregroundStyle(.oceanBlue)
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 8)
+                            .foregroundStyle(.ourLightGray)
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(.oceanBlue, lineWidth: 1)
+                        HStack {
+                            Text(mileageRate == "" ? "---" : mileageRate)
+                                .foregroundStyle(mileageRate == "" ? .gray : .oceanBlue)
+                                .font(Font.custom("Poppins", size: 16))
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .foregroundStyle(.oceanBlue)
+                                .fontWeight(.semibold)
+                        }.padding(.horizontal)
+                    }
+                    .frame(height: 41)
+                }
             }
         }
     }
     
     var telephoneCellFields: some View {
         VStack(alignment: .leading, spacing: 2) {
-            TextField("Carrier", text: $carrier)
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Carrier")
+                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                    .foregroundStyle(.oceanBlue)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .foregroundStyle(.ourLightGray)
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(.oceanBlue, lineWidth: 1)
+                    HStack {
+                        TextField("---", text: $carrier)
+                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                            .foregroundStyle(.oceanBlue)
+                    }.padding(.horizontal)
+                }.frame(height: 41)
+            }
         }
     }
     
@@ -289,22 +572,6 @@ struct NewExpenseForm: View {
                 .fixedSize(horizontal: false, vertical: true)
             }
         }
-        .padding(.bottom, 3)
-    }
-    
-    var ourPfu: some View {
-        VStack {
-            HStack {
-                Spacer()
-                Image("pfuLogo")
-            }
-        }.ignoresSafeArea()
-    }
-    
-    var line: some View {
-        RoundedRectangle(cornerRadius: 10)
-            .frame(height: 1)
-            .foregroundStyle(Color.gray.opacity(0.4))
     }
     
     var reportHeader: some View {
@@ -315,6 +582,7 @@ struct NewExpenseForm: View {
                 if let date = DateFormatter.apiDate.date(from: report.reportDate) {
                     Text(DateFormatter.userFriendly.string(from: date))
                         .font(.system(size: 17).weight(.semibold))
+                        .foregroundStyle(.gray)
                 } else {
                     Text("Unknown Date")
                         .font(.system(size: 17).weight(.semibold))
@@ -324,13 +592,14 @@ struct NewExpenseForm: View {
                     .font(.system(size: 17).weight(.semibold))
             }
             Spacer()
-        }.padding(.bottom, 3)
+        }
     }
     
     var cityContainer: some View {
-        VStack(alignment: .leading, spacing: 2) {
+        VStack(alignment: .leading, spacing: 3) {
             Text("City")
-                .foregroundStyle(.gray)
+                .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                .foregroundStyle(.oceanBlue)
             Menu {
                 ForEach(commonDataManager.cities, id: \.value) { city in
                     Button(action: {
@@ -342,35 +611,53 @@ struct NewExpenseForm: View {
             } label: {
                 ZStack {
                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.gray, lineWidth: 1)
+                        .foregroundStyle(.ourLightGray2)
+                        .frame(height: 41)
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(.oceanBlue, lineWidth: 1)
+                        .frame(height: 41)
                     HStack {
-                        Text(selectedCity)
-                            .foregroundStyle(.black)
+                        Text("\(date.formatted(date: .abbreviated, time: .omitted))")
+                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                            .foregroundStyle(.oceanBlue)
                         Spacer()
-                        Image(systemName: "chevron.down")
-                            .foregroundStyle(.gray)
-                            .fontWeight(.semibold)
+                        Image(systemName: "calendar")
+                            .font(.title3)
+                            .foregroundStyle(.oceanBlue)
+                            .overlay {
+                                DatePicker(
+                                    "",
+                                    selection: $date,
+                                    displayedComponents: [.date]
+                                )
+                                .blendMode(.destinationOver)
+                            }
                     }.padding(.horizontal)
                 }
             }.frame(height: 41)
-        }.padding(.bottom, 3)
+        }
     }
     
     var dateField: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 3) {
             Text("Date")
-                .foregroundStyle(.gray)
+                .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                .foregroundStyle(.oceanBlue)
             ZStack {
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray, lineWidth: 1)
+                    .foregroundStyle(.ourLightGray2)
+                    .frame(height: 41)
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(.oceanBlue, lineWidth: 1)
                     .frame(height: 41)
                 HStack {
-                    Text("\(date.formatted(date: .numeric, time: .omitted))")
-                        .foregroundStyle(.black)
+                    Text("\(date.formatted(date: .abbreviated, time: .omitted))")
+                        .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                        .foregroundStyle(.oceanBlue)
                     Spacer()
                     Image(systemName: "calendar")
                         .font(.title3)
-                        .foregroundStyle(.gray)
+                        .foregroundStyle(.oceanBlue)
                         .overlay {
                             DatePicker(
                                 "",
@@ -379,71 +666,98 @@ struct NewExpenseForm: View {
                             )
                             .blendMode(.destinationOver)
                         }
-                }.padding()
+                }.padding(.horizontal)
             }
-        }.padding(.bottom, 3)
+        }
+    }
+    
+    var allAmmounts: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 10)
+                .foregroundStyle(.ourLightBlue)
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(.oceanBlue, lineWidth: 1)
+            VStack {
+                recieptAmountContainer
+                convertedCurrency
+            }.padding()
+        }
     }
     
     var recieptAmountContainer: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text("Reciept Amount")
-                .foregroundStyle(.gray)
-            HStack {
-                Menu {
-                    ForEach(countries, id: \.self) { currency in
-                        Button(action: {
-                            selectedCurrency = currency
-                        }, label: {
-                            Text(currency)
-                        })
-                    }
-                } label: {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.gray, lineWidth: 1)
-                        HStack {
-                            Image(selectedCurrency)
-                            Text(selectedCurrency)
-                                .foregroundStyle(.black)
-                            Image(systemName: "chevron.down")
-                                .foregroundStyle(.gray)
-                                .fontWeight(.semibold)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Reciept Amount")
+                    .foregroundStyle(.oceanBlue)
+                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                HStack {
+                    Menu {
+                        ForEach(countries, id: \.self) { currency in
+                            Button(action: {
+                                selectedCurrency = currency
+                            }, label: {
+                                Text(currency)
+                            })
+                        }
+                    } label: {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 8)
+                                .foregroundStyle(.ourLightGray)
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.oceanBlue, lineWidth: 1)
+                            HStack {
+                                Image(selectedCurrency)
+                                Text(selectedCurrency)
+                                    .foregroundStyle(.oceanBlue)
+                                    .fontWeight(.semibold)
+                                Image(systemName: "chevron.down")
+                                    .foregroundStyle(.oceanBlue)
+                                    .fontWeight(.semibold)
+                            }
                         }
                     }
-                }
-                .frame(width: 100)
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.gray, lineWidth: 1)
-                    TextField("", text: $amount)
-                        .padding(.horizontal)
-                }
-            }.frame(height: 41)
-        }
+                    .frame(width: 100)
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 8)
+                            .foregroundStyle(.ourLightGray)
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.oceanBlue, lineWidth: 1)
+                        TextField("", text: $amount)
+                            .padding(.horizontal)
+                    }
+                }.frame(height: 41)
+            }
     }
     
     var convertedCurrency: some View {
         VStack(alignment: .leading, spacing: 2) {
-            Text("Converted Reporting Amount")
-                .foregroundStyle(.gray)
+            Text("Converted Report Amount")
+                .foregroundStyle(.oceanBlue)
+                .font(Font.custom("Poppins", size: 16).weight(.semibold))
             HStack {
                 ZStack {
                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.gray, lineWidth: 1)
+                        .foregroundStyle(.ourLightGray)
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.oceanBlue, lineWidth: 1)
                     HStack {
                         Image("USD")
                         Text("USD")
-                            .foregroundStyle(.black)
+                            .foregroundStyle(.oceanBlue)
+                            .fontWeight(.semibold)
                         Image(systemName: "chevron.down")
-                            .foregroundStyle(.gray)
+                            .foregroundStyle(.oceanBlue)
                             .fontWeight(.semibold)
                     }
                 }
                 .frame(width: 100)
                 ZStack {
                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.gray, lineWidth: 1)
+                        .foregroundStyle(.ourLightGray)
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.oceanBlue, lineWidth: 1)
                     Text("\(convertedAmount.formatted(.number))")
+                        .foregroundStyle(.oceanBlue)
+                        .fontWeight(.semibold)
                 }
             }.frame(height: 41)
         }.disabled(true)
@@ -451,16 +765,23 @@ struct NewExpenseForm: View {
     
     var justificationContainer: some View {
         VStack(alignment: .leading, spacing: 2) {
-            Text("Justification")
-                .foregroundStyle(.gray)
-            ZStack {
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray, lineWidth: 1)
-                TextField("Justify your expense here", text: $justification)
-                    .padding(.horizontal)
-            }.frame(height: 41)
-            
-        }.padding(.bottom, 3)
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Justification")
+                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                    .foregroundStyle(.oceanBlue)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .foregroundStyle(.ourLightGray)
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(.oceanBlue, lineWidth: 1)
+                    HStack {
+                        TextField("---", text: $justification)
+                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                            .foregroundStyle(.oceanBlue)
+                    }.padding(.horizontal)
+                }.frame(height: 41)
+            }
+        }
     }
     
     var saveButton: some View {
@@ -469,10 +790,10 @@ struct NewExpenseForm: View {
         }, label: {
             ZStack {
                 RoundedRectangle(cornerRadius: 14)
-                    .foregroundStyle(.blue)
-                Text("Save")
+                    .foregroundStyle(.oceanBlue)
+                Text("+ Add Expense")
                     .foregroundStyle(.white)
-                    .font(.system(size: 17).weight(.semibold))
+                    .font(Font.custom("Poppins", size: 18).weight(.semibold))
             }
         }).frame(height: 41)
     }
