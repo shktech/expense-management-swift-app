@@ -33,6 +33,7 @@ struct UserView: View {
             line
             emailField
             changePassword
+            logOut
             Spacer()
             manageFinancesButton
         }.padding()
@@ -84,6 +85,17 @@ struct UserView: View {
             .fontWeight(.bold)
             .foregroundStyle(.black)
             .padding()
+    }
+    
+    var logOut: some View {
+        NavigationLink(destination: SignInView().environmentObject(authManager)) {
+            Text("Logout")
+                .fontWeight(.bold)
+                .foregroundColor(.red)
+        }
+        .simultaneousGesture(TapGesture().onEnded {
+            authManager.signOut()
+        })
     }
     
     var manageFinancesButton: some View {

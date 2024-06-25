@@ -1,25 +1,18 @@
-//
-//  ReportComponent.swift
-//  ExpenseManagement
-//
-//  Created by infra on 31/05/24.
-//
-
 import SwiftUI
 
 struct ReportComponent: View {
     
-    let report: Report
+    @Binding var report: Report
     
     var body: some View {
-        NavigationLink(destination: ReportsDetailView(report: report)) {
+        NavigationLink(destination: ReportsDetailView(report: $report)) {
             ZStack {
                 Color.white
                     .ignoresSafeArea()
                 HStack {
                     VStack(alignment: .leading) {
                         Text(report.reportNumber)
-                            .font(.system(size: 17))
+                            .font(.system(size: 17).weight(.semibold))
                             .foregroundStyle(.black)
                         if let date = DateFormatter.apiDate.date(from: report.reportDate) {
                             Text(DateFormatter.userFriendly.string(from: date))
@@ -38,7 +31,7 @@ struct ReportComponent: View {
                             .foregroundStyle(.gray)
                         Text(report.reportStatus)
                             .foregroundStyle(report.reportStatus == "Submitted" ? .green : .red)
-                            .font(.system(size: 15))
+                            .font(.system(size: 15).weight(.semibold))
                     }
                     Spacer()
                     HStack(spacing: 0) {
@@ -48,9 +41,10 @@ struct ReportComponent: View {
                             .foregroundStyle(.black.opacity(0.3))
                             .fontWeight(.semibold)
                     }
-                }.padding()
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 7)
             }
-            .frame(height: 127)
             .clipShape(RoundedRectangle(cornerRadius: 14))
             .shadow(color: .black.opacity(0.2), radius: 4, x: 0, y: 4)
         }
@@ -58,23 +52,22 @@ struct ReportComponent: View {
 }
 
 #Preview {
-    ReportComponent(report: 
-                        Report(
-                            id: "1",
-                            user: (dao.user?.first_name ?? "") + (dao.user?.last_name ?? ""),
-                            reportNumber: "RPT123456",
-                            reportStatus: "Pending",
-                            reportSubmitDate: "2023-01-15",
-                            integrationStatus: "Not Integrated",
-                            integrationDate: nil,
-                            reportDate: "2024-06-08",
-                            expenseType: "Travel",
-                            purpose: "Business trip to NYC",
-                            paymentMethod: "Credit Card",
-                            reportAmount: "1200.00",
-                            reportCurrency: "USD",
-                            createdAt: "2023-01-10T10:00:00Z",
-                            updatedAt: "2023-01-15T12:00:00Z"
-                        )
-    )
+    ReportComponent(report: .constant(
+        Report(
+            id: "1",
+            reportNumber: "RPT123456",
+            reportStatus: "Pending",
+            reportSubmitDate: "2023-01-15",
+            integrationStatus: "Not Integrated",
+            integrationDate: nil,
+            reportDate: "2024-06-08",
+            expenseType: "Travel",
+            purpose: "Business trip to NYC",
+            paymentMethod: "Credit Card",
+            reportAmount: "1200.00",
+            reportCurrency: "USD",
+            createdAt: "2023-01-10T10:00:00Z",
+            updatedAt: "2023-01-15T12:00:00Z"
+        )
+    ))
 }

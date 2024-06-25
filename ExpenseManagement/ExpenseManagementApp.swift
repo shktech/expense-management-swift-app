@@ -1,10 +1,3 @@
-//
-//  ExpenseManagementApp.swift
-//  ExpenseManagement
-//
-//  Created by infra on 30/05/24.
-//
-
 import SwiftUI
 
 @main

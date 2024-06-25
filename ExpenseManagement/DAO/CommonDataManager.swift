@@ -12,6 +12,7 @@ class CommonDataManager: ObservableObject {
     @Published var cities: [City] = []
     @Published var hotelDailyBaseRates: [HotelDailyBaseRate] = []
     @Published var mileageRates: [MileageRate] = []
+    @Published var exchangeRates: [String: [String: Double]] = [:]
     
     private let dao = DAO.instance
     
@@ -112,6 +113,29 @@ class CommonDataManager: ObservableObject {
 
         dispatchGroup.notify(queue: .main) {
             completion(.success(()))
+        }
+    }
+    
+    func fetchExchangeRates(base: String, accessToken: String, completion: @escaping (Result<[String: Double], Error>) -> Void) {
+        if let cachedRates = exchangeRates[base] {
+            completion(.success(cachedRates))
+            return
+        }
+        
+        dao.fetchExchangeRates(base: base, accessToken: accessToken) { result in
+            switch result {
+            case .success(let rates):
+                print(result)
+                DispatchQueue.main.async {
+                    self.exchangeRates[base] = rates
+                    completion(.success(rates))
+                }
+            case .failure(let error):
+                print(error)
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+            }
         }
     }
 }

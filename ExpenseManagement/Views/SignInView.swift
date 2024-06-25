@@ -3,6 +3,8 @@ import SwiftUI
 enum NavigationDestination {
     case mainView
     case verifyMFAView
+    case signInView
+    case signUpView
 }
 
 struct SignInView: View {
@@ -33,18 +35,20 @@ struct SignInView: View {
                     destination: { VerifyMFAView() },
                     label: { EmptyView() }
                 )
+                NavigationLink(
+                    tag: NavigationDestination.signInView,
+                    selection: $navigationDestination,
+                    destination: { SignInView() },
+                    label: { EmptyView() }
+                )
+                NavigationLink(
+                    tag: NavigationDestination.signUpView,
+                    selection: $navigationDestination,
+                    destination: { SignUpView() },
+                    label: { EmptyView() }
+                )
             }
             .navigationBarHidden(true)
-//            .navigationDestination(for: NavigationDestination?.self) { destination in
-//                switch destination {
-//                case .mainView:
-//                    TabViewContainer()
-//                case .verifyMFAView:
-//                    VerifyMFAView()
-//                default:
-//                    EmptyView()
-//                }
-//            }
         }
     }
     
@@ -58,6 +62,7 @@ struct SignInView: View {
             }
             fields
             bottomContent
+            signUpText
         }.padding()
     }
     
@@ -66,6 +71,21 @@ struct SignInView: View {
             .font(.system(size: 32).weight(.semibold))
             .foregroundStyle(Color(uiColor: .darkGray))
     }
+    
+    var signUpText: some View {
+        HStack {
+            Text("Don’t have an account? ")
+                .font(.system(size: 13))
+                .foregroundColor(.black)
+            Text("Sign up")
+                .font(.system(size: 13).weight(.bold))
+                .foregroundColor(.black)
+                .onTapGesture {
+                    navigationDestination = .signUpView
+                }
+        }
+    }
+
     
     var fields: some View {
         VStack(spacing: 20) {
@@ -82,7 +102,7 @@ struct SignInView: View {
             TextField("", text: $emailField)
                 .autocapitalization(.none)
                 .autocorrectionDisabled(true) // Disable autocorrect
-                .frame(height: 40)
+                .frame(height: 50)
                 .padding(.horizontal, 10)
                 .overlay(
                     RoundedRectangle(cornerRadius: 10)
@@ -104,7 +124,7 @@ struct SignInView: View {
                     }
                 }) {
                     Image(systemName: rememberMe ? "checkmark.square.fill" : "square")
-                        .foregroundStyle(rememberMe ? .white : Color.secondary, Color(UIColor.systemBlue))
+                        .foregroundStyle(rememberMe ? .white : Color.secondary, Color(UIColor.oceanBlue))
                 }
                 .buttonStyle(PlainButtonStyle())
                 
@@ -134,7 +154,7 @@ struct SignInView: View {
                     .foregroundColor(.gray)
             }
         }
-        .frame(height: 40)
+        .frame(height: 50)
         .padding(.horizontal, 10)
         .overlay(
             RoundedRectangle(cornerRadius: 10)
@@ -164,11 +184,10 @@ struct SignInView: View {
                     .font(.system(size: 17).weight(.semibold))
                     .foregroundColor(.white)
                     .frame(width: 349, height: 55)
-                    .background(Color.blue)
+                    .background(Color.oceanBlue)
                     .cornerRadius(14)
             })
             Button(action: {
-                // Forgot Password
             }, label: {
                 Text("Forgot Password?")
                     .foregroundStyle(.black)
@@ -176,33 +195,6 @@ struct SignInView: View {
             })
             .padding()
         }
-    }
-}
-
-struct KeyboardProvider: ViewModifier {
-    
-    var keyboardHeight: Binding<CGFloat>
-    
-    func body(content: Content) -> some View {
-        content
-            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification),
-                       perform: { notification in
-                guard let userInfo = notification.userInfo,
-                      let keyboardRect = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
-                
-                self.keyboardHeight.wrappedValue = keyboardRect.height
-                
-            }).onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification),
-                         perform: { _ in
-                self.keyboardHeight.wrappedValue = 0
-            })
-    }
-}
-
-
-public extension View {
-    func keyboardHeight(_ state: Binding<CGFloat>) -> some View {
-        self.modifier(KeyboardProvider(keyboardHeight: state))
     }
 }
 

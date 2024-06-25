@@ -15,6 +15,7 @@ struct NewReportView: View {
     @State var selectedCurrency: String = "USD"
     
     @EnvironmentObject var authManager: AuthenticationManager
+    private let dao = DAO.instance
     
     let allCurrency: [String] = [
         "USD", "EUR", "JPY", "CAD"
@@ -254,7 +255,6 @@ struct NewReportView: View {
             expenseType: expenseType,
             purpose: purposeField,
             paymentMethod: selectedPaymentMethod,
-            reportAmount: 0,
             reportCurrency: selectedCurrency
         )
         

@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ReportsDetailView: View {
     
-    let report: Report
+    @Binding var report: Report
     
     @State var isShowingForm: Bool = false
     @State var isLoading: Bool = false
@@ -10,107 +10,7 @@ struct ReportsDetailView: View {
     
     @EnvironmentObject var authManager: AuthenticationManager
     
-//    let expenseItems: [ExpenseItem] = [
-//        ExpenseItem(
-//            id: "1",
-//            airline: "Airline A",
-//            rentalAgency: nil,
-//            carType: nil,
-//            mealCategory: nil,
-//            relationshipToPAI: nil,
-//            city: "New York",
-//            hotelDailyBaseRate: "150.00",
-//            mileageRate: nil,
-//            presignedURL: nil,
-//            filename: nil,
-//            expenseType: "Flight",
-//            expenseDate: "2023-01-01",
-//            receiptAmount: "500.00",
-//            receiptCurrency: "USD",
-//            justification: "Business trip",
-//            note: "Direct flight",
-//            s3Path: nil,
-//            originDestination: "NYC-LAX",
-//            employeeNames: nil,
-//            totalEmployees: nil,
-//            companyCustomerName: nil,
-//            businessTopic: nil,
-//            totalAttendees: nil,
-//            nameOfEstablishment: nil,
-//            hotelName: nil,
-//            carrier: "Airline A",
-//            distance: "2451 miles",
-//            createdAt: "2023-01-01T10:00:00Z",
-//            updatedAt: "2023-01-02T10:00:00Z",
-//            report: 1
-//        ),
-//        ExpenseItem(
-//            id: "2",
-//            airline: nil,
-//            rentalAgency: "Rental Agency B",
-//            carType: "SUV",
-//            mealCategory: nil,
-//            relationshipToPAI: nil,
-//            city: "Los Angeles",
-//            hotelDailyBaseRate: nil,
-//            mileageRate: "0.50",
-//            presignedURL: nil,
-//            filename: nil,
-//            expenseType: "Car Rental",
-//            expenseDate: "2023-01-02",
-//            receiptAmount: "200.00",
-//            receiptCurrency: "USD",
-//            justification: "Client meetings",
-//            note: "Rented for two days",
-//            s3Path: nil,
-//            originDestination: nil,
-//            employeeNames: nil,
-//            totalEmployees: nil,
-//            companyCustomerName: nil,
-//            businessTopic: nil,
-//            totalAttendees: nil,
-//            nameOfEstablishment: nil,
-//            hotelName: nil,
-//            carrier: nil,
-//            distance: "100 miles",
-//            createdAt: "2023-01-02T11:00:00Z",
-//            updatedAt: "2023-01-03T11:00:00Z",
-//            report: 1
-//        ),
-//        ExpenseItem(
-//            id: "3",
-//            airline: nil,
-//            rentalAgency: nil,
-//            carType: nil,
-//            mealCategory: "Dinner",
-//            relationshipToPAI: nil,
-//            city: "Los Angeles",
-//            hotelDailyBaseRate: nil,
-//            mileageRate: nil,
-//            presignedURL: nil,
-//            filename: nil,
-//            expenseType: "Meal",
-//            expenseDate: "2023-01-02",
-//            receiptAmount: "50.00",
-//            receiptCurrency: "USD",
-//            justification: "Dinner with clients",
-//            note: "Dinner at a fine dining restaurant",
-//            s3Path: nil,
-//            originDestination: nil,
-//            employeeNames: nil,
-//            totalEmployees: 2,
-//            companyCustomerName: nil,
-//            businessTopic: nil,
-//            totalAttendees: 3,
-//            nameOfEstablishment: "Restaurant C",
-//            hotelName: nil,
-//            carrier: nil,
-//            distance: nil,
-//            createdAt: "2023-01-02T20:00:00Z",
-//            updatedAt: "2023-01-02T22:00:00Z",
-//            report: 1
-//        )
-//    ]
+    private let dao = DAO.instance
     
     var body: some View {
         NavigationStack {
@@ -125,9 +25,12 @@ struct ReportsDetailView: View {
             SelectTypeForm(isShowingSelf: $isShowingForm, report: report)
         })
         .onChange(of: isShowingForm) {
+            if !isShowingForm {
+                refreshReport()
+            }
             loadData()
         }
-//        .onAppear(perform: loadData)
+        .onAppear(perform: loadData)
     }
     
     var ourPfu: some View {
@@ -207,7 +110,7 @@ struct ReportsDetailView: View {
                     .font(Font.custom("Poppins", size: 18).weight(.semibold))
                     .foregroundStyle(.white)
             }
-        }).frame(height: 52)
+        }).frame(height: 55)
     }
 
     var expenseItemsList: some View {
@@ -245,7 +148,6 @@ struct ReportsDetailView: View {
         dao.fetchReportItems(reportId: report.id, accessToken: accessToken) { result in
             switch result {
             case .success(let items):
-//                print(items)
                 self.expenseItems = items
             case .failure(let error):
                 print("Failed to fetch items: \(error)")
@@ -253,14 +155,32 @@ struct ReportsDetailView: View {
             self.isLoading = false
         }
     }
+    
+    private func refreshReport() {
+        self.isLoading = true
+        guard let accessToken = authManager.accessToken else {
+            print("Access token not found")
+            return
+        }
+        dao.fetchReport(reportId: report.id, accessToken: accessToken) { result in
+            switch result {
+            case .success(let report):
+                print("Refreshing report")
+                self.report = report
+            case .failure(let error):
+                print("Failed to fetch report: \(error)")
+            }
+            self.isLoading = false
+        }
+
+    }
 
 }
 
 #Preview {
-    ReportsDetailView(report:
+    ReportsDetailView(report: .constant(
                         Report(
                             id: "1",
-                            user: (dao.user?.first_name ?? "") + (dao.user?.last_name ?? ""),
                             reportNumber: "RPT123456",
                             reportStatus: "Pending",
                             reportSubmitDate: "2023-01-15",
@@ -274,6 +194,6 @@ struct ReportsDetailView: View {
                             reportCurrency: "USD",
                             createdAt: "2023-01-10T10:00:00Z",
                             updatedAt: "2023-01-15T12:00:00Z"
-                        ))
+                        )))
     .environmentObject(AuthenticationManager())
 }

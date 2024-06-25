@@ -14,16 +14,34 @@ struct User: Codable {
     var phone_number: String?
     var department: String?
     var currency: String?
-//    var reports: [Report]?
     var paymentMethods: [CreditCard]?
     var defaultPaymentMethod: Int?
 }
 
 struct CreditCard: Codable, Identifiable {
     var id = UUID()
-    
     var cardNumber: String
     var expirationDate: Date
+}
+
+struct RegisterUser: Codable {
+    var first_name: String?
+    var last_name: String?
+    var email: String?
+    var password: String?
+    var phone_number: String?
+    var department: String?
+    var currency: String?
+}
+
+struct RegisterResponse: Codable {
+    var detail: String?
+    var first_name: String?
+    var last_name: String?
+    var email: String?
+    var phone_number: String?
+    var department: String?
+    var currency: String?
 }
 
 struct CreateReportRequest: Codable {
@@ -31,7 +49,6 @@ struct CreateReportRequest: Codable {
     let expenseType: String
     let purpose: String
     let paymentMethod: String
-    let reportAmount: Double
     let reportCurrency: String
     
     enum CodingKeys: String, CodingKey {
@@ -39,14 +56,13 @@ struct CreateReportRequest: Codable {
         case expenseType = "expense_type"
         case purpose
         case paymentMethod = "payment_method"
-        case reportAmount = "report_amount"
         case reportCurrency = "report_currency"
     }
 }
 
-struct Report: Codable {
+struct Report: Identifiable, Codable {
     let id: String
-    let user: String
+//    let user: String?
     let reportNumber: String
     let reportStatus: String
     let reportSubmitDate: String?
@@ -63,7 +79,7 @@ struct Report: Codable {
     
     enum CodingKeys: String, CodingKey {
         case id
-        case user
+//        case user
         case reportNumber = "report_number"
         case reportStatus = "report_status"
         case reportSubmitDate = "report_submit_date"
@@ -227,8 +243,8 @@ struct ExpenseItem: Codable {
     let mealCategory: String?
     let relationshipToPAI: String?
     let city: String?
-    let hotelDailyBaseRate: String?
-    let mileageRate: String?
+    let hotelDailyBaseRate: HotelDailyBaseRate?
+    let mileageRate: MileageRate?
     let presignedURL: String?
     let filename: String?
     let expenseType: String
@@ -370,4 +386,17 @@ struct RelationshipToPAI: Codable {
 
 struct RentalAgency: Codable {
     let value: String
+}
+
+struct ExchangeRates: Codable {
+    let rates: [String: Double]
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.rates = try container.decode([String: Double].self, forKey: .rates)
+    }
+    
+    private enum CodingKeys: CodingKey {
+        case rates
+    }
 }

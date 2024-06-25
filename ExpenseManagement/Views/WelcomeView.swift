@@ -44,16 +44,19 @@ struct WelcomeView: View {
                     .font(.system(size: 17).weight(.semibold))
                     .foregroundColor(.white)
                     .frame(width: 349, height: 55)
-                    .background(Color.blue)
-                    .cornerRadius(14)
+                    .background(Color.oceanBlue)
+                    .cornerRadius(10)
             }
             NavigationLink(destination: SignUpView()) {
-                Text("Sign up")
+                Text("Create account")
                     .font(.system(size: 17).weight(.semibold))
                     .foregroundColor(.black)
                     .frame(width: 349, height: 55)
-                    .background(Color.gray)
-                    .cornerRadius(14)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color.oceanBlue, lineWidth: 1)
+                    )
+
             }
         }
         .padding(.bottom, 100)

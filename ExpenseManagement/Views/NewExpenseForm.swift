@@ -11,6 +11,7 @@ struct NewExpenseForm: View {
     @State var date: Date = Date()
     @State var selectedCurrency: String = "USD"
     @State var amount: String = ""
+    @State var convertedAmount: Double = 0.0
     @State var justification: String = ""
     @State var isLoading: Bool = false
     @State var isShowingFilePicker: Bool = false
@@ -39,10 +40,12 @@ struct NewExpenseForm: View {
     @State var carrier: String = ""
     @State var companyCustomerName: String = ""
     
-    var convertedAmount: Double {
-        let amountValue = Double(amount) ?? 0
-        return Utilities.CurrencyConverter.convert(amount: amountValue, from: selectedCurrency, to: authManager.user?.currency ?? "USD")
-    }
+    private let dao = DAO.instance
+    
+    //    var convertedAmount: Double {
+    //        let amountValue = Double(amount) ?? 0
+    //        return Utilities.CurrencyConverter.convert(amount: amountValue, from: selectedCurrency, to: authManager.user?.currency ?? "USD")
+    //    }
     
     var warningMessage: String? {
         switch selectedType {
@@ -67,12 +70,12 @@ struct NewExpenseForm: View {
         case .seminarsTraining:
             return "Must include approved ETA number. Enter ETA number in Justification field"
         case .marketingDevelopment:
-                return "Approved Requisition is required for this expense type. Enter Requisition number in Justification Field"
+            return "Approved Requisition is required for this expense type. Enter Requisition number in Justification Field"
         default:
             return nil
         }
     }
-
+    
     var body: some View {
         ZStack {
             content
@@ -113,7 +116,8 @@ struct NewExpenseForm: View {
                 }
                 dateField
                 specificFields
-                allAmmounts
+                //                allAmmounts
+                AllAmountsComponent(amount: $amount, selectedCurrency: $selectedCurrency, convertedAmount: $convertedAmount, targetCurrency: authManager.user?.currency ?? "USD", accessToken: authManager.accessToken ?? "")
                 if selectedTypeRequiresCity {
                     cityContainer
                 }
@@ -354,10 +358,6 @@ struct NewExpenseForm: View {
                 }.frame(height: 41)
             }
             if selectedType == .entertainment {
-//                Picker("Relationship to PAI", selection: $relationshipToPAI) {
-//                    Text("Business").tag("Business")
-//                    Text("Personal").tag("Personal")
-//                }
                 NavigationLink(destination: RelashionshipToPaiPickerView(selectedRelation: $relationshipToPAI)) {
                     VStack(alignment: .leading, spacing: 3) {
                         Text("Relationship to PAI")
@@ -421,31 +421,31 @@ struct NewExpenseForm: View {
                 }.frame(height: 41)
             }
             // The HotelBaseDailyRate model doen't make much sense like all the other attributes models
-//            VStack(alignment: .leading, spacing: 3) {
-//                Text("Hotel Daily Base Rate")
-//                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
-//                    .foregroundStyle(.oceanBlue)
-//                NavigationLink(destination: HotelBaseRatePickerView(selectedBaseRate: $hotelDailyBaseRate)) {
-//                    VStack(alignment: .leading, spacing: 3) {
-//                        ZStack {
-//                            RoundedRectangle(cornerRadius: 8)
-//                                .foregroundStyle(.ourLightGray)
-//                            RoundedRectangle(cornerRadius: 8)
-//                                .stroke(.oceanBlue, lineWidth: 1)
-//                            HStack {
-//                                Text(hotelDailyBaseRate == "" ? "---" : hotelDailyBaseRate)
-//                                    .foregroundStyle(hotelDailyBaseRate == "" ? .gray : .oceanBlue)
-//                                    .font(Font.custom("Poppins", size: 16))
-//                                Spacer()
-//                                Image(systemName: "chevron.right")
-//                                    .foregroundStyle(.oceanBlue)
-//                                    .fontWeight(.semibold)
-//                            }.padding(.horizontal)
-//                        }
-//                        .frame(height: 41)
-//                    }
-//                }
-//            }
+            //            VStack(alignment: .leading, spacing: 3) {
+            //                Text("Hotel Daily Base Rate")
+            //                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
+            //                    .foregroundStyle(.oceanBlue)
+            //                NavigationLink(destination: HotelBaseRatePickerView(selectedBaseRate: $hotelDailyBaseRate)) {
+            //                    VStack(alignment: .leading, spacing: 3) {
+            //                        ZStack {
+            //                            RoundedRectangle(cornerRadius: 8)
+            //                                .foregroundStyle(.ourLightGray)
+            //                            RoundedRectangle(cornerRadius: 8)
+            //                                .stroke(.oceanBlue, lineWidth: 1)
+            //                            HStack {
+            //                                Text(hotelDailyBaseRate == "" ? "---" : hotelDailyBaseRate)
+            //                                    .foregroundStyle(hotelDailyBaseRate == "" ? .gray : .oceanBlue)
+            //                                    .font(Font.custom("Poppins", size: 16))
+            //                                Spacer()
+            //                                Image(systemName: "chevron.right")
+            //                                    .foregroundStyle(.oceanBlue)
+            //                                    .fontWeight(.semibold)
+            //                            }.padding(.horizontal)
+            //                        }
+            //                        .frame(height: 41)
+            //                    }
+            //                }
+            //            }
         }
     }
     
@@ -685,47 +685,47 @@ struct NewExpenseForm: View {
     }
     
     var recieptAmountContainer: some View {
-            VStack(alignment: .leading, spacing: 2) {
-                Text("Reciept Amount")
-                    .foregroundStyle(.oceanBlue)
-                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                HStack {
-                    Menu {
-                        ForEach(countries, id: \.self) { currency in
-                            Button(action: {
-                                selectedCurrency = currency
-                            }, label: {
-                                Text(currency)
-                            })
-                        }
-                    } label: {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 8)
-                                .foregroundStyle(.ourLightGray)
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.oceanBlue, lineWidth: 1)
-                            HStack {
-                                Image(selectedCurrency)
-                                Text(selectedCurrency)
-                                    .foregroundStyle(.oceanBlue)
-                                    .fontWeight(.semibold)
-                                Image(systemName: "chevron.down")
-                                    .foregroundStyle(.oceanBlue)
-                                    .fontWeight(.semibold)
-                            }
-                        }
+        VStack(alignment: .leading, spacing: 2) {
+            Text("Reciept Amount")
+                .foregroundStyle(.oceanBlue)
+                .font(Font.custom("Poppins", size: 16).weight(.semibold))
+            HStack {
+                Menu {
+                    ForEach(countries, id: \.self) { currency in
+                        Button(action: {
+                            selectedCurrency = currency
+                        }, label: {
+                            Text(currency)
+                        })
                     }
-                    .frame(width: 100)
+                } label: {
                     ZStack {
                         RoundedRectangle(cornerRadius: 8)
                             .foregroundStyle(.ourLightGray)
                         RoundedRectangle(cornerRadius: 8)
                             .stroke(Color.oceanBlue, lineWidth: 1)
-                        TextField("", text: $amount)
-                            .padding(.horizontal)
+                        HStack {
+                            Image(selectedCurrency)
+                            Text(selectedCurrency)
+                                .foregroundStyle(.oceanBlue)
+                                .fontWeight(.semibold)
+                            Image(systemName: "chevron.down")
+                                .foregroundStyle(.oceanBlue)
+                                .fontWeight(.semibold)
+                        }
                     }
-                }.frame(height: 41)
-            }
+                }
+                .frame(width: 100)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .foregroundStyle(.ourLightGray)
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.oceanBlue, lineWidth: 1)
+                    TextField("", text: $amount)
+                        .padding(.horizontal)
+                }
+            }.frame(height: 41)
+        }
     }
     
     var convertedCurrency: some View {
@@ -795,7 +795,7 @@ struct NewExpenseForm: View {
                     .foregroundStyle(.white)
                     .font(Font.custom("Poppins", size: 18).weight(.semibold))
             }
-        }).frame(height: 41)
+        }).frame(height: 55)
     }
     
     func submitItem() {
@@ -874,7 +874,6 @@ struct NewExpenseForm: View {
 #Preview {
     NewExpenseForm(isShowingSelf: .constant(true), report: Report(
         id: "3",
-        user: (dao.user?.first_name ?? "") + (dao.user?.last_name ?? ""),
         reportNumber: "RPT789012",
         reportStatus: "Rejected",
         reportSubmitDate: "2023-03-10",
