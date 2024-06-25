@@ -75,6 +75,14 @@ struct EditExpenseForm: View {
             return nil
         }
     }
+    
+    @State private var fileAction: FileAction?
+    enum FileAction {
+        case downloadView, delete, add
+    }
+    
+    @State private var showAlert = false
+    @State private var alertMessage = ""
 
     var body: some View {
         ZStack {
@@ -88,6 +96,9 @@ struct EditExpenseForm: View {
         .sheet(isPresented: $isShowingImagePicker) {
             ImagePicker(selectedFileURL: $selectedFileURL)
         }
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text("Download Completed"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+        }
         .actionSheet(isPresented: $isShowingActionSheet) {
             ActionSheet(title: Text("Upload Receipt"), message: nil, buttons: [
                 .default(Text("Take Photo")) {
@@ -99,6 +110,21 @@ struct EditExpenseForm: View {
                 .default(Text("Browse")) {
                     isShowingFilePicker = true
                 },
+                // Conditional to see if there is already an image on the expense report item
+//                if expenseItem.imageData.count > 0 {
+                    .default(Text("Download and View")) {
+                        fileAction = .downloadView
+    //                    handleAction()
+                    },
+                    .default(Text("Add New File")) {
+                        fileAction = .add
+                        //                    handleAction()
+                    },
+                    .destructive(Text("Delete")) {
+                        fileAction = .delete
+    //                    handleAction()
+                    },
+//                },
                 .cancel()
             ])
         }
@@ -641,6 +667,7 @@ struct EditExpenseForm: View {
     
     var filePickerButton: some View {
         VStack(alignment: .leading, spacing: 2) {
+            // Make a conditional to see if there is already a reciept
             Text("Upload Receipt")
                 .foregroundStyle(.gray)
             Button(action: {
@@ -979,11 +1006,66 @@ struct EditExpenseForm: View {
         }
     }
     
+    private func handleAction() {
+        guard let action = fileAction else { return }
+
+        switch action {
+        case .downloadView:
+            downloadAndViewFile()
+        case .delete:
+            deleteFile()
+        case .add:
+            addNewFile()
+        }
+    }
+
+    private func downloadAndViewFile() {
+        guard let url = URL(string: "https://example.com/image.jpg") else { return }
+
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let data = data {
+                DispatchQueue.main.async {
+//                    self.expenseReport.imageData = data
+                    self.saveImageToGallery(imageData: data)
+                }
+            } else {
+                print("Failed to download image: \(error?.localizedDescription ?? "Unknown error")")
+            }
+        }.resume()
+    }
+
+    private func deleteFile() {
+        // Implement the logic to delete the file
+        print("Deleting the file")
+//            expenseReport.imageData = nil
+    }
+
+    private func addNewFile() {
+        showImagePicker(sourceType: .photoLibrary)
+    }
+    
     private func showImagePicker(sourceType: UIImagePickerController.SourceType) {
         guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
             return
         }
         isShowingImagePicker = true
+    }
+    
+    private func saveImageToGallery(imageData: Data) {
+        guard let image = UIImage(data: imageData) else { return }
+        
+        PHPhotoLibrary.shared().performChanges({
+            PHAssetChangeRequest.creationRequestForAsset(from: image)
+        }) { success, error in
+            DispatchQueue.main.async {
+                if success {
+                    self.alertMessage = "Image successfully saved to gallery."
+                } else {
+                    self.alertMessage = "Failed to save image: \(error?.localizedDescription ?? "Unknown error")"
+                }
+                self.showAlert = true
+            }
+        }
     }
     
     private var selectedTypeRequiresCity: Bool {
@@ -1069,60 +1151,6 @@ struct EditExpenseForm: View {
         createdAt: nil,
         updatedAt: nil,
         report: 3
-    ))
-    .environmentObject(AuthenticationManager())
-}
-
-
-#Preview {
-    EditExpenseForm(report: Report(
-        id: "3",
-        user: (dao.user?.first_name ?? "") + (dao.user?.last_name ?? ""),
-        reportNumber: "RPT789012",
-        reportStatus: "Rejected",
-        reportSubmitDate: "2023-03-10",
-        integrationStatus: "Not Integrated",
-        integrationDate: nil,
-        reportDate: "2024-06-08",
-        expenseType: "Hotel",
-        purpose: "Hotel stay during conference",
-        paymentMethod: "Debit Card",
-        reportAmount: "500.00",
-        reportCurrency: "USD",
-        createdAt: "2023-03-08T09:00:00Z",
-        updatedAt: "2023-03-10T14:00:00Z"
-    ), expenseReport: ExpenseItem(
-        id: nil,
-        airline: nil,
-        rentalAgency: nil,
-        carType: nil,
-        mealCategory: nil,
-        relationshipToPAI: nil,
-        city: nil,
-        hotelDailyBaseRate: nil,
-        mileageRate: nil,
-        presignedURL: nil,
-        filename: nil,
-        expenseType: "Airline",
-        expenseDate: "2024-06-24",
-        receiptAmount: "120.99",
-        receiptCurrency: "USD",
-        justification: "Travel to Brazil",
-        note: nil,
-        s3Path: nil,
-        originDestination: nil,
-        employeeNames: nil,
-        totalEmployees: nil,
-        companyCustomerName: nil,
-        businessTopic: nil,
-        totalAttendees: nil,
-        nameOfEstablishment: nil,
-        hotelName: nil,
-        carrier: nil,
-        distance: nil,
-        createdAt: nil,
-        updatedAt: nil,
-        report: nil
     ))
     .environmentObject(AuthenticationManager())
 }

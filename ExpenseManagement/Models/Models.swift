@@ -251,6 +251,9 @@ struct ExpenseItem: Codable {
     let createdAt: String?
     let updatedAt: String?
     let report: Int?
+    // How I recomend storing the image
+    // If we want to allow the user to update more than one image, this should be an array
+//    var imageData: Data?
     
     enum CodingKeys: String, CodingKey {
         case id
