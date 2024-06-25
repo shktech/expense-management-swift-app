@@ -14,45 +14,45 @@ struct ReportComponent: View {
     var body: some View {
         NavigationLink(destination: ReportsDetailView(report: report)) {
             ZStack {
-                Color.white
-                    .ignoresSafeArea()
+                RoundedRectangle(cornerRadius: 14)
+                    .foregroundStyle(.ourLightGray)
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(.oceanBlue, lineWidth: 1)
                 HStack {
-                    VStack(alignment: .leading) {
-                        Text(report.reportNumber)
-                            .font(.system(size: 17))
-                            .foregroundStyle(.black)
+                    VStack(alignment: .leading, spacing: 3) {
                         if let date = DateFormatter.apiDate.date(from: report.reportDate) {
                             Text(DateFormatter.userFriendly.string(from: date))
-                                .font(.system(size: 15))
+                                .font(Font.custom("Poppins", size: 14))
                                 .foregroundColor(.gray)
                         } else {
                             Text("Unknown")
                                 .font(.system(size: 15))
                                 .foregroundColor(.gray)
                         }
+                    }.frame(width: 100)
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundStyle(.oceanBlue)
+                        .frame(width: 1.5)
+                    VStack(alignment: .leading) {
+                        Text(report.id)
+                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                            .foregroundStyle(.oceanBlue)
                         Text(report.purpose)
-                            .font(.system(size: 15))
-                            .foregroundStyle(.gray)
-                        Text("\(Utilities.CurrencyFormatter.formatCurrency(amount: report.reportAmount, currencyCode: report.reportCurrency)) \(report.reportCurrency)")
-                            .font(.system(size: 15))
-                            .foregroundStyle(.gray)
-                        Text(report.reportStatus)
-                            .foregroundStyle(report.reportStatus == "Submitted" ? .green : .red)
-                            .font(.system(size: 15))
+                            .font(Font.custom("Poppins", size: 14))
+                            .foregroundStyle(.black)
+                            .multilineTextAlignment(.leading)
+                        Text("\(Utilities.CurrencyFormatter.formatCurrency(amount: report.reportAmount, currencyCode: report.reportCurrency))")
+                            .font(Font.custom("Poppins", size: 14))
+                            .foregroundStyle(.black)
                     }
                     Spacer()
-                    HStack(spacing: 0) {
-                        Text("Detail")
-                            .foregroundStyle(.black.opacity(0.5))
+                    HStack {
                         Image(systemName: "chevron.right")
-                            .foregroundStyle(.black.opacity(0.3))
-                            .fontWeight(.semibold)
+                            .font(.system(size: 20).weight(.semibold))
+                            .foregroundStyle(.oceanBlue)
                     }
                 }.padding()
             }
-            .frame(height: 127)
-            .clipShape(RoundedRectangle(cornerRadius: 14))
-            .shadow(color: .black.opacity(0.2), radius: 4, x: 0, y: 4)
         }
     }
 }
