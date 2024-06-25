@@ -916,7 +916,7 @@ struct EditExpenseForm: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 14)
                     .foregroundStyle(.oceanBlue)
-                Text("+ Add Expense")
+                Text("Save")
                     .foregroundStyle(.white)
                     .font(Font.custom("Poppins", size: 18).weight(.semibold))
             }
