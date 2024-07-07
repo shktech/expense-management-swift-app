@@ -12,7 +12,7 @@ struct VerifyMFAView: View {
             ZStack {
                 Color(uiColor: .systemGray6).ignoresSafeArea()
                 ZStack {
-                    ourPfu
+                    PFULogo()
                     content
                 }
             }
@@ -22,16 +22,6 @@ struct VerifyMFAView: View {
             }
             
         }
-    }
-    
-    var ourPfu: some View {
-        VStack {
-            HStack {
-                Spacer()
-                Image("pfuLogo")
-            }
-            Spacer()
-        }.ignoresSafeArea().padding()
     }
     
     var content: some View {
@@ -101,6 +91,7 @@ struct VerifyMFAView: View {
     }
 }
 
-//#Preview {
-//    VerifyMFAView()
-//}
+#Preview {
+    VerifyMFAView()
+        .environmentObject(AuthenticationManager())
+}

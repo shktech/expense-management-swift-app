@@ -161,6 +161,7 @@ struct SelectTypeForm: View {
 #Preview {
     SelectTypeForm(isShowingSelf: .constant(true), report: Report(
         id: "3",
+        user: "something@something.com",
         reportNumber: "RPT789012",
         reportStatus: "Rejected",
         reportSubmitDate: "2023-03-10",

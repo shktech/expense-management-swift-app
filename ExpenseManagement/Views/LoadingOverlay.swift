@@ -3,11 +3,11 @@ import SwiftUI
 struct LoadingOverlayView: View {
     var body: some View {
         ZStack {
-            Color.gray.opacity(0.5) // Semi-transparent grey background
+            Color.gray.opacity(0.5)
                 .edgesIgnoringSafeArea(.all)
             ProgressView()
                 .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                .scaleEffect(2)
+                .scaleEffect(1)
         }
     }
 }

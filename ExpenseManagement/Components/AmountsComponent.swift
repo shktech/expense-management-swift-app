@@ -36,7 +36,7 @@ struct AllAmountsComponent: View {
         VStack(alignment: .leading, spacing: 2) {
             Text("Receipt Amount")
                 .foregroundStyle(.oceanBlue)
-                .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                .font(Font.custom("Nunito", size: 16).weight(.bold))
             HStack {
                 Menu {
                     ForEach(currencies, id: \.code) { currency in
@@ -81,7 +81,7 @@ struct AllAmountsComponent: View {
         VStack(alignment: .leading, spacing: 2) {
             Text("Converted Report Amount")
                 .foregroundStyle(.oceanBlue)
-                .font(Font.custom("Poppins", size: 16).weight(.semibold))
+                .font(Font.custom("Nunito", size: 16).weight(.semibold))
             HStack {
                 ZStack {
                     RoundedRectangle(cornerRadius: 8)

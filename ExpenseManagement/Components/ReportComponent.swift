@@ -7,8 +7,8 @@ struct ReportComponent: View {
     var body: some View {
         NavigationLink(destination: ReportsDetailView(report: $report)) {
             ZStack {
-                Color.white
-                    .ignoresSafeArea()
+                Rectangle()
+                    .foregroundStyle(.ourMoreLightGray)
                 HStack {
                     VStack(alignment: .leading) {
                         Text(report.reportNumber)
@@ -16,38 +16,57 @@ struct ReportComponent: View {
                             .foregroundStyle(.black)
                         if let date = DateFormatter.apiDate.date(from: report.reportDate) {
                             Text(DateFormatter.userFriendly.string(from: date))
-                                .font(.system(size: 15))
+                                .font(Font.custom("Poppins", size: 14))
                                 .foregroundColor(.gray)
                         } else {
                             Text("Unknown")
                                 .font(.system(size: 15))
                                 .foregroundColor(.gray)
                         }
-                        Text(report.purpose)
-                            .font(.system(size: 15))
-                            .foregroundStyle(.gray)
-                        Text("\(Utilities.CurrencyFormatter.formatCurrency(amount: report.reportAmount, currencyCode: report.reportCurrency)) \(report.reportCurrency)")
-                            .font(.system(size: 15))
-                            .foregroundStyle(.gray)
-                        Text(report.reportStatus)
-                            .foregroundStyle(report.reportStatus == "Submitted" ? .green : .red)
-                            .font(.system(size: 15).weight(.semibold))
-                    }
-                    Spacer()
-                    HStack(spacing: 0) {
-                        Text("Detail")
-                            .foregroundStyle(.black.opacity(0.5))
-                        Image(systemName: "chevron.right")
-                            .foregroundStyle(.black.opacity(0.3))
-                            .fontWeight(.semibold)
+                        ReportStatusView(reportStatus: report.reportStatus)
+                    }.frame(width: 100)
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundStyle(.oceanBlue)
+                        .frame(width: 1.5)
+                    HStack{
+                        VStack(alignment: .leading) {
+                            Text(report.purpose)
+                                .font(Font.custom("Poppins", size: 14).weight(.semibold))
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                                .foregroundStyle(.oceanBlue)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            Text("\(Utilities.CurrencyFormatter.formatCurrency(amount: report.reportAmount, currencyCode: report.reportCurrency)) \(report.reportCurrency)")
+                                .font(Font.custom("Poppins", size: 14).weight(.semibold))
+                                .foregroundStyle(.black)
+                            VStack(alignment: .leading) {
+                                if let submitDate = DateFormatter.apiDate.date(from: report.reportSubmitDate ?? "") {
+                                    Text("Submission Date: \(DateFormatter.userFriendly.string(from: submitDate))")
+                                        .font(.system(size: 12))
+                                        .foregroundStyle(.gray)
+                                } else {
+                                    Text("Submission Date: N/A")
+                                        .font(.system(size: 12))
+                                        .foregroundStyle(.gray)
+                                }
+                                Text("Approval Date: N/A").font(.system(size: 12)).foregroundStyle(.gray)
+                            }.padding(.top, 1)
+                        }
+//                        Image(systemName: "chevron.right")
+//                            .font(.system(size: 20).weight(.semibold))
+//                            .foregroundStyle(.oceanBlue)
                     }
                 }
-                .padding(.horizontal)
+                .padding(.horizontal, 2)
                 .padding(.vertical, 7)
             }
             .clipShape(RoundedRectangle(cornerRadius: 14))
-            .shadow(color: .black.opacity(0.2), radius: 4, x: 0, y: 4)
-        }
+            .shadow(color: .black.opacity(0.2), radius: 2, x: 0, y: 2)
+        }.frame(height: 100)
+            .onAppear(perform: log)
+    }
+    
+    private func log() {
+        print(report)
     }
 }
 
@@ -55,9 +74,10 @@ struct ReportComponent: View {
     ReportComponent(report: .constant(
         Report(
             id: "1",
+            user: "something@gmail.com",
             reportNumber: "RPT123456",
-            reportStatus: "Pending",
-            reportSubmitDate: "2023-01-15",
+            reportStatus: "Open",
+            reportSubmitDate: "2024-06-27",
             integrationStatus: "Not Integrated",
             integrationDate: nil,
             reportDate: "2024-06-08",

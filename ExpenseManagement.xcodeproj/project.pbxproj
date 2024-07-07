@@ -16,6 +16,7 @@
 		0F4684DB2C28CDA700406B9A /* RelashionshipToPaiPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4684DA2C28CDA700406B9A /* RelashionshipToPaiPickerView.swift */; };
 		0F4684DD2C28D44100406B9A /* HotelBaseRatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4684DC2C28D44100406B9A /* HotelBaseRatePickerView.swift */; };
 		0F4684DF2C28D5C300406B9A /* MileageRatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4684DE2C28D5C300406B9A /* MileageRatePickerView.swift */; };
+		0F4684E12C2A378500406B9A /* EditExpenseForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4684E02C2A378500406B9A /* EditExpenseForm.swift */; };
 		0FBD331C2C21E388000502B0 /* SelectTypeForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBD331B2C21E388000502B0 /* SelectTypeForm.swift */; };
 		0FCD00A72C08CAAF00A49C62 /* ExpenseManagementApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00A62C08CAAF00A49C62 /* ExpenseManagementApp.swift */; };
 		0FCD00A92C08CAAF00A49C62 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00A82C08CAAF00A49C62 /* ContentView.swift */; };
@@ -46,6 +47,25 @@
 		0FFCC9892C0FD4C1003CBEC1 /* rates.json in Resources */ = {isa = PBXBuildFile; fileRef = 0FFCC9882C0FD4C1003CBEC1 /* rates.json */; };
 		0FFCC98B2C0FD4F6003CBEC1 /* citiesAmounts.json in Resources */ = {isa = PBXBuildFile; fileRef = 0FFCC98A2C0FD4F6003CBEC1 /* citiesAmounts.json */; };
 		0FFCC98D2C0FD50D003CBEC1 /* allCities.json in Resources */ = {isa = PBXBuildFile; fileRef = 0FFCC98C2C0FD50D003CBEC1 /* allCities.json */; };
+		B50D30D92C2B464F00AE8880 /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50D30D82C2B464F00AE8880 /* ViewExtensions.swift */; };
+		B50D30DB2C2B489C00AE8880 /* StatusDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50D30DA2C2B489C00AE8880 /* StatusDisplay.swift */; };
+		B50D30DD2C2CDA4E00AE8880 /* FilePickerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50D30DC2C2CDA4E00AE8880 /* FilePickerButton.swift */; };
+		B50D30DF2C2DF2FA00AE8880 /* MessagesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50D30DE2C2DF2FA00AE8880 /* MessagesProvider.swift */; };
+		B50D30E22C2DF34700AE8880 /* SwiftMessages in Frameworks */ = {isa = PBXBuildFile; productRef = B50D30E12C2DF34700AE8880 /* SwiftMessages */; };
+		B50D30E42C2DF4D400AE8880 /* GlobalStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50D30E32C2DF4D400AE8880 /* GlobalStateManager.swift */; };
+		B50D30E62C2DFA4D00AE8880 /* BiometricAuthenticationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50D30E52C2DFA4D00AE8880 /* BiometricAuthenticationProvider.swift */; };
+		B50D30E82C2E107F00AE8880 /* Toggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50D30E72C2E107F00AE8880 /* Toggle.swift */; };
+		B50D30ED2C313BFC00AE8880 /* MockCommonDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50D30EC2C313BFC00AE8880 /* MockCommonDataManager.swift */; };
+		B50D30EF2C330C3000AE8880 /* CityPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50D30EE2C330C3000AE8880 /* CityPickerView.swift */; };
+		B50D30F12C3315CD00AE8880 /* TextInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50D30F02C3315CD00AE8880 /* TextInputView.swift */; };
+		B50D30F32C33166600AE8880 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50D30F22C33166600AE8880 /* SearchBar.swift */; };
+		B50D30F52C331E2B00AE8880 /* DateFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50D30F42C331E2B00AE8880 /* DateFieldView.swift */; };
+		B50D30F72C33284800AE8880 /* WarningMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50D30F62C33284800AE8880 /* WarningMessageView.swift */; };
+		B50D30FA2C34E37000AE8880 /* FormValidator in Frameworks */ = {isa = PBXBuildFile; productRef = B50D30F92C34E37000AE8880 /* FormValidator */; };
+		B50D30FC2C34F13300AE8880 /* PickerField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50D30FB2C34F13300AE8880 /* PickerField.swift */; };
+		B50D30FE2C35CF9900AE8880 /* DateFilterPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50D30FD2C35CF9900AE8880 /* DateFilterPicker.swift */; };
+		B50D31002C38EB0200AE8880 /* ContentUnavailableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50D30FF2C38EB0200AE8880 /* ContentUnavailableView.swift */; };
+		B50D31022C38F1D800AE8880 /* MockAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50D31012C38F1D800AE8880 /* MockAuthManager.swift */; };
 		B559AD912C1116D100CE4CF1 /* LoadingOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = B559AD902C1116D100CE4CF1 /* LoadingOverlay.swift */; };
 		B59BD5EF2C112A900027E599 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD5EE2C112A900027E599 /* Auth.swift */; };
 		B59BD5F22C113CE90027E599 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD5F12C113CE90027E599 /* AuthManager.swift */; };
@@ -54,7 +74,6 @@
 		B59BD5F92C1172ED0027E599 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD5F82C1172ED0027E599 /* DateFormatter.swift */; };
 		B59BD5FC2C11837A0027E599 /* user.json in Resources */ = {isa = PBXBuildFile; fileRef = B59BD5FB2C11837A0027E599 /* user.json */; };
 		B59BD5FE2C1184110027E599 /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD5FD2C1184110027E599 /* DataLoader.swift */; };
-		B59BD6022C118CB90027E599 /* MockAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD6012C118CB90027E599 /* MockAuthManager.swift */; };
 		B59BD6042C11AFD20027E599 /* FilePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD6032C11AFD20027E599 /* FilePicker.swift */; };
 		B59BD6062C11B86C0027E599 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD6052C11B86C0027E599 /* ImagePicker.swift */; };
 		B59BD6082C123DE00027E599 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD6072C123DE00027E599 /* Utilities.swift */; };
@@ -63,12 +82,12 @@
 		B59BD60E2C1B7BF30027E599 /* Poppins.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B59BD60D2C1B7BF30027E599 /* Poppins.ttf */; };
 		B59BD6102C1B7C540027E599 /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B59BD60F2C1B7C540027E599 /* Poppins-Bold.ttf */; };
 		B59BD6252C28EB3F0027E599 /* PhoneNumberInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD6242C28EB3F0027E599 /* PhoneNumberInput.swift */; };
-		B59BD6282C28ECCE0027E599 /* JWTDecode in Frameworks */ = {isa = PBXBuildFile; productRef = B59BD6272C28ECCE0027E599 /* JWTDecode */; };
-		B59BD62B2C28ECE10027E599 /* PhoneNumberKit in Frameworks */ = {isa = PBXBuildFile; productRef = B59BD62A2C28ECE10027E599 /* PhoneNumberKit */; };
 		B59BD62D2C28ED9D0027E599 /* KeyChainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD62C2C28ED9D0027E599 /* KeyChainHelper.swift */; };
 		B59BD62F2C290A680027E599 /* AmountsComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD62E2C290A680027E599 /* AmountsComponent.swift */; };
 		B59BD6312C2923510027E599 /* CurrencyPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD6302C2923510027E599 /* CurrencyPicker.swift */; };
 		B59BD6332C2940900027E599 /* Timeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD6322C2940900027E599 /* Timeline.swift */; };
+		B59BD6352C2B3B040027E599 /* PhoneNumberKit in Frameworks */ = {isa = PBXBuildFile; productRef = B59BD6342C2B3B040027E599 /* PhoneNumberKit */; };
+		B59BD6372C2B3B0E0027E599 /* JWTDecode in Frameworks */ = {isa = PBXBuildFile; productRef = B59BD6362C2B3B0E0027E599 /* JWTDecode */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -81,6 +100,7 @@
 		0F4684DA2C28CDA700406B9A /* RelashionshipToPaiPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelashionshipToPaiPickerView.swift; sourceTree = "<group>"; };
 		0F4684DC2C28D44100406B9A /* HotelBaseRatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotelBaseRatePickerView.swift; sourceTree = "<group>"; };
 		0F4684DE2C28D5C300406B9A /* MileageRatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MileageRatePickerView.swift; sourceTree = "<group>"; };
+		0F4684E02C2A378500406B9A /* EditExpenseForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditExpenseForm.swift; sourceTree = "<group>"; };
 		0FBD331B2C21E388000502B0 /* SelectTypeForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTypeForm.swift; sourceTree = "<group>"; };
 		0FCD00A32C08CAAF00A49C62 /* ExpenseManagement.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExpenseManagement.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FCD00A62C08CAAF00A49C62 /* ExpenseManagementApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseManagementApp.swift; sourceTree = "<group>"; };
@@ -112,6 +132,23 @@
 		0FFCC9882C0FD4C1003CBEC1 /* rates.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rates.json; sourceTree = "<group>"; };
 		0FFCC98A2C0FD4F6003CBEC1 /* citiesAmounts.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = citiesAmounts.json; sourceTree = "<group>"; };
 		0FFCC98C2C0FD50D003CBEC1 /* allCities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = allCities.json; sourceTree = "<group>"; };
+		B50D30D82C2B464F00AE8880 /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
+		B50D30DA2C2B489C00AE8880 /* StatusDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusDisplay.swift; sourceTree = "<group>"; };
+		B50D30DC2C2CDA4E00AE8880 /* FilePickerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilePickerButton.swift; sourceTree = "<group>"; };
+		B50D30DE2C2DF2FA00AE8880 /* MessagesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesProvider.swift; sourceTree = "<group>"; };
+		B50D30E32C2DF4D400AE8880 /* GlobalStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalStateManager.swift; sourceTree = "<group>"; };
+		B50D30E52C2DFA4D00AE8880 /* BiometricAuthenticationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricAuthenticationProvider.swift; sourceTree = "<group>"; };
+		B50D30E72C2E107F00AE8880 /* Toggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toggle.swift; sourceTree = "<group>"; };
+		B50D30EC2C313BFC00AE8880 /* MockCommonDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCommonDataManager.swift; sourceTree = "<group>"; };
+		B50D30EE2C330C3000AE8880 /* CityPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityPickerView.swift; sourceTree = "<group>"; };
+		B50D30F02C3315CD00AE8880 /* TextInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputView.swift; sourceTree = "<group>"; };
+		B50D30F22C33166600AE8880 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
+		B50D30F42C331E2B00AE8880 /* DateFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFieldView.swift; sourceTree = "<group>"; };
+		B50D30F62C33284800AE8880 /* WarningMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WarningMessageView.swift; sourceTree = "<group>"; };
+		B50D30FB2C34F13300AE8880 /* PickerField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerField.swift; sourceTree = "<group>"; };
+		B50D30FD2C35CF9900AE8880 /* DateFilterPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFilterPicker.swift; sourceTree = "<group>"; };
+		B50D30FF2C38EB0200AE8880 /* ContentUnavailableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentUnavailableView.swift; sourceTree = "<group>"; };
+		B50D31012C38F1D800AE8880 /* MockAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAuthManager.swift; sourceTree = "<group>"; };
 		B559AD8B2C10162900CE4CF1 /* Local.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Local.xcconfig; sourceTree = "<group>"; };
 		B559AD8C2C10163400CE4CF1 /* Test.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Test.xcconfig; sourceTree = "<group>"; };
 		B559AD8D2C10164700CE4CF1 /* Prod.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Prod.xcconfig; sourceTree = "<group>"; };
@@ -124,7 +161,6 @@
 		B59BD5F82C1172ED0027E599 /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 		B59BD5FB2C11837A0027E599 /* user.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = user.json; sourceTree = "<group>"; };
 		B59BD5FD2C1184110027E599 /* DataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataLoader.swift; sourceTree = "<group>"; };
-		B59BD6012C118CB90027E599 /* MockAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAuthManager.swift; sourceTree = "<group>"; };
 		B59BD6032C11AFD20027E599 /* FilePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilePicker.swift; sourceTree = "<group>"; };
 		B59BD6052C11B86C0027E599 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		B59BD6072C123DE00027E599 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
@@ -144,8 +180,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B59BD6282C28ECCE0027E599 /* JWTDecode in Frameworks */,
-				B59BD62B2C28ECE10027E599 /* PhoneNumberKit in Frameworks */,
+				B59BD6372C2B3B0E0027E599 /* JWTDecode in Frameworks */,
+				B50D30E22C2DF34700AE8880 /* SwiftMessages in Frameworks */,
+				B59BD6352C2B3B040027E599 /* PhoneNumberKit in Frameworks */,
+				B50D30FA2C34E37000AE8880 /* FormValidator in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,6 +202,14 @@
 				0F4684DE2C28D5C300406B9A /* MileageRatePickerView.swift */,
 				B59BD6242C28EB3F0027E599 /* PhoneNumberInput.swift */,
 				B59BD6302C2923510027E599 /* CurrencyPicker.swift */,
+				B50D30DC2C2CDA4E00AE8880 /* FilePickerButton.swift */,
+				B50D30E72C2E107F00AE8880 /* Toggle.swift */,
+				B50D30EE2C330C3000AE8880 /* CityPickerView.swift */,
+				B50D30F02C3315CD00AE8880 /* TextInputView.swift */,
+				B50D30F22C33166600AE8880 /* SearchBar.swift */,
+				B50D30F42C331E2B00AE8880 /* DateFieldView.swift */,
+				B50D30FB2C34F13300AE8880 /* PickerField.swift */,
+				B50D30FD2C35CF9900AE8880 /* DateFilterPicker.swift */,
 			);
 			path = Pickers;
 			sourceTree = "<group>";
@@ -187,6 +233,8 @@
 		0FCD00A52C08CAAF00A49C62 /* ExpenseManagement */ = {
 			isa = PBXGroup;
 			children = (
+				B50D30EB2C313BC700AE8880 /* Mocks */,
+				B50D30D72C2B463100AE8880 /* Extensions */,
 				0F4684D32C28C68B00406B9A /* Pickers */,
 				B59BD5F72C1172C00027E599 /* Utils */,
 				B59BD5F02C1130A90027E599 /* Info.plist */,
@@ -238,6 +286,9 @@
 				B59BD6052C11B86C0027E599 /* ImagePicker.swift */,
 				B59BD6092C1B70A70027E599 /* VerifyMFAView.swift */,
 				0FBD331B2C21E388000502B0 /* SelectTypeForm.swift */,
+				0F4684E02C2A378500406B9A /* EditExpenseForm.swift */,
+				B50D30F62C33284800AE8880 /* WarningMessageView.swift */,
+				B50D30FF2C38EB0200AE8880 /* ContentUnavailableView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -251,6 +302,10 @@
 				0FCD00E02C0CE91600A49C62 /* ExpenseComponent.swift */,
 				B59BD62E2C290A680027E599 /* AmountsComponent.swift */,
 				B59BD6322C2940900027E599 /* Timeline.swift */,
+				B50D30DA2C2B489C00AE8880 /* StatusDisplay.swift */,
+				B50D30DE2C2DF2FA00AE8880 /* MessagesProvider.swift */,
+				B50D30E32C2DF4D400AE8880 /* GlobalStateManager.swift */,
+				B50D30E52C2DFA4D00AE8880 /* BiometricAuthenticationProvider.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -293,11 +348,27 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		B50D30D72C2B463100AE8880 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				B50D30D82C2B464F00AE8880 /* ViewExtensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		B50D30EB2C313BC700AE8880 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				B50D30EC2C313BFC00AE8880 /* MockCommonDataManager.swift */,
+				B50D31012C38F1D800AE8880 /* MockAuthManager.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
 		B59BD5F72C1172C00027E599 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
 				B59BD5F82C1172ED0027E599 /* DateFormatter.swift */,
-				B59BD6012C118CB90027E599 /* MockAuthManager.swift */,
 				B59BD6072C123DE00027E599 /* Utilities.swift */,
 			);
 			path = Utils;
@@ -320,8 +391,10 @@
 			);
 			name = ExpenseManagement;
 			packageProductDependencies = (
-				B59BD6272C28ECCE0027E599 /* JWTDecode */,
-				B59BD62A2C28ECE10027E599 /* PhoneNumberKit */,
+				B59BD6342C2B3B040027E599 /* PhoneNumberKit */,
+				B59BD6362C2B3B0E0027E599 /* JWTDecode */,
+				B50D30E12C2DF34700AE8880 /* SwiftMessages */,
+				B50D30F92C34E37000AE8880 /* FormValidator */,
 			);
 			productName = ExpenseManagement;
 			productReference = 0FCD00A32C08CAAF00A49C62 /* ExpenseManagement.app */;
@@ -352,9 +425,10 @@
 			);
 			mainGroup = 0FCD009A2C08CAAF00A49C62;
 			packageReferences = (
-				0FCD00C92C0A34DD00A49C62 /* XCRemoteSwiftPackageReference "CodableExtensions" */,
 				B59BD6262C28ECCE0027E599 /* XCRemoteSwiftPackageReference "JWTDecode" */,
 				B59BD6292C28ECE10027E599 /* XCRemoteSwiftPackageReference "PhoneNumberKit" */,
+				B50D30E02C2DF34700AE8880 /* XCRemoteSwiftPackageReference "SwiftMessages" */,
+				B50D30F82C34E37000AE8880 /* XCRemoteSwiftPackageReference "SwiftUIFormValidator" */,
 			);
 			productRefGroup = 0FCD00A42C08CAAF00A49C62 /* Products */;
 			projectDirPath = "";
@@ -401,14 +475,20 @@
 				0FCD00C22C0A33DA00A49C62 /* DAO.swift in Sources */,
 				0FBD331C2C21E388000502B0 /* SelectTypeForm.swift in Sources */,
 				B59BD6082C123DE00027E599 /* Utilities.swift in Sources */,
+				B50D30FC2C34F13300AE8880 /* PickerField.swift in Sources */,
 				B59BD5F92C1172ED0027E599 /* DateFormatter.swift in Sources */,
 				0F4684D72C28C91100406B9A /* CarTypesPickerView.swift in Sources */,
 				0F4684D22C2874FB00406B9A /* AirlinePickerView.swift in Sources */,
 				B59BD6042C11AFD20027E599 /* FilePicker.swift in Sources */,
+				B50D30D92C2B464F00AE8880 /* ViewExtensions.swift in Sources */,
+				B50D30E82C2E107F00AE8880 /* Toggle.swift in Sources */,
 				0FCD00A92C08CAAF00A49C62 /* ContentView.swift in Sources */,
 				0FCD00BA2C08D92000A49C62 /* SignUpView.swift in Sources */,
 				0FCD00E52C0D2B1400A49C62 /* NewReportView.swift in Sources */,
 				B59BD5FE2C1184110027E599 /* DataLoader.swift in Sources */,
+				B50D30ED2C313BFC00AE8880 /* MockCommonDataManager.swift in Sources */,
+				B50D30E42C2DF4D400AE8880 /* GlobalStateManager.swift in Sources */,
+				B50D30F72C33284800AE8880 /* WarningMessageView.swift in Sources */,
 				0FCD00B62C08D90900A49C62 /* WelcomeView.swift in Sources */,
 				0FCD00DF2C0CD5A800A49C62 /* NewCreditCardForm.swift in Sources */,
 				B59BD6312C2923510027E599 /* CurrencyPicker.swift in Sources */,
@@ -418,25 +498,36 @@
 				0F4684D92C28CA9100406B9A /* MealCategoriesPickerView.swift in Sources */,
 				0F4684DB2C28CDA700406B9A /* RelashionshipToPaiPickerView.swift in Sources */,
 				B59BD6252C28EB3F0027E599 /* PhoneNumberInput.swift in Sources */,
+				B50D30E62C2DFA4D00AE8880 /* BiometricAuthenticationProvider.swift in Sources */,
+				B50D30DB2C2B489C00AE8880 /* StatusDisplay.swift in Sources */,
 				0FCD00DD2C0BE28200A49C62 /* ManagePaymentView.swift in Sources */,
+				B50D30F12C3315CD00AE8880 /* TextInputView.swift in Sources */,
+				B50D30DF2C2DF2FA00AE8880 /* MessagesProvider.swift in Sources */,
+				B50D30EF2C330C3000AE8880 /* CityPickerView.swift in Sources */,
 				0FCD00DB2C0A53E900A49C62 /* ReportsDetailView.swift in Sources */,
+				B50D30DD2C2CDA4E00AE8880 /* FilePickerButton.swift in Sources */,
 				0FCD00E32C0D28B800A49C62 /* NewExpenseForm.swift in Sources */,
 				B559AD912C1116D100CE4CF1 /* LoadingOverlay.swift in Sources */,
+				B50D30F52C331E2B00AE8880 /* DateFieldView.swift in Sources */,
+				B50D31022C38F1D800AE8880 /* MockAuthManager.swift in Sources */,
 				0F4684DF2C28D5C300406B9A /* MileageRatePickerView.swift in Sources */,
 				B59BD60A2C1B70A70027E599 /* VerifyMFAView.swift in Sources */,
 				0FCD00BF2C08E69300A49C62 /* PFULogo.swift in Sources */,
 				0FFCC97B2C0F2AD1003CBEC1 /* ExpenseDetailView.swift in Sources */,
+				0F4684E12C2A378500406B9A /* EditExpenseForm.swift in Sources */,
 				0FCD00D92C0A51AB00A49C62 /* ReportComponent.swift in Sources */,
-				B59BD6022C118CB90027E599 /* MockAuthManager.swift in Sources */,
 				0FCD00BD2C08E66500A49C62 /* BackgroundImage.swift in Sources */,
 				0FCD00D72C0A403900A49C62 /* UserView.swift in Sources */,
 				0F4684DD2C28D44100406B9A /* HotelBaseRatePickerView.swift in Sources */,
 				B59BD62D2C28ED9D0027E599 /* KeyChainHelper.swift in Sources */,
+				B50D31002C38EB0200AE8880 /* ContentUnavailableView.swift in Sources */,
 				B59BD5EF2C112A900027E599 /* Auth.swift in Sources */,
 				0FCD00D22C0A3AC400A49C62 /* ReportsView.swift in Sources */,
 				B59BD5F62C1163A80027E599 /* ExpenseDataManager.swift in Sources */,
 				0FCD00CD2C0A350900A49C62 /* Models.swift in Sources */,
 				B59BD6062C11B86C0027E599 /* ImagePicker.swift in Sources */,
+				B50D30F32C33166600AE8880 /* SearchBar.swift in Sources */,
+				B50D30FE2C35CF9900AE8880 /* DateFilterPicker.swift in Sources */,
 				0FCD00B82C08D91500A49C62 /* SignInView.swift in Sources */,
 				0F4684D52C28C6A900406B9A /* carRentalPickerView.swift in Sources */,
 				0FCD00A72C08CAAF00A49C62 /* ExpenseManagementApp.swift in Sources */,
@@ -499,6 +590,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "We use Face ID to quickly log you into your account.";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -557,6 +649,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "We use Face ID to quickly log you into your account.";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -686,6 +779,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "We use Face ID to quickly log you into your account.";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -756,12 +850,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		0FCD00C92C0A34DD00A49C62 /* XCRemoteSwiftPackageReference "CodableExtensions" */ = {
+		B50D30E02C2DF34700AE8880 /* XCRemoteSwiftPackageReference "SwiftMessages" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/rvenieris/CodableExtensions.git";
+			repositoryURL = "https://github.com/SwiftKickMobile/SwiftMessages";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				minimumVersion = 10.0.0;
+			};
+		};
+		B50D30F82C34E37000AE8880 /* XCRemoteSwiftPackageReference "SwiftUIFormValidator" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Open-Bytes/SwiftUIFormValidator";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.4;
 			};
 		};
 		B59BD6262C28ECCE0027E599 /* XCRemoteSwiftPackageReference "JWTDecode" */ = {
@@ -783,15 +885,25 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		B59BD6272C28ECCE0027E599 /* JWTDecode */ = {
+		B50D30E12C2DF34700AE8880 /* SwiftMessages */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B59BD6262C28ECCE0027E599 /* XCRemoteSwiftPackageReference "JWTDecode" */;
-			productName = JWTDecode;
+			package = B50D30E02C2DF34700AE8880 /* XCRemoteSwiftPackageReference "SwiftMessages" */;
+			productName = SwiftMessages;
 		};
-		B59BD62A2C28ECE10027E599 /* PhoneNumberKit */ = {
+		B50D30F92C34E37000AE8880 /* FormValidator */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B50D30F82C34E37000AE8880 /* XCRemoteSwiftPackageReference "SwiftUIFormValidator" */;
+			productName = FormValidator;
+		};
+		B59BD6342C2B3B040027E599 /* PhoneNumberKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B59BD6292C28ECE10027E599 /* XCRemoteSwiftPackageReference "PhoneNumberKit" */;
 			productName = PhoneNumberKit;
+		};
+		B59BD6362C2B3B0E0027E599 /* JWTDecode */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B59BD6262C28ECCE0027E599 /* XCRemoteSwiftPackageReference "JWTDecode" */;
+			productName = JWTDecode;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

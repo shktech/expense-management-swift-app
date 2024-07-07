@@ -2,15 +2,34 @@ import SwiftUI
 import Combine
 import JWTDecode
 
-class AuthenticationManager: ObservableObject {
+protocol AuthenticationManagerProtocol: ObservableObject {
+    var accessToken: String? { get set }
+    var refreshToken: String? { get set }
+    var isSignedIn: Bool { get set }
+    var loginFailed: Bool { get set }
+    var user: User? { get set }
+    var isDataLoading: Bool { get set }
+    var email: String? { get set }
+
+    func signIn(email: String, password: String, completion: @escaping (Result<Void, Error>) -> Void)
+    func verifyMFA(code: String, completion: @escaping (Result<Void, Error>) -> Void)
+    func loadUserData(completion: @escaping (Result<Void, Error>) -> Void)
+    func createCreditCard(cardNumber: String, expirationDate: String, completion: @escaping (Result<Void, Error>) -> Void)
+    func register(email: String, password: String, firstName: String, lastName: String, phoneNumber: String, department: String, currency: String, completion: @escaping (Result<String, Error>) -> Void)
+    func refreshAccessTokenIfNeeded(completion: @escaping (Result<Void, Error>) -> Void)
+    func signOut()
+    func dateFromString(_ string: String) -> Date?
+}
+
+class AuthenticationManager: AuthenticationManagerProtocol {
     @Published var accessToken: String? {
         didSet {
-            saveToken(accessToken, forKey: "pfu_expense_accessToken")
+            saveToken(accessToken, forKey: "accessToken")
         }
     }
     @Published var refreshToken: String? {
         didSet {
-            saveToken(refreshToken, forKey: "pfu_expense_refreshToken")
+            saveToken(refreshToken, forKey: "refreshToken")
         }
     }
     @Published var isSignedIn: Bool = false
@@ -23,8 +42,8 @@ class AuthenticationManager: ObservableObject {
     private let commonDataManager = CommonDataManager.instance
 
     init() {
-        self.accessToken = loadToken(forKey: "pfu_expense_accessToken")
-        self.refreshToken = loadToken(forKey: "pfu_expense_refreshToken")
+        self.accessToken = loadToken(forKey: "accessToken")
+        self.refreshToken = loadToken(forKey: "refreshToken")
         if let token = accessToken, isAccessTokenValid(token) {
             self.isSignedIn = true
             loadUserDataAndCommonData { _ in }
@@ -87,38 +106,96 @@ class AuthenticationManager: ObservableObject {
         })
     }
 
-    private func loadUserDataAndCommonData(completion: @escaping (Result<Void, Error>) -> Void) {
+    public func loadUserData(completion: @escaping (Result<Void, Error>) -> Void) {
         guard let accessToken = accessToken else {
             completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No access token available"])))
             return
         }
 
-        let dispatchGroup = DispatchGroup()
-
-        dispatchGroup.enter()
         dao.fetchUserData(accessToken: accessToken) { result in
             switch result {
             case .success(let user):
                 self.user = user
+                completion(.success(()))
             case .failure(let error):
                 print("Failed to fetch user data: \(error)")
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    func createCreditCard(cardNumber: String, expirationDate: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let accessToken = accessToken else {
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No access token available"])))
+            return
+        }
+
+        let creditCard = CreditCard(cardNumber: cardNumber, expirationDate: expirationDate)
+        dao.createCreditCard(creditCard: creditCard, accessToken: accessToken) { result in
+            switch result {
+            case .success:
+                self.loadUserData { userResult in
+                    switch userResult {
+                    case .success:
+                        completion(.success(()))
+                    case .failure(let error):
+                        completion(.failure(error))
+                    }
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+
+    private func loadCommonData(completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let accessToken = accessToken else {
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No access token available"])))
+            return
+        }
+
+        commonDataManager.loadCommonData(accessToken: accessToken) { result in
+            switch result {
+            case .success:
+                print("Common data loaded successfully")
+                completion(.success(()))
+            case .failure(let error):
+                print("Failed to load common data: \(error)")
+                completion(.failure(error))
+            }
+        }
+    }
+
+    private func loadUserDataAndCommonData(completion: @escaping (Result<Void, Error>) -> Void) {
+        let dispatchGroup = DispatchGroup()
+
+        var userDataError: Error?
+        var commonDataError: Error?
+
+        dispatchGroup.enter()
+        loadUserData { result in
+            if case .failure(let error) = result {
+                userDataError = error
             }
             dispatchGroup.leave()
         }
 
         dispatchGroup.enter()
-        commonDataManager.loadCommonData(accessToken: accessToken) { result in
-            switch result {
-            case .success:
-                print("Common data loaded successfully")
-            case .failure(let error):
-                print("Failed to load common data: \(error)")
+        loadCommonData { result in
+            if case .failure(let error) = result {
+                commonDataError = error
             }
             dispatchGroup.leave()
         }
 
         dispatchGroup.notify(queue: .main) {
-            completion(.success(()))
+            if let userDataError = userDataError {
+                completion(.failure(userDataError))
+            } else if let commonDataError = commonDataError {
+                completion(.failure(commonDataError))
+            } else {
+                completion(.success(()))
+            }
         }
     }
 
@@ -170,8 +247,14 @@ class AuthenticationManager: ObservableObject {
         self.isSignedIn = false
         self.user = nil
         self.email = nil
-        deleteToken(forKey: "pfu_expense_accessToken")
-        deleteToken(forKey: "pfu_expense_refreshToken")
+        deleteToken(forKey: "accessToken")
+        deleteToken(forKey: "refreshToken")
+    }
+    
+    func dateFromString(_ string: String) -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/yy"
+        return dateFormatter.date(from: string)
     }
 
     private func isAccessTokenValid(_ token: String) -> Bool {
@@ -192,7 +275,7 @@ class AuthenticationManager: ObservableObject {
     }
 
     private func loadToken(forKey key: String) -> String? {
-        return KeychainHelper.load(key: key)
+        return KeychainHelper.load(key: key) as? String ?? nil
     }
 
     private func deleteToken(forKey key: String) {

@@ -133,3 +133,39 @@ struct ExpenseDetailView: View {
         }.padding(.top)
     }
 }
+
+#Preview {
+    ExpenseDetailView(expense: ExpenseItem(
+        id: "1",
+        airline: nil,
+        rentalAgency: nil,
+        carType: nil,
+        mealCategory: nil,
+        relationshipToPAI: nil,
+        city: nil,
+        hotelDailyBaseRate: nil,
+        mileageRate: nil,
+        presignedURL: nil,
+        filename: nil,
+        expenseType: ExpenseType.airFare,
+        expenseDate: "2024-06-24",
+        receiptAmount: "120.99",
+        receiptCurrency: "USD",
+        justification: "Travel to Brazil",
+        note: nil,
+        s3Path: nil,
+        originDestination: nil,
+        employeeNames: nil,
+        totalEmployees: nil,
+        companyCustomerName: nil,
+        businessTopic: nil,
+        totalAttendees: nil,
+        nameOfEstablishment: nil,
+        hotelName: nil,
+        carrier: nil,
+        distance: nil,
+        createdAt: nil,
+        updatedAt: nil,
+        report: nil
+    ))
+}

@@ -1,38 +1,47 @@
-//
-//  MileageRatePickerView.swift
-//  ExpenseManagement
-//
-//  Created by infra on 23/06/24.
-//
-
 import SwiftUI
 
-struct MileageRatePickerView: View {
-    @StateObject private var commonDataManager = CommonDataManager.instance
-    
-    @State var searchText: String = ""
-    
+struct MileageRatePickerView<CommonDataManager: CommonDataManagerProtocol>: View {
     @Binding var selectedMileage: String
-    
-    var filteredMileage: [MileageRate] {
-            if searchText.isEmpty {
-                return commonDataManager.mileageRates
-            } else {
-                return commonDataManager.mileageRates.filter { $0.title.lowercased().contains(searchText.lowercased()) }
+    @Binding var isEditable: Bool
+    @EnvironmentObject var commonDataManager: CommonDataManager
+    @State private var showMileagePicker = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text("Mileage Rate")
+                .font(Font.custom("Nunito", size: 16).weight(.bold))
+                .foregroundStyle(.oceanBlue)
+            ZStack {
+                RoundedRectangle(cornerRadius: 8)
+                    .foregroundStyle(isEditable ? .ourLightGray : .black.opacity(0.15))
+                HStack {
+                    Text(selectedMileage.isEmpty ? "---" : selectedMileage)
+                        .foregroundStyle(selectedMileage.isEmpty ? .gray : .oceanBlue)
+                        .font(Font.custom("Nunito", size: 16))
+                    Spacer()
+                    Image(systemName: "chevron.down")
+                        .foregroundStyle(.oceanBlue)
+                        .fontWeight(.semibold)
+                        .opacity(isEditable ? 1:0)
+                }
+                .padding(.horizontal)
+            }
+            .frame(height: 41)
+            .onTapGesture {
+                showMileagePicker.toggle()
             }
         }
-    
-    var body: some View {
-        ZStack {
+        .sheet(isPresented: $showMileagePicker) {
             VStack(spacing: 15) {
-                Text("Select your Rental Agency")
-                    .font(Font.custom("Poppins", size: 24).weight(.semibold))
+                Text("Select your Mileage Rate")
+                    .font(Font.custom("Nunito", size: 18).weight(.semibold))
                     .foregroundStyle(.oceanBlue)
                 ScrollView {
                     VStack(spacing: 15) {
-                        ForEach(Array(filteredMileage.enumerated()), id:\.element.title) { index, relation in
+                        ForEach(commonDataManager.mileageRates, id: \.title) { relation in
                             Button {
                                 selectedMileage = relation.title
+                                showMileagePicker = false
                             } label: {
                                 ZStack {
                                     if selectedMileage == relation.title {
@@ -40,17 +49,17 @@ struct MileageRatePickerView: View {
                                             .foregroundStyle(.oceanBlue)
                                         HStack {
                                             Text(relation.title)
-                                                .font(Font.custom("Poppins", size: 16))
+                                                .font(Font.custom("Nunito", size: 16))
                                                 .foregroundStyle(.white)
                                             Spacer()
                                             Image(systemName: "checkmark")
                                         }.padding()
                                     } else {
                                         RoundedRectangle(cornerRadius: 8)
-                                            .foregroundStyle(index % 2 == 0 ? .ourLightBlue : .ourLightGray)
+                                            .foregroundStyle(.gray.opacity(0.2))
                                         HStack {
                                             Text(relation.title)
-                                                .font(Font.custom("Poppins", size: 16))
+                                                .font(Font.custom("Nunito", size: 16))
                                                 .foregroundStyle(.black)
                                             Spacer()
                                         }.padding()
@@ -59,13 +68,20 @@ struct MileageRatePickerView: View {
                             }
                             .frame(height: 44)
                         }
-                    }.padding(.top)
+                    }
+                    .padding(.top)
                 }
+                .padding(.horizontal)
             }
-        }.padding()
+            .padding()
+            .presentationDetents([.fraction(0.5)])
+        }
     }
 }
 
-//#Preview {
-//    MileageRatePickerView()
-//}
+struct MileageRatePickerView_Previews: PreviewProvider {
+    static var previews: some View {
+        MileageRatePickerView<MockCommonDataManager>(selectedMileage: .constant(""), isEditable: .constant(true))
+            .environmentObject(MockCommonDataManager())
+    }
+}

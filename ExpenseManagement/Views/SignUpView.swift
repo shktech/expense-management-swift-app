@@ -91,7 +91,7 @@ struct SignUpView: View {
             confirmPasswordContainer
             phoneNumberInputView
             departmentContainer
-            CurrencyPicker(selectedCurrency: $selectedCurrency)
+            CurrencyPicker(selectedCurrency: $selectedCurrency, isEditable: .constant(true))
         }
     }
     

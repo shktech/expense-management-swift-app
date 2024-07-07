@@ -8,20 +8,30 @@
 import Foundation
 
 struct User: Codable {
-    var first_name: String?
-    var last_name: String?
-    var email: String?
-    var phone_number: String?
+    var id: String
+    var first_name: String
+    var last_name: String
+    var email: String
+    var phone_number: String
     var department: String?
-    var currency: String?
-    var paymentMethods: [CreditCard]?
-    var defaultPaymentMethod: Int?
+    var currency: String
+    var creditCard: CreditCard?
+    
+    enum CodingKeys: String, CodingKey {
+        case id, first_name, last_name, email, phone_number, department, currency
+        case creditCard = "cc_card"
+    }
+
 }
 
-struct CreditCard: Codable, Identifiable {
-    var id = UUID()
+struct CreditCard: Codable {
     var cardNumber: String
-    var expirationDate: Date
+    var expirationDate: String
+    
+    enum CodingKeys: String, CodingKey {
+        case cardNumber = "card_number"
+        case expirationDate = "expiration_date"
+    }
 }
 
 struct RegisterUser: Codable {
@@ -62,7 +72,7 @@ struct CreateReportRequest: Codable {
 
 struct Report: Identifiable, Codable {
     let id: String
-//    let user: String?
+    let user: String?
     let reportNumber: String
     let reportStatus: String
     let reportSubmitDate: String?
@@ -79,7 +89,7 @@ struct Report: Identifiable, Codable {
     
     enum CodingKeys: String, CodingKey {
         case id
-//        case user
+        case user
         case reportNumber = "report_number"
         case reportStatus = "report_status"
         case reportSubmitDate = "report_submit_date"
@@ -236,7 +246,7 @@ struct CreateExpenseItemRequest: Codable {
 
 
 struct ExpenseItem: Codable {
-    let id: String?
+    let id: String
     let airline: String?
     let rentalAgency: String?
     let carType: String?
@@ -247,7 +257,7 @@ struct ExpenseItem: Codable {
     let mileageRate: MileageRate?
     let presignedURL: String?
     let filename: String?
-    let expenseType: String
+    let expenseType: ExpenseType
     let expenseDate: String
     let receiptAmount: String
     let receiptCurrency: String
@@ -303,7 +313,7 @@ struct ExpenseItem: Codable {
     }
 }
 
-enum ExpenseType: String, CaseIterable, Identifiable {
+enum ExpenseType: String, CaseIterable, Codable, Identifiable {
     case airFare = "AirFare"
     case airlineClubMembershipDues = "Airline Club Membership Dues"
     case airlineFees = "Airline Fees"
@@ -398,5 +408,13 @@ struct ExchangeRates: Codable {
     
     private enum CodingKeys: CodingKey {
         case rates
+    }
+}
+
+struct Preview: Codable {
+    let presignedURL: String
+    
+    enum CodingKeys: String, CodingKey {
+        case presignedURL = "presigned_url"
     }
 }

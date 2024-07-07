@@ -1,39 +1,59 @@
-//
-//  carRentalPickerView.swift
-//  ExpenseManagement
-//
-//  Created by infra on 23/06/24.
-//
-
 import SwiftUI
 
-struct CarRentalPickerView: View {
-    
-    @StateObject private var commonDataManager = CommonDataManager.instance
-    
-    @State var searchText: String = ""
-    
+struct CarRentalPickerView<CommonDataManager: CommonDataManagerProtocol>: View {
     @Binding var selectedRental: String
-    
+    @Binding var isEditable: Bool
+    @EnvironmentObject var commonDataManager: CommonDataManager
+    @State private var showRentalPicker = false
+    @State private var searchText: String = ""
+
     var filteredRentals: [RentalAgency] {
-            if searchText.isEmpty {
-                return commonDataManager.rentalAgencies
-            } else {
-                return commonDataManager.rentalAgencies.filter { $0.value.lowercased().contains(searchText.lowercased()) }
+        if searchText.isEmpty {
+            return commonDataManager.rentalAgencies
+        } else {
+            return commonDataManager.rentalAgencies.filter { $0.value.lowercased().contains(searchText.lowercased()) }
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text("Rental Agency")
+                .font(Font.custom("Nunito", size: 16).weight(.bold))
+                .foregroundStyle(.oceanBlue)
+            ZStack {
+                RoundedRectangle(cornerRadius: 8)
+                    .foregroundStyle(isEditable ? .ourLightGray : .black.opacity(0.15))
+                HStack {
+                    Text(selectedRental.isEmpty ? "---" : selectedRental)
+                        .foregroundStyle(selectedRental.isEmpty ? .gray : .oceanBlue)
+                        .font(Font.custom("Nunito", size: 16))
+                    Spacer()
+                    Image(systemName: "chevron.down")
+                        .foregroundStyle(.oceanBlue)
+                        .fontWeight(.semibold)
+                        .opacity(isEditable ? 1:0)
+                }
+                .padding(.horizontal)
+            }
+            .frame(height: 40)
+            .onTapGesture {
+                if isEditable {
+                    showRentalPicker.toggle()
+                }
             }
         }
-    
-    var body: some View {
-        ZStack {
+        .sheet(isPresented: $showRentalPicker) {
             VStack(spacing: 15) {
                 Text("Select your Rental Agency")
-                    .font(Font.custom("Poppins", size: 24).weight(.semibold))
+                    .font(Font.custom("Nunito", size: 18).weight(.semibold))
                     .foregroundStyle(.oceanBlue)
+                SearchBar(text: $searchText, placeholder: "Search rental agencies")
                 ScrollView {
                     VStack(spacing: 15) {
-                        ForEach(Array(filteredRentals.enumerated()), id:\.element.value) { index, rental in
+                        ForEach(filteredRentals, id: \.value) { rental in
                             Button {
                                 selectedRental = rental.value
+                                showRentalPicker = false
                             } label: {
                                 ZStack {
                                     if selectedRental == rental.value {
@@ -41,17 +61,17 @@ struct CarRentalPickerView: View {
                                             .foregroundStyle(.oceanBlue)
                                         HStack {
                                             Text(rental.value)
-                                                .font(Font.custom("Poppins", size: 16))
+                                                .font(Font.custom("Nunito", size: 16))
                                                 .foregroundStyle(.white)
                                             Spacer()
                                             Image(systemName: "checkmark")
                                         }.padding()
                                     } else {
                                         RoundedRectangle(cornerRadius: 8)
-                                            .foregroundStyle(index % 2 == 0 ? .ourLightBlue : .ourLightGray)
+                                            .foregroundStyle(.gray.opacity(0.2))
                                         HStack {
                                             Text(rental.value)
-                                                .font(Font.custom("Poppins", size: 16))
+                                                .font(Font.custom("Nunito", size: 16))
                                                 .foregroundStyle(.black)
                                             Spacer()
                                         }.padding()
@@ -60,13 +80,20 @@ struct CarRentalPickerView: View {
                             }
                             .frame(height: 44)
                         }
-                    }.padding(.top)
+                    }
+                    .padding(.top)
                 }
+                .padding(.horizontal)
             }
-        }.padding()
+            .padding()
+            .presentationDetents([.fraction(0.5)])
+        }
     }
 }
 
-//#Preview {
-//    carRentalPickerView()
-//}
+struct CarRentalPickerView_Previews: PreviewProvider {
+    static var previews: some View {
+        CarRentalPickerView<MockCommonDataManager>(selectedRental: .constant(""), isEditable: .constant(true))
+            .environmentObject(MockCommonDataManager())
+    }
+}

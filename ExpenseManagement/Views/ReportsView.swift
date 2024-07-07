@@ -1,21 +1,14 @@
 import SwiftUI
 
 struct ReportsView: View {
-    @State var initialDate: Date = Calendar.current.date(byAdding: .day, value: -180, to: Date())!
-    @State private var finalDate: Date = {
-        let calendar = Calendar.current
-        let now = Date()
-        let startOfDay = calendar.startOfDay(for: now)
-        return calendar.date(byAdding: DateComponents(day: 1, second: -1), to: startOfDay)!
-    }()
+    @State var initialDate: Date = Calendar.current.date(from: DateComponents(year: Calendar.current.component(.year, from: Date()), month: 1, day: 1))!
+    @State var finalDate: Date = Date()
     
     @State var isShowingAddReport: Bool = false
     @State private var isLoading = false
     @State var reports: [Report] = []
     
     private let dao = DAO.instance
-    
-    @EnvironmentObject var floatingButtonViewModel: FloatingButtonViewModel
     
     var filteredReports: [Binding<Report>] {
         let filtered = reports.filter { report in
@@ -50,12 +43,21 @@ struct ReportsView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(uiColor: .systemGray6)
+                Color.white
                     .ignoresSafeArea()
                 PFULogo()
                 ZStack {
-                    content.loadingOverlay(isLoading: $isLoading)
+                    content
                 }.padding()
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        newReportButton
+                            .padding()
+                            .shadow(color: .black.opacity(0.3), radius: 2, x: 2, y: 3)
+                    }
+                }
             }
             .sheet(isPresented: $isShowingAddReport, content: {
                 NewReportView(isShowing: $isShowingAddReport)
@@ -65,24 +67,24 @@ struct ReportsView: View {
             }
         }
         .onAppear {
-            floatingButtonViewModel.action = {
-                isShowingAddReport.toggle()
-            }
-            floatingButtonViewModel.visible = true
             loadData()
         }
         .refreshable(action: loadData)
+        .loadingOverlay(isLoading: $isLoading)
     }
     
     var content: some View {
-        VStack {
+        VStack(alignment: .leading) {
             headerContent
             line
             reportsTitle
-//            newReportButton
             datePickerContainer
             line
-            scrollViewReports
+            if (reports.isEmpty) {
+                ContentUnavailableView(title: "No reports", description: "Tap the “+“ button and start adding expense reports")
+            } else {
+                scrollViewReports
+            }
             Spacer()
         }.padding()
     }
@@ -90,7 +92,7 @@ struct ReportsView: View {
     var headerContent: some View {
         HStack {
             VStack(alignment: .leading, spacing: 10) {
-                Text(authManager.user?.first_name ?? "")
+                Text("\(authManager.user?.first_name ?? "") \(authManager.user?.last_name ?? "")")
                     .font(.system(size: 17).weight(.semibold))
                 Text(authManager.user?.department ?? "")
                     .font(.system(size: 17).weight(.semibold))
@@ -109,38 +111,38 @@ struct ReportsView: View {
     
     var reportsTitle: some View {
         HStack {
-            Text("Reports")
+            Text("Expense Reports")
                 .font(.system(size: 32).weight(.semibold))
             Spacer()
         }
     }
     
     var newReportButton: some View {
-        Button(action: {
-            isShowingAddReport.toggle()
-        }, label: {
-            ZStack {
-                RoundedRectangle(cornerRadius: 14)
-                    .foregroundStyle(.blue)
-                Text("+ Add New Report")
-                    .font(Font.custom("Poppins", size: 18).weight(.semibold))
-                    .foregroundStyle(.white)
+        ZStack{
+            Button(action: {
+                isShowingAddReport.toggle()
+            }) {
+                Image(systemName: "plus.circle.fill")
+                    .resizable()
+                    .frame(width: 55, height: 55)
+                    .foregroundColor(.oceanBlue)
             }
-        })
-        .frame(height: 55)
+            .zIndex(1)
+        }.padding()
     }
     
     var datePickerContainer: some View {
-        HStack {
-            DatePicker("", selection: $initialDate, displayedComponents: [.date] )
-                .labelsHidden()
-            RoundedRectangle(cornerRadius: 10)
-                .frame(width: 20, height: 1)
-                .foregroundStyle(Color.gray.opacity(0.4))
-            DatePicker("", selection: $finalDate, displayedComponents: [.date])
-                .labelsHidden()
-            Spacer()
-        }.padding(.bottom, 10)
+        DateFilterPicker(initialDate: $initialDate, finalDate: $finalDate, isEditable: .constant(true))
+//        HStack {
+//            DatePicker("", selection: $initialDate, displayedComponents: [.date] )
+//                .labelsHidden()
+//            RoundedRectangle(cornerRadius: 10)
+//                .frame(width: 20, height: 1)
+//                .foregroundStyle(Color.gray.opacity(0.4))
+//            DatePicker("", selection: $finalDate, displayedComponents: [.date])
+//                .labelsHidden()
+//            Spacer()
+//        }.padding(.bottom, 10)
     }
     
     var scrollViewReports: some View {
@@ -156,7 +158,6 @@ struct ReportsView: View {
         dao.fetchReports(accessToken: authManager.accessToken ?? "") { result in
             switch result {
             case .success(let reports):
-                print(reports)
                 self.reports = reports
             case .failure(let error):
                 print("Failed to fetch reports: \(error)")
@@ -169,5 +170,4 @@ struct ReportsView: View {
 #Preview {
     ReportsView()
         .environmentObject(AuthenticationManager())
-        .environmentObject(FloatingButtonViewModel())
 }

@@ -4,7 +4,6 @@ struct NewReportView: View {
     
     @Binding var isShowing: Bool
     @State var newReportName: String = "New Report"
-    @FocusState private var isTextFieldFocused: Bool
     @FocusState private var isPurposeFieldFocused: Bool
     
     @State var isLoading: Bool = false
@@ -13,45 +12,31 @@ struct NewReportView: View {
     @State var purposeField: String = ""
     @State var selectedPaymentMethod: String = "Cash"
     @State var selectedCurrency: String = "USD"
+    @State var isEditable: Bool = true
     
     @EnvironmentObject var authManager: AuthenticationManager
     private let dao = DAO.instance
     
-    let allCurrency: [String] = [
-        "USD", "EUR", "JPY", "CAD"
-    ]
-    
     var body: some View {
         ZStack {
-            Color(uiColor: .systemGray6)
-                .ignoresSafeArea()
             ZStack {
-                ourPfu
-                content.loadingOverlay(isLoading: $isLoading)
+                content
             }.padding()
-        }
-    }
-    
-    var ourPfu: some View {
-        VStack {
-            HStack {
-                Spacer()
-                Image("pfuLogo")
-            }
-            Spacer()
-        }.ignoresSafeArea()
+        }.loadingOverlay(isLoading: $isLoading)
     }
     
     var content: some View {
         VStack {
-            headerContent
-            line
-            newReportNameField
-            dateField
-            expenseTypeField
-            purposeFieldContainer
-            preferredPaymentMethodContainer
-            currencyField
+            newReportNameField.padding(.vertical)
+            DateFieldView(title: "Date", date: $date, isEditable: .constant(true))
+            PickerField(title: "Expense Type", options: ["Domestic", "International"], selectedOption: $expenseType, isEditable: .constant(true))
+            TextInputView(title: "Purpose", text: $purposeField, isEditable: .constant(true), placeholder: "ex: New Conference")
+                .focused($isPurposeFieldFocused)
+                .onAppear {
+                    isPurposeFieldFocused = true
+                }
+            PickerField(title: "Preferred Payment Method", options: ["Cash", "Credit card"], selectedOption: $selectedPaymentMethod, isEditable: .constant(true))
+            CurrencyPicker(selectedCurrency: $selectedCurrency, isEditable: .constant(true))
             Spacer()
             addButton
         }.padding()
@@ -79,149 +64,10 @@ struct NewReportView: View {
     
     var newReportNameField: some View {
         HStack {
-            TextField("New Report", text: $newReportName)
-                .focused($isTextFieldFocused)
+            Text(newReportName)
                 .font(.system(size: 32).weight(.semibold))
             Spacer()
         }.padding(.top)
-        .onAppear {
-            isTextFieldFocused = true
-        }
-    }
-    
-    var dateField: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text("Date")
-            ZStack {
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray, lineWidth: 2)
-                    .frame(height: 41)
-                HStack {
-                    Text("\(date.formatted(date: .numeric, time: .omitted))")
-                    Spacer()
-                    Image(systemName: "calendar")
-                        .font(.title3)
-                        .overlay {
-                            DatePicker(
-                                "",
-                                selection: $date,
-                                displayedComponents: [.date]
-                            )
-                            .blendMode(.destinationOver)
-                        }
-                }.padding()
-            }
-        }.padding(.top)
-    }
-    
-    var expenseTypeField: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text("Expense Type")
-            Menu {
-                Button(action: {
-                    expenseType = "Domestic"
-                }, label: {
-                    Text("Domestic")
-                })
-                Button(action: {
-                    expenseType = "International"
-                }, label: {
-                    Text("International")
-                })
-            } label: {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.gray, lineWidth: 2)
-                        .frame(height: 41)
-                        .foregroundStyle(Color(uiColor: .systemGray6))
-                    HStack {
-                        Text(expenseType)
-                            .foregroundStyle(Color.black)
-                        Spacer()
-                        Image(systemName: "chevron.down")
-                            .foregroundStyle(Color.gray)
-                    }.padding()
-                }
-            }
-        }.padding(.top)
-    }
-    
-    var purposeFieldContainer: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text("Purpose")
-            ZStack {
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray, lineWidth: 2)
-                    .frame(height: 41)
-                TextField("ex: New Conference", text: $purposeField)
-                    .focused($isPurposeFieldFocused)
-                    .padding()
-            }
-        }.padding(.top)
-        .onAppear {
-            isPurposeFieldFocused = true
-        }
-    }
-    
-    var preferredPaymentMethodContainer: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text("Preferred Payment Method")
-            Menu {
-                Button(action: {
-                    selectedPaymentMethod = "Cash"
-                }, label: {
-                    Text("Cash")
-                })
-                Button(action: {
-                    selectedPaymentMethod = "Credit card"
-                }, label: {
-                    Text("Credit card")
-                })
-            } label: {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.gray, lineWidth: 2)
-                        .frame(height: 41)
-                        .foregroundStyle(Color(uiColor: .systemGray6))
-                    HStack {
-                        Text(selectedPaymentMethod)
-                            .foregroundStyle(Color.black)
-                        Spacer()
-                        Image(systemName: "chevron.down")
-                            .foregroundStyle(Color.gray)
-                    }.padding()
-                }
-            }
-        }.padding(.top)
-    }
-    
-    var currencyField: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text("Currency")
-            Menu {
-                ForEach(allCurrency, id: \.self) { currency in
-                    Button(action: {
-                        selectedCurrency = currency
-                    }, label: {
-                        Text(currency)
-                    })
-                }
-            } label: {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.gray, lineWidth: 2)
-                        .frame(height: 41)
-                        .foregroundStyle(Color(uiColor: .systemGray6))
-                    HStack {
-                        Text(selectedCurrency)
-                            .foregroundStyle(Color.black)
-                        Spacer()
-                        Image(systemName: "chevron.down")
-                            .foregroundStyle(Color.gray)
-                    }.padding()
-                }
-            }
-        }
     }
     
     var addButton: some View {
@@ -231,13 +77,12 @@ struct NewReportView: View {
         }, label: {
             ZStack {
                 RoundedRectangle(cornerRadius: 14)
-                    .foregroundStyle(.blue)
-                Text("Add")
+                    .foregroundStyle(.oceanBlue)
+                Text("Save")
                     .foregroundStyle(.white)
-                    .font(.system(size: 17).weight(.semibold))
-                    
+                    .font(Font.custom("Poppins", size: 18).weight(.semibold))
             }
-        }).frame(height: 41)
+        }).frame(height: 50)
     }
     
     func submitReport() {
@@ -274,3 +119,9 @@ struct NewReportView: View {
     }
 }
 
+struct NewReportView_Previews: PreviewProvider {
+    static var previews: some View {
+        NewReportView(isShowing: .constant(true))
+            .environmentObject(AuthenticationManager())
+    }
+}

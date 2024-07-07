@@ -1,15 +1,6 @@
 {
-  "originHash" : "d28fee8c4e8a38dbd7c496c68510bf736d857aedc3aa86679732bd244eb396da",
+  "originHash" : "1d3338b55066ccfb97c453fcc1a40156f44ec7c580f51fb93db3da4f19426a43",
   "pins" : [
-    {
-      "identity" : "codableextensions",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/rvenieris/CodableExtensions.git",
-      "state" : {
-        "revision" : "e671737b81ffe39c17523f0caac73e93cce36927",
-        "version" : "1.0.0"
-      }
-    },
     {
       "identity" : "jwtdecode.swift",
       "kind" : "remoteSourceControl",
@@ -26,6 +17,24 @@
       "state" : {
         "revision" : "0a025521711539e3a6e0e725ac868ac84a4983e1",
         "version" : "3.7.11"
+      }
+    },
+    {
+      "identity" : "swiftmessages",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftKickMobile/SwiftMessages",
+      "state" : {
+        "revision" : "b899be48a61ddb209695a8d5e411189b704a7fa3",
+        "version" : "10.0.0"
+      }
+    },
+    {
+      "identity" : "swiftuiformvalidator",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Open-Bytes/SwiftUIFormValidator",
+      "state" : {
+        "revision" : "29547a930990b4e4b7a6cc4919615a746d43742a",
+        "version" : "1.0.4"
       }
     }
   ],

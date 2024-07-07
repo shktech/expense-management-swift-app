@@ -14,8 +14,8 @@ struct PhoneNumberInputView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Phone Number")
-                .font(.system(size: 13).weight(.semibold))
-                .foregroundStyle(.black)
+                .font(Font.custom("Nunito", size: 16).weight(.bold))
+                .foregroundStyle(.oceanBlue)
             VStack(spacing: 3) {
                 HStack(spacing: 0) {
                     Menu {

@@ -1,37 +1,58 @@
-//
-//  CarTypesPIckerView.swift
-//  ExpenseManagement
-//
-//  Created by infra on 23/06/24.
-//
-
 import SwiftUI
 
-struct CarTypesPickerView: View {
+struct CarTypeInputField<CommonDataManager: CommonDataManagerProtocol>: View {
+    @Binding var selectedCar: String;
+    @State private var showCarTypesPicker = false
+    @Binding var isEditable: Bool
+    @EnvironmentObject var commonDataManager: CommonDataManager
     
-    @StateObject private var commonDataManager = CommonDataManager.instance
-    
-    @State var searchText: String = ""
-    
-    @Binding var selectedCar: String
-    
-    var filteredCars: [CarType] {
-            if searchText.isEmpty {
-                return commonDataManager.carTypes
-            } else {
-                return commonDataManager.carTypes.filter { $0.value.lowercased().contains(searchText.lowercased()) }
+    var body: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text("Car Type")
+                .font(Font.custom("Nunito", size: 16).weight(.bold))
+                .foregroundStyle(.oceanBlue)
+            ZStack {
+                RoundedRectangle(cornerRadius: 8)
+                    .foregroundStyle(isEditable ? .ourLightGray : .black.opacity(0.15))
+                HStack {
+                    Text(selectedCar.isEmpty ? "---" : selectedCar)
+                        .foregroundStyle(selectedCar.isEmpty ? .gray : .oceanBlue)
+                        .font(Font.custom("Nunito", size: 16))
+                    Spacer()
+                    Image(systemName: "chevron.down")
+                        .foregroundStyle(.oceanBlue)
+                        .fontWeight(.semibold)
+                        .opacity(isEditable ? 1:0)
+                }
+                .padding(.horizontal)
+            }
+            .frame(height: 40)
+        }
+        .onTapGesture {
+            if isEditable {
+                showCarTypesPicker.toggle()
             }
         }
+        .sheet(isPresented: $showCarTypesPicker) {
+            CarTypesPickerView<CommonDataManager>(selectedCar: $selectedCar)
+                .presentationDetents([.fraction(0.5)])
+        }
+    }
+}
+
+struct CarTypesPickerView<CommonDataManager: CommonDataManagerProtocol>: View {
+    @Binding var selectedCar: String
+    @EnvironmentObject var commonDataManager: CommonDataManager
     
     var body: some View {
         ZStack {
             VStack(spacing: 15) {
-                Text("Select your Rental Agency")
-                    .font(Font.custom("Poppins", size: 24).weight(.semibold))
+                Text("Select your car type")
+                    .font(Font.custom("Nunito", size: 18).weight(.semibold))
                     .foregroundStyle(.oceanBlue)
                 ScrollView {
                     VStack(spacing: 15) {
-                        ForEach(Array(filteredCars.enumerated()), id:\.element.value) { index, car in
+                        ForEach(Array(commonDataManager.carTypes.enumerated()), id:\.element.value) { index, car in
                             Button {
                                 selectedCar = car.value
                             } label: {
@@ -41,7 +62,7 @@ struct CarTypesPickerView: View {
                                             .foregroundStyle(.oceanBlue)
                                         HStack {
                                             Text(car.value)
-                                                .font(Font.custom("Poppins", size: 16))
+                                                .font(Font.custom("Nunito", size: 16))
                                                 .foregroundStyle(.white)
                                             Spacer()
                                             Image(systemName: "checkmark")
@@ -51,7 +72,7 @@ struct CarTypesPickerView: View {
                                             .foregroundStyle(index % 2 == 0 ? .ourLightBlue : .ourLightGray)
                                         HStack {
                                             Text(car.value)
-                                                .font(Font.custom("Poppins", size: 16))
+                                                .font(Font.custom("Nunito", size: 16))
                                                 .foregroundStyle(.black)
                                             Spacer()
                                         }.padding()
@@ -67,6 +88,9 @@ struct CarTypesPickerView: View {
     }
 }
 
-//#Preview {
-//    CarTypesPIckerView()
-//}
+struct CarTypeInputField_Previews: PreviewProvider {
+    static var previews: some View {
+        CarTypeInputField<MockCommonDataManager>(selectedCar: .constant(""), isEditable: .constant(true))
+            .environmentObject(MockCommonDataManager())
+    }
+}

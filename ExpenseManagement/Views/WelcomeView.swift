@@ -1,18 +1,9 @@
-//
-//  WelcomeView.swift
-//  ExpenseManagement
-//
-//  Created by infra on 30/05/24.
-//
-
-import SwiftUI
-
 import SwiftUI
 
 struct WelcomeView: View {
     var body: some View {
         ZStack {
-            BackgroundImage()
+            BackgroundImage(opacity: 0.3)
             PFULogo()
             content
         }

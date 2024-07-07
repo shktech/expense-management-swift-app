@@ -1,7 +1,22 @@
 import Foundation
 import Combine
 
-class CommonDataManager: ObservableObject {
+protocol CommonDataManagerProtocol: ObservableObject {
+    var airlines: [Airline] { get set }
+    var rentalAgencies: [RentalAgency] { get set }
+    var carTypes: [CarType] { get set }
+    var mealCategories: [MealCategory] { get set }
+    var relationshipsToPAI: [RelationshipToPAI] { get set }
+    var cities: [City] { get set }
+    var hotelDailyBaseRates: [HotelDailyBaseRate] { get set }
+    var mileageRates: [MileageRate] { get set }
+    var exchangeRates: [String: [String: Double]] { get set }
+    
+    func loadCommonData(accessToken: String, completion: @escaping (Result<Void, Error>) -> Void)
+    func fetchExchangeRates(base: String, accessToken: String, completion: @escaping (Result<[String: Double], Error>) -> Void)
+}
+
+class CommonDataManager: CommonDataManagerProtocol {
     static let instance = CommonDataManager()
     
     @Published var airlines: [Airline] = []
@@ -26,7 +41,6 @@ class CommonDataManager: ObservableObject {
         dao.fetchData(endpoint: "common/airlines/", accessToken: accessToken) { (result: Result<[Airline], Error>) in
             switch result {
             case .success(let data):
-                print(data)
                 self.airlines = data
             case .failure(let error):
                 print("Failed to fetch airlines: \(error)")
@@ -125,7 +139,6 @@ class CommonDataManager: ObservableObject {
         dao.fetchExchangeRates(base: base, accessToken: accessToken) { result in
             switch result {
             case .success(let rates):
-                print(result)
                 DispatchQueue.main.async {
                     self.exchangeRates[base] = rates
                     completion(.success(rates))
