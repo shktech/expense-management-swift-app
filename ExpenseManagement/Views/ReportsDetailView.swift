@@ -2,132 +2,70 @@ import SwiftUI
 
 struct ReportsDetailView: View {
     
-    let report: Report
+    @Binding var report: Report
     
     @State var isShowingForm: Bool = false
+    @State var isShowingDeleteConfirmation: Bool = false
+    @State var isShowingSubmitConfirmation: Bool = false
     @State var isLoading: Bool = false
-//    @State var expenseItems: [ExpenseItem] = []
+    @State var expenseItems: [ExpenseItem] = []
     
     @EnvironmentObject var authManager: AuthenticationManager
+    @EnvironmentObject var globalState: GlobalStateManager
     
-    let expenseItems: [ExpenseItem] = [
-        ExpenseItem(
-            id: "1",
-            airline: "Airline A",
-            rentalAgency: nil,
-            carType: nil,
-            mealCategory: nil,
-            relationshipToPAI: nil,
-            city: "New York",
-            hotelDailyBaseRate: "150.00",
-            mileageRate: nil,
-            presignedURL: nil,
-            filename: nil,
-            expenseType: "Flight",
-            expenseDate: "2023-01-01",
-            receiptAmount: "500.00",
-            receiptCurrency: "USD",
-            justification: "Business trip",
-            note: "Direct flight",
-            s3Path: nil,
-            originDestination: "NYC-LAX",
-            employeeNames: nil,
-            totalEmployees: nil,
-            companyCustomerName: nil,
-            businessTopic: nil,
-            totalAttendees: nil,
-            nameOfEstablishment: nil,
-            hotelName: nil,
-            carrier: "Airline A",
-            distance: "2451 miles",
-            createdAt: "2023-01-01T10:00:00Z",
-            updatedAt: "2023-01-02T10:00:00Z",
-            report: 1
-        ),
-        ExpenseItem(
-            id: "2",
-            airline: nil,
-            rentalAgency: "Rental Agency B",
-            carType: "SUV",
-            mealCategory: nil,
-            relationshipToPAI: nil,
-            city: "Los Angeles",
-            hotelDailyBaseRate: nil,
-            mileageRate: "0.50",
-            presignedURL: nil,
-            filename: nil,
-            expenseType: "Car Rental",
-            expenseDate: "2023-01-02",
-            receiptAmount: "200.00",
-            receiptCurrency: "USD",
-            justification: "Client meetings",
-            note: "Rented for two days",
-            s3Path: nil,
-            originDestination: nil,
-            employeeNames: nil,
-            totalEmployees: nil,
-            companyCustomerName: nil,
-            businessTopic: nil,
-            totalAttendees: nil,
-            nameOfEstablishment: nil,
-            hotelName: nil,
-            carrier: nil,
-            distance: "100 miles",
-            createdAt: "2023-01-02T11:00:00Z",
-            updatedAt: "2023-01-03T11:00:00Z",
-            report: 1
-        ),
-        ExpenseItem(
-            id: "3",
-            airline: nil,
-            rentalAgency: nil,
-            carType: nil,
-            mealCategory: "Dinner",
-            relationshipToPAI: nil,
-            city: "Los Angeles",
-            hotelDailyBaseRate: nil,
-            mileageRate: nil,
-            presignedURL: nil,
-            filename: nil,
-            expenseType: "Meal",
-            expenseDate: "2023-01-02",
-            receiptAmount: "50.00",
-            receiptCurrency: "USD",
-            justification: "Dinner with clients",
-            note: "Dinner at a fine dining restaurant",
-            s3Path: nil,
-            originDestination: nil,
-            employeeNames: nil,
-            totalEmployees: 2,
-            companyCustomerName: nil,
-            businessTopic: nil,
-            totalAttendees: 3,
-            nameOfEstablishment: "Restaurant C",
-            hotelName: nil,
-            carrier: nil,
-            distance: nil,
-            createdAt: "2023-01-02T20:00:00Z",
-            updatedAt: "2023-01-02T22:00:00Z",
-            report: 1
-        )
-    ]
+    private let dao = DAO.instance
     
     var body: some View {
         NavigationStack {
             ZStack {
                 Color.white
                     .ignoresSafeArea()
-                ZStack {
-                    content.loadingOverlay(isLoading: $isLoading)
-                }.padding()
+                VStack {
+                    content
+                    if (report.reportStatus == "Open" && !expenseItems.isEmpty) {
+                        submittingButton
+                    }
+                }
+                .padding(.horizontal)
+                .toolbar {
+                    if (report.reportStatus == "Open") {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button {
+                                isShowingForm.toggle()
+                            } label: {
+                                Image(systemName: "plus")
+                                    .foregroundColor(.oceanBlue)
+                            }
+                        }
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button {
+                                isShowingDeleteConfirmation.toggle()
+                            } label: {
+                                Image(systemName: "trash")
+                                    .foregroundColor(.oceanBlue)
+                            }
+                            .confirmationDialog("Delete Report",
+                                                isPresented: $isShowingDeleteConfirmation, titleVisibility: .visible) {
+                                Button("Delete", role: .destructive) {}
+                            } message: {
+                                Text("Are you sure you want to delete this report")
+                            }
+                        }
+                    }
+                }
+                .sheet(isPresented: $isShowingForm, content: {
+                    SelectTypeForm(isShowingSelf: $isShowingForm, report: report)
+                })
+                .onChange(of: isShowingForm) { _ in
+                    if !isShowingForm {
+                        refreshReport()
+                    }
+                    loadData()
+                }
+                .onAppear(perform: loadData)
+                .loadingOverlay(isLoading: $isLoading)
             }
-        }.sheet(isPresented: $isShowingForm, content: {
-            SelectTypeForm(isShowingSelf: $isShowingForm, report: report)
-        })
-        .onChange(of: isShowingForm) {
-            loadData()
         }
-//        .onAppear(perform: loadData)
     }
     
     var ourPfu: some View {
@@ -143,10 +81,14 @@ struct ReportsDetailView: View {
     var content: some View {
         VStack {
             reportHeader
-            addNewButton
-            expenseItemsList
-            Spacer()
-            submittingButton
+            if (report.reportStatus != "Open") {
+                TimeLineContentView(status: report.reportStatus)
+            }
+            if (expenseItems.isEmpty) {
+                ContentUnavailableView(title: "No expenses", description: "Tap the “+“ button and start adding expenses")
+            } else {
+                expenseItemsList
+            }
         }.padding()
     }
     
@@ -194,22 +136,6 @@ struct ReportsDetailView: View {
         }
     }
     
-    var addNewButton: some View {
-        Button(action: {
-            isShowingForm.toggle()
-        }, label: {
-            ZStack {
-                RoundedRectangle(cornerRadius: 14)
-                    .foregroundStyle(.oceanBlue.opacity(0.75))
-                RoundedRectangle(cornerRadius: 14)
-                    .stroke(.oceanBlue2, lineWidth: 4)
-                Text("+ Add New Expense")
-                    .font(Font.custom("Poppins", size: 18).weight(.semibold))
-                    .foregroundStyle(.white)
-            }
-        }).frame(height: 52)
-    }
-
     var expenseItemsList: some View {
         VStack {
             ScrollView {
@@ -224,17 +150,25 @@ struct ReportsDetailView: View {
     }
     
     var submittingButton: some View {
-        Button {
-            // submitting
-        } label: {
+        Button(action: {
+            isShowingSubmitConfirmation.toggle()
+        }, label: {
             ZStack {
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: 14)
                     .foregroundStyle(.oceanBlue)
                 Text("Submit")
-                    .font(Font.custom("Poppins", size: 17).weight(.semibold))
                     .foregroundStyle(.white)
+                    .font(Font.custom("Poppins", size: 18).weight(.semibold))
             }
-        }.frame(height: 45)
+        }).frame(height: 50)
+        .confirmationDialog("Submit Report",
+                            isPresented: $isShowingSubmitConfirmation, titleVisibility: .visible) {
+            Button("Submit", role: .none) {
+                submitReport()
+            }
+        } message: {
+            Text("Are you sure you want to submit this report?")
+        }
     }
     
     private func loadData() {
@@ -246,35 +180,71 @@ struct ReportsDetailView: View {
         dao.fetchReportItems(reportId: report.id, accessToken: accessToken) { result in
             switch result {
             case .success(let items):
-                print(items)
-//                self.expenseItems = items
+                self.expenseItems = items
             case .failure(let error):
                 print("Failed to fetch items: \(error)")
             }
             self.isLoading = false
         }
     }
-
+    
+    private func refreshReport() {
+        self.isLoading = true
+        guard let accessToken = authManager.accessToken else {
+            print("Access token not found")
+            return
+        }
+        dao.fetchReport(reportId: report.id, accessToken: accessToken) { result in
+            switch result {
+            case .success(let report):
+                print("Refreshing report")
+                self.report = report
+            case .failure(let error):
+                print("Failed to fetch report: \(error)")
+            }
+            self.isLoading = false
+        }
+    }
+    
+    private func submitReport() {
+        self.isLoading = true
+        guard let accessToken = authManager.accessToken else {
+            print("Access token not found")
+            return
+        }
+        dao.submitReport(reportId: report.id, accessToken: accessToken) {
+            result in
+            switch result {
+            case .success(let report):
+                globalState.showMessage(title: "Success", message: "Successfully submitted report", type: .success)
+                self.report = report
+            case .failure(_):
+                globalState.showMessage(title: "Error", message: "Failed to submit report", type: .error)
+            }
+            self.isLoading = false
+        }
+    }
 }
 
 #Preview {
-    ReportsDetailView(report:
-                        Report(
-                            id: "1",
-                            user: (dao.user?.first_name ?? "") + (dao.user?.last_name ?? ""),
-                            reportNumber: "RPT123456",
-                            reportStatus: "Pending",
-                            reportSubmitDate: "2023-01-15",
-                            integrationStatus: "Not Integrated",
-                            integrationDate: nil,
-                            reportDate: "2024-06-08",
-                            expenseType: "Travel",
-                            purpose: "Business trip to NYC",
-                            paymentMethod: "Credit Card",
-                            reportAmount: "1200.00",
-                            reportCurrency: "USD",
-                            createdAt: "2023-01-10T10:00:00Z",
-                            updatedAt: "2023-01-15T12:00:00Z"
-                        ))
+    ReportsDetailView(report: .constant(
+        Report(
+            id: "1",
+            user: "something@something.com",
+            reportNumber: "RPT123456",
+            reportStatus: "Open",
+            reportSubmitDate: "2023-01-15",
+            integrationStatus: "Not Integrated",
+            integrationDate: nil,
+            reportDate: "2024-06-08",
+            expenseType: "Travel",
+            purpose: "Business trip to NYC",
+            paymentMethod: "Credit Card",
+            reportAmount: "1200.00",
+            reportCurrency: "USD",
+            createdAt: "2023-01-10T10:00:00Z",
+            updatedAt: "2023-01-15T12:00:00Z"
+        )))
     .environmentObject(AuthenticationManager())
+    .environmentObject(GlobalStateManager())
 }

@@ -2,23 +2,20 @@ import Foundation
 
 class Utilities {
     struct CurrencyConverter {
-        static func convert(amount: Double, from: String, to: String) -> Double {
-            let exchangeRate = exchangeRate(from: from, to: to)
-            return amount * exchangeRate
-        }
-
-        private static func exchangeRate(from: String, to: String) -> Double {
-            // Define exchange rates for conversion
-            let rates: [String: [String: Double]] = [
-                "USD": ["CAD": 0.80, "JPY": 110.0, "USD": 1.0],
-                "CAD": ["USD": 1.25, "JPY": 88.0, "CAD": 1.0],
-                "JPY": ["USD": 0.0091, "CAD": 0.011, "JPY": 1.0]
-            ]
-            
-            return rates[from]?[to] ?? 1.0
+        static func convert(amount: Double, from: String, to: String, accessToken: String, completion: @escaping (Double) -> Void) {
+            CommonDataManager.instance.fetchExchangeRates(base: from, accessToken: accessToken) { result in
+                switch result {
+                case .success(let rates):
+                    let exchangeRate = rates[to] ?? 1.0
+                    let convertedAmount = amount * exchangeRate
+                    completion(convertedAmount)
+                case .failure:
+                    completion(amount)
+                }
+            }
         }
     }
-    
+
     struct CurrencyFormatter {
         static func formatCurrency(amount: String, currencyCode: String) -> String {
             guard let amount = Double(amount) else {

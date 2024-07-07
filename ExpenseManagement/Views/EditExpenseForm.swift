@@ -1,14 +1,13 @@
 import SwiftUI
-import PhotosUI
-import UIKit
 
 struct EditExpenseForm: View {
+    let allowEdit: Bool
     let report: Report
-    let countries: [String] = ["USD", "CAD", "JPY"]
     @State var selectedCity: String = ""
     @State var date: Date = Date()
     @State var selectedCurrency: String = "USD"
     @State var amount: String = ""
+    @State var convertedAmount: Double = 0.0
     @State var justification: String = ""
     @State var isLoading: Bool = false
     @State var isShowingFilePicker: Bool = false
@@ -17,12 +16,14 @@ struct EditExpenseForm: View {
     @State var isShowingActionSheet: Bool = false
     @StateObject private var commonDataManager = CommonDataManager.instance
     @EnvironmentObject var authManager: AuthenticationManager
-    
-    // Editting fields
-    var expenseReport: ExpenseItem
+    private let dao = DAO.instance
+
+    // Editing fields
+    let expenseItem: ExpenseItem
 
     @State var isEditable: Bool = false
-    
+    @State var fileAction: FileAction?
+
     // Dynamic Fields
     @State var airline: String = ""
     @State var origin: String = ""
@@ -42,97 +43,25 @@ struct EditExpenseForm: View {
     @State var carrier: String = ""
     @State var companyCustomerName: String = ""
     
-    var convertedAmount: Double {
-        let amountValue = Double(amount) ?? 0
-        return Utilities.CurrencyConverter.convert(amount: amountValue, from: selectedCurrency, to: authManager.user?.currency ?? "USD")
-    }
-    
-    var warningMessage: String? {
-        switch expenseReport.expenseType {
-        case "airlineClubMembershipDues":
-            return "Approved Requisition is required for this expense type. Enter Requisition number in Justification Field"
-        case "autoRental", "automobile":
-            return "Approved Requisition is required for this expense type. Enter Requisition number in Justification Field"
-        case "companySponsorVPDF":
-            return "Pre-approval required, include approved form with receipts"
-        case "customerGifts":
-            return "Pre-approval required, include approved form with receipts"
-        case "dataProcessingDisksManual":
-            return "Pre-approval required, include approved form with receipts"
-        case "entertainment", "entertainmentLevi":
-            return "Approved Requisition is required for this expense type. Enter Requisition number in Justification Field"
-        case "fieldEngineerSupplies":
-            return "Approved Requisition is required for this expense type. Enter Requisition number in Justification Field"
-        case "officeSupplies":
-            return "Must include approved Purchase Requisition number"
-        case "otherMarketingExpenses":
-            return "Approved Requisition is required for this expense type. Enter Requisition number in Justification Field"
-        case "seminarsTraining":
-            return "Must include approved ETA number. Enter ETA number in Justification field"
-        case "marketingDevelopment":
-            return "Approved Requisition is required for this expense type. Enter Requisition number in Justification Field"
-        default:
-            return nil
-        }
-    }
-    
-    @State private var fileAction: FileAction?
-    enum FileAction {
-        case downloadView, delete, add
-    }
-    
     @State private var showAlert = false
     @State private var alertMessage = ""
-
+    
     var body: some View {
         ZStack {
-            content
-                .padding()
-                .loadingOverlay(isLoading: $isLoading)
+            VStack {
+                content
+                    .padding()
+                    .frame(maxHeight: .infinity)
+                saveButton
+                    .padding(.horizontal)
+            }
         }
-        .sheet(isPresented: $isShowingFilePicker) {
-            FilePicker(selectedFileURL: $selectedFileURL)
-        }
-        .sheet(isPresented: $isShowingImagePicker) {
-            ImagePicker(selectedFileURL: $selectedFileURL)
-        }
-        .alert(isPresented: $showAlert) {
-            Alert(title: Text("Download Completed"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
-        }
-        .actionSheet(isPresented: $isShowingActionSheet) {
-            ActionSheet(title: Text("Upload Receipt"), message: nil, buttons: [
-                .default(Text("Take Photo")) {
-                    showImagePicker(sourceType: .camera)
-                },
-                .default(Text("Photo Library")) {
-                    showImagePicker(sourceType: .photoLibrary)
-                },
-                .default(Text("Browse")) {
-                    isShowingFilePicker = true
-                },
-                // Conditional to see if there is already an image on the expense report item
-//                if expenseItem.imageData.count > 0 {
-                    .default(Text("Download and View")) {
-                        fileAction = .downloadView
-    //                    handleAction()
-                    },
-                    .default(Text("Add New File")) {
-                        fileAction = .add
-                        //                    handleAction()
-                    },
-                    .destructive(Text("Delete")) {
-                        fileAction = .delete
-    //                    handleAction()
-                    },
-//                },
-                .cancel()
-            ])
-        }
+        .loadingOverlay(isLoading: $isLoading)
         .onAppear {
             loadExpenseData()
         }
     }
-    
+
     var content: some View {
         ScrollView {
             VStack(spacing: 15) {
@@ -141,558 +70,118 @@ struct EditExpenseForm: View {
                     Button(action: {
                         isEditable.toggle()
                     }) {
-                        Image(systemName: isEditable ? "pencil.slash" : "pencil.circle.fill")
+                        Image(systemName: isEditable ? "pencil.slash" : "pencil")
                             .font(.title)
                             .foregroundStyle(.oceanBlue)
-                    }
+                    }.opacity(allowEdit ? 1 : 0)
                 }
-                if let warningMessage = warningMessage {
-                    Text(warningMessage)
-                        .foregroundColor(.red)
-                        .font(Font.custom("Poppins", size: 17).weight(.semibold))
-                        .multilineTextAlignment(.center)
-                }
-                dateField
-                specificFields
-                allAmmounts
+                WarningMessageView(expenseType: expenseItem.expenseType)
+                DateFieldView(title: "Date", date: $date, isEditable: $isEditable)
+                AllAmountsComponent(amount: $amount, selectedCurrency: $selectedCurrency, convertedAmount: $convertedAmount, targetCurrency: authManager.user?.currency ?? "USD", accessToken: authManager.accessToken ?? "")
                 if selectedTypeRequiresCity {
-                    cityContainer
+                    CityPickerView<CommonDataManager>(selectedCity: $selectedCity, isEditable: $isEditable)
                 }
+                specificFields
                 justificationContainer
-                filePickerButton
-                Spacer()
-                saveButton
+                FilePickerButton(allowEdit: allowEdit, selectedFileURL: $selectedFileURL, isShowingFilePicker: $isShowingFilePicker, isShowingImagePicker: $isShowingImagePicker, isShowingActionSheet: $isShowingActionSheet, showAlert: $showAlert, alertMessage: $alertMessage, isEditable: $isEditable)
             }.padding()
         }
     }
-    
+
     var specificFields: some View {
         Group {
-            switch expenseReport.expenseType {
-            case "airFare":
+            switch expenseItem.expenseType {
+            case .airFare:
                 airFareFields
-            case "autoRental":
+            case .autoRental:
                 autoRentalFields
-            case "businessMeals":
+            case .businessMeals:
                 businessMealsFields
-            case "entertainment", "entertainmentLevi":
+            case .entertainment, .entertainmentLevi:
                 entertainmentFields
-            case "hotel":
+            case .hotel:
                 hotelFields
-            case "mileage":
+            case .mileage:
                 mileageFields
-            case "telephoneCell":
+            case .telephoneCell:
                 telephoneCellFields
             default:
                 EmptyView()
             }
         }
     }
-    
+
     var airFareFields: some View {
         VStack(alignment: .leading, spacing: 15) {
-            VStack(alignment: .leading, spacing: 3) {
-                Text("Airline")
-                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                    .foregroundStyle(.oceanBlue)
-                NavigationLink(destination: AirlinePickerView(selectedAirline: $airline)) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.ourLightGray)
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.oceanBlue, lineWidth: 1)
-                        HStack {
-                            Text(airline == "" ? "Select your Airline" : airline)
-                                .foregroundStyle(airline == "" ? .gray : .oceanBlue)
-                                .font(Font.custom("Poppins", size: 16).weight(airline == "" ? .regular : .semibold))
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .foregroundStyle(.oceanBlue)
-                                .fontWeight(.semibold)
-                        }.padding(.horizontal)
-                        if !isEditable {
-                            RoundedRectangle(cornerRadius: 8)
-                                .foregroundStyle(.black)
-                                .opacity(0.15)
-                        }
-                    }
-                }.frame(height: 41)
-                .disabled(!isEditable)
-            }
-            
-            VStack(alignment: .leading, spacing: 3) {
-                Text("Origin")
-                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                    .foregroundStyle(.oceanBlue)
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(.ourLightGray)
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(.oceanBlue, lineWidth: 1)
-                    HStack {
-                        TextField("---", text: $origin)
-                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                            .foregroundStyle(.oceanBlue)
-                    }.padding(.horizontal)
-                        .frame(height: 41)
-                    if !isEditable {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.black)
-                            .opacity(0.15)
-                    }
-                }
-                .disabled(!isEditable)
-            }
-            VStack(alignment: .leading, spacing: 3) {
-                Text("Destination")
-                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                    .foregroundStyle(.oceanBlue)
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(.ourLightGray)
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(.oceanBlue, lineWidth: 1)
-                    HStack {
-                        TextField("---", text: $destination)
-                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                            .foregroundStyle(.oceanBlue)
-                    }.padding(.horizontal)
-                        .frame(height: 41)
-                    if !isEditable {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.black)
-                            .opacity(0.15)
-                    }
-                }
-                .disabled(!isEditable)
-            }
+            AirlinePickerView<CommonDataManager>(selectedAirline: $airline, isEditable: $isEditable)
+            TextInputView(title: "Origin", text: $origin, isEditable: $isEditable, placeholder: "---")
+            TextInputView(title: "Destination", text: $destination, isEditable: $isEditable, placeholder: "---")
         }
     }
-    
+
     var autoRentalFields: some View {
         VStack(alignment: .leading, spacing: 10) {
-            NavigationLink(destination: CarRentalPickerView(selectedRental: $rentalAgency)) {
-                VStack(alignment: .leading, spacing: 3) {
-                    Text("Rental Agency")
-                        .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                        .foregroundStyle(.oceanBlue)
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.ourLightGray)
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(.oceanBlue, lineWidth: 1)
-                        HStack {
-                            Text(rentalAgency == "" ? "---" : rentalAgency)
-                                .foregroundStyle(rentalAgency == "" ? .gray : .oceanBlue)
-                                .font(Font.custom("Poppins", size: 16))
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .foregroundStyle(.oceanBlue)
-                                .fontWeight(.semibold)
-                        }.padding(.horizontal)
-                        if !isEditable {
-                            RoundedRectangle(cornerRadius: 8)
-                                .foregroundStyle(.black)
-                                .opacity(0.15)
-                        }
-                    }
-                    .frame(height: 41)
-                }
-            }
-            .disabled(!isEditable)
-            NavigationLink(destination: CarTypesPickerView(selectedCar: $carType)) {
-                VStack(alignment: .leading, spacing: 3) {
-                    Text("Car Type")
-                        .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                        .foregroundStyle(.oceanBlue)
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.ourLightGray)
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(.oceanBlue, lineWidth: 1)
-                        HStack {
-                            Text(carType == "" ? "---" : carType)
-                                .foregroundStyle(carType == "" ? .gray : .oceanBlue)
-                                .font(Font.custom("Poppins", size: 16))
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .foregroundStyle(.oceanBlue)
-                                .fontWeight(.semibold)
-                        }.padding(.horizontal)
-                        if !isEditable {
-                            RoundedRectangle(cornerRadius: 8)
-                                .foregroundStyle(.black)
-                                .opacity(0.15)
-                        }
-                    }
-                    .frame(height: 41)
-                }
-            }
-            .disabled(!isEditable)
+            CarRentalPickerView<CommonDataManager>(selectedRental: $rentalAgency, isEditable: $isEditable)
+            CarTypeInputField<CommonDataManager>(selectedCar: $carType, isEditable: $isEditable)
         }
     }
-    
+
     var businessMealsFields: some View {
-        NavigationLink(destination: MealCategoriesPickerView(selectedMeal: $mealCategory)) {
-            VStack(alignment: .leading, spacing: 3) {
-                Text("Meal Category")
-                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                    .foregroundStyle(.oceanBlue)
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(.ourLightGray)
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(.oceanBlue, lineWidth: 1)
-                    HStack {
-                        Text(mealCategory == "" ? "---" : mealCategory)
-                            .foregroundStyle(mealCategory == "" ? .gray : .oceanBlue)
-                            .font(Font.custom("Poppins", size: 16))
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .foregroundStyle(.oceanBlue)
-                            .fontWeight(.semibold)
-                    }.padding(.horizontal)
-                    if !isEditable {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.black)
-                            .opacity(0.15)
-                    }
-                }
-                .frame(height: 41)
-            }
-        }
-        .disabled(!isEditable)
+        MealCategoriesPickerView<CommonDataManager>(selectedMeal: $mealCategory, isEditable: $isEditable)
     }
-    
+
     var entertainmentFields: some View {
         VStack(alignment: .leading, spacing: 10) {
-            VStack(alignment: .leading, spacing: 3) {
-                Text("Name of Establishment")
-                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                    .foregroundStyle(.oceanBlue)
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(.ourLightGray)
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(.oceanBlue, lineWidth: 1)
-                    HStack {
-                        TextField("---", text: $establishmentName)
-                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                            .foregroundStyle(.oceanBlue)
-                    }.padding(.horizontal)
-                    if !isEditable {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.black)
-                            .opacity(0.15)
-                    }
-                }.frame(height: 41)
-                .disabled(!isEditable)
-            }
-            VStack(alignment: .leading, spacing: 3) {
-                Text("City")
-                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                    .foregroundStyle(.oceanBlue)
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(.ourLightGray)
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(.oceanBlue, lineWidth: 1)
-                    HStack {
-                        TextField("---", text: $selectedCity)
-                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                            .foregroundStyle(.oceanBlue)
-                    }.padding(.horizontal)
-                    if !isEditable {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.black)
-                            .opacity(0.15)
-                    }
-                }.frame(height: 41)
-                .disabled(!isEditable)
-            }
-            VStack(alignment: .leading, spacing: 3) {
-                Text("Business Topic")
-                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                    .foregroundStyle(.oceanBlue)
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(.ourLightGray)
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(.oceanBlue, lineWidth: 1)
-                    HStack {
-                        TextField("---", text: $businessTopic)
-                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                            .foregroundStyle(.oceanBlue)
-                    }.padding(.horizontal)
-                    if !isEditable {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.black)
-                            .opacity(0.15)
-                    }
-                }.frame(height: 41)
-                .disabled(!isEditable)
-            }
-            VStack(alignment: .leading, spacing: 3) {
-                Text("Total Attendees")
-                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                    .foregroundStyle(.oceanBlue)
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(.ourLightGray)
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(.oceanBlue, lineWidth: 1)
-                    HStack {
-                        TextField("---", value: $totalAttendees, formatter: NumberFormatter())
-                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                            .foregroundStyle(.oceanBlue)
-                    }.padding(.horizontal)
-                    if !isEditable {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.black)
-                            .opacity(0.15)
-                    }
-                }.frame(height: 41)
-                .disabled(!isEditable)
-            }
-            if expenseReport.expenseType == "entertainment" {
-                NavigationLink(destination: RelashionshipToPaiPickerView(selectedRelation: $relationshipToPAI)) {
-                    VStack(alignment: .leading, spacing: 3) {
-                        Text("Relationship to PAI")
-                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                            .foregroundStyle(.oceanBlue)
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 8)
-                                .foregroundStyle(.ourLightGray)
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(.oceanBlue, lineWidth: 1)
-                            HStack {
-                                Text(mealCategory == "" ? "---" : mealCategory)
-                                    .foregroundStyle(mealCategory == "" ? .gray : .oceanBlue)
-                                    .font(Font.custom("Poppins", size: 16))
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .foregroundStyle(.oceanBlue)
-                                    .fontWeight(.semibold)
-                            }.padding(.horizontal)
-                            if !isEditable {
-                                RoundedRectangle(cornerRadius: 8)
-                                    .foregroundStyle(.black)
-                                    .opacity(0.15)
-                            }
-                        }
-                        .frame(height: 41)
-                    }
-                }
-                .disabled(!isEditable)
+            TextInputView(title: "Name of Establishment", text: $establishmentName, isEditable: $isEditable, placeholder: "---")
+            TextInputView(title: "City", text: $selectedCity, isEditable: $isEditable, placeholder: "---")
+            TextInputView(title: "Business Topic", text: $businessTopic, isEditable: $isEditable, placeholder: "---")
+            TextInputView(title: "Total Attendees", text: Binding(
+                get: { String(totalAttendees) },
+                set: { totalAttendees = Int($0) ?? 0 }
+            ), isEditable: $isEditable, placeholder: "---")
+            if expenseItem.expenseType == .entertainment {
+                RelashionshipToPaiPickerView<CommonDataManager>(selectedRelation: $relationshipToPAI, isEditable: $isEditable)
             } else {
-                VStack(alignment: .leading, spacing: 3) {
-                    Text("Attendees (Names)")
-                        .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                        .foregroundStyle(.oceanBlue)
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.ourLightGray)
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(.oceanBlue, lineWidth: 1)
-                        HStack {
-                            TextField("---", text: $employeeNames)
-                                .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                                .foregroundStyle(.oceanBlue)
-                        }.padding(.horizontal)
-                        if !isEditable {
-                            RoundedRectangle(cornerRadius: 8)
-                                .foregroundStyle(.black)
-                                .opacity(0.15)
-                        }
-                    }.frame(height: 41)
-                    .disabled(!isEditable)
-                }
+                TextInputView(title: "Attendees (Names)", text: $employeeNames, isEditable: $isEditable, placeholder: "---")
             }
         }
     }
-    
+
     var hotelFields: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            VStack(alignment: .leading, spacing: 3) {
-                Text("Hotel Name")
-                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                    .foregroundStyle(.oceanBlue)
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(.ourLightGray)
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(.oceanBlue, lineWidth: 1)
-                    HStack {
-                        TextField("---", text: $hotelName)
-                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                            .foregroundStyle(.oceanBlue)
-                    }.padding(.horizontal)
-                    if !isEditable {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.black)
-                            .opacity(0.15)
-                    }
-                }.frame(height: 41)
-                .disabled(!isEditable)
-            }
-        }
+        TextInputView(title: "Hotel Name", text: $hotelName, isEditable: $isEditable, placeholder: "---")
     }
-    
+
     var mileageFields: some View {
         VStack(alignment: .leading, spacing: 10) {
-            VStack(alignment: .leading, spacing: 3) {
-                Text("Origin")
-                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                    .foregroundStyle(.oceanBlue)
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(.ourLightGray)
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(.oceanBlue, lineWidth: 1)
-                    HStack {
-                        TextField("---", text: $origin)
-                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                            .foregroundStyle(.oceanBlue)
-                    }.padding(.horizontal)
-                    if !isEditable {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.black)
-                            .opacity(0.15)
-                    }
-                }.frame(height: 41)
-                .disabled(!isEditable)
-            }
-            VStack(alignment: .leading, spacing: 3) {
-                Text("Destination")
-                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                    .foregroundStyle(.oceanBlue)
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(.ourLightGray)
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(.oceanBlue, lineWidth: 1)
-                    HStack {
-                        TextField("---", text: $destination)
-                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                            .foregroundStyle(.oceanBlue)
-                    }.padding(.horizontal)
-                    if !isEditable {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.black)
-                            .opacity(0.15)
-                    }
-                }.frame(height: 41)
-                .disabled(!isEditable)
-            }
-            VStack(alignment: .leading, spacing: 3) {
-                Text("Distance")
-                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                    .foregroundStyle(.oceanBlue)
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(.ourLightGray)
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(.oceanBlue, lineWidth: 1)
-                    HStack {
-                        TextField("---", text: $distance)
-                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                            .foregroundStyle(.oceanBlue)
-                    }.padding(.horizontal)
-                    if !isEditable {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.black)
-                            .opacity(0.15)
-                    }
-                }.frame(height: 41)
-                .disabled(!isEditable)
-            }
-            NavigationLink(destination: MileageRatePickerView(selectedMileage: $mileageRate)) {
-                VStack(alignment: .leading, spacing: 3) {
-                    Text("Mileage Rate")
-                        .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                        .foregroundStyle(.oceanBlue)
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.ourLightGray)
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(.oceanBlue, lineWidth: 1)
-                        HStack {
-                            Text(mileageRate == "" ? "---" : mileageRate)
-                                .foregroundStyle(mileageRate == "" ? .gray : .oceanBlue)
-                                .font(Font.custom("Poppins", size: 16))
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .foregroundStyle(.oceanBlue)
-                                .fontWeight(.semibold)
-                        }.padding(.horizontal)
-                        if !isEditable {
-                            RoundedRectangle(cornerRadius: 8)
-                                .foregroundStyle(.black)
-                                .opacity(0.15)
-                        }
-                    }
-                    .frame(height: 41)
-                }
-            }
-            .disabled(!isEditable)
+            TextInputView(title: "Origin", text: $origin, isEditable: $isEditable, placeholder: "---")
+            TextInputView(title: "Destination", text: $destination, isEditable: $isEditable, placeholder: "---")
+            TextInputView(title: "Distance", text: $distance, isEditable: $isEditable, placeholder: "---")
+            MileageRatePickerView<CommonDataManager>(selectedMileage: $mileageRate, isEditable: $isEditable)
         }
     }
-    
+
     var telephoneCellFields: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            VStack(alignment: .leading, spacing: 3) {
-                Text("Carrier")
-                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                    .foregroundStyle(.oceanBlue)
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(.ourLightGray)
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(.oceanBlue, lineWidth: 1)
-                    HStack {
-                        TextField("---", text: $carrier)
-                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                            .foregroundStyle(.oceanBlue)
-                    }.padding(.horizontal)
-                    if !isEditable {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.black)
-                            .opacity(0.15)
-                    }
-                }.frame(height: 41)
-                .disabled(!isEditable)
-            }
-        }
+        TextInputView(title: "Carrier", text: $carrier, isEditable: $isEditable, placeholder: "---")
     }
-    
-    var filePickerButton: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            // Make a conditional to see if there is already a reciept
-            Text("Upload Receipt")
-                .foregroundStyle(.gray)
-            Button(action: {
-                isShowingActionSheet.toggle()
-            }) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(style: StrokeStyle(lineWidth: 1, dash: [5]))
-                        .foregroundColor(.gray)
-                        .frame(height: 60)
-                    VStack {
-                        Image(systemName: "square.and.arrow.up")
-                            .foregroundStyle(.gray)
-                            .fontWeight(.semibold)
-                        Text(selectedFileURL?.lastPathComponent ?? "Upload file")
-                            .foregroundStyle(.gray)
-                    }
-                    .padding(.horizontal)
-                    .padding(.vertical, 10)
-                }
-                .frame(width: 250)
-                .fixedSize(horizontal: false, vertical: true)
+
+    var justificationContainer: some View {
+        TextInputView(title: "Justification", text: $justification, isEditable: $isEditable, placeholder: "")
+    }
+
+    var saveButton: some View {
+        Button(action: {
+            submitItem()
+        }, label: {
+            ZStack {
+                RoundedRectangle(cornerRadius: 14)
+                    .foregroundStyle(.oceanBlue)
+                Text("Save")
+                    .foregroundStyle(.white)
+                    .font(Font.custom("Poppins", size: 18).weight(.semibold))
             }
-            .disabled(!isEditable)
-        }
+        }).frame(height: 50)
+        .disabled(!isEditable)
+        .opacity(allowEdit && isEditable ? 1 : 0)
     }
     
     var reportHeader: some View {
@@ -715,257 +204,22 @@ struct EditExpenseForm: View {
             Spacer()
         }
     }
-    
-    var cityContainer: some View {
-        VStack(alignment: .leading, spacing: 3) {
-            Text("City")
-                .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                .foregroundStyle(.oceanBlue)
-            Menu {
-                ForEach(commonDataManager.cities, id: \.value) { city in
-                    Button(action: {
-                        selectedCity = city.value
-                    }, label: {
-                        Text(city.value)
-                    })
-                }
-            } label: {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(.ourLightGray2)
-                        .frame(height: 41)
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(.oceanBlue, lineWidth: 1)
-                        .frame(height: 41)
-                    HStack {
-                        Text(selectedCity)
-                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                            .foregroundStyle(.oceanBlue)
-                        Spacer()
-                        Image(systemName: "chevron.down")
-                            .foregroundStyle(.oceanBlue)
-                            .fontWeight(.semibold)
-                    }.padding(.horizontal)
-                    if !isEditable {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.black)
-                            .opacity(0.15)
-                    }
-                }
-            }.frame(height: 41)
-            .disabled(!isEditable)
-        }
-    }
-    
-    var dateField: some View {
-        VStack(alignment: .leading, spacing: 3) {
-            Text("Date")
-                .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                .foregroundStyle(.oceanBlue)
-            ZStack {
-                RoundedRectangle(cornerRadius: 8)
-                    .foregroundStyle(.ourLightGray2)
-                    .frame(height: 41)
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(.oceanBlue, lineWidth: 1)
-                    .frame(height: 41)
-                HStack {
-                    Text("\(date.formatted(date: .abbreviated, time: .omitted))")
-                        .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                        .foregroundStyle(.oceanBlue)
-                    Spacer()
-                    Image(systemName: "calendar")
-                        .font(.title3)
-                        .foregroundStyle(.oceanBlue)
-                        .overlay {
-                            DatePicker(
-                                "",
-                                selection: $date,
-                                displayedComponents: [.date]
-                            )
-                            .blendMode(.destinationOver)
-                        }
-                }.padding(.horizontal)
-                if !isEditable {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(.black)
-                        .opacity(0.15)
-                }
-            }
-            .disabled(!isEditable)
-        }
-    }
-    
-    var allAmmounts: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundStyle(.ourLightBlue)
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(.oceanBlue, lineWidth: 1)
-            VStack {
-                recieptAmountContainer
-                convertedCurrency
-            }.padding()
-        }
-    }
-    
-    var recieptAmountContainer: some View {
-            VStack(alignment: .leading, spacing: 2) {
-                Text("Reciept Amount")
-                    .foregroundStyle(.oceanBlue)
-                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                HStack {
-                    Menu {
-                        ForEach(countries, id: \.self) { currency in
-                            Button(action: {
-                                selectedCurrency = currency
-                            }, label: {
-                                Text(currency)
-                            })
-                        }
-                    } label: {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 8)
-                                .foregroundStyle(.ourLightGray)
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.oceanBlue, lineWidth: 1)
-                            HStack {
-                                Image(selectedCurrency)
-                                Text(selectedCurrency)
-                                    .foregroundStyle(.oceanBlue)
-                                    .fontWeight(.semibold)
-                                Image(systemName: "chevron.down")
-                                    .foregroundStyle(.oceanBlue)
-                                    .fontWeight(.semibold)
-                            }
-                            if !isEditable {
-                                RoundedRectangle(cornerRadius: 8)
-                                    .foregroundStyle(.black)
-                                    .opacity(0.15)
-                            }
-                        }
-                    }
-                    .frame(width: 100)
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.ourLightGray)
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.oceanBlue, lineWidth: 1)
-                        TextField("", text: $amount)
-                            .padding(.horizontal)
-                        if !isEditable {
-                            RoundedRectangle(cornerRadius: 8)
-                                .foregroundStyle(.black)
-                                .opacity(0.15)
-                        }
-                    }
-                }.frame(height: 41)
-                .disabled(!isEditable)
-            }
-    }
-    
-    var convertedCurrency: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text("Converted Report Amount")
-                .foregroundStyle(.oceanBlue)
-                .font(Font.custom("Poppins", size: 16).weight(.semibold))
-            HStack {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(.ourLightGray)
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.oceanBlue, lineWidth: 1)
-                    HStack {
-                        Image("USD")
-                        Text("USD")
-                            .foregroundStyle(.oceanBlue)
-                            .fontWeight(.semibold)
-                        Image(systemName: "chevron.down")
-                            .foregroundStyle(.oceanBlue)
-                            .fontWeight(.semibold)
-                    }
-                    if !isEditable {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.black)
-                            .opacity(0.15)
-                    }
-                }
-                .frame(width: 100)
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(.ourLightGray)
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.oceanBlue, lineWidth: 1)
-                    Text("\(convertedAmount.formatted(.number))")
-                        .foregroundStyle(.oceanBlue)
-                        .fontWeight(.semibold)
-                    if !isEditable {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.black)
-                            .opacity(0.15)
-                    }
-                }
-            }.frame(height: 41)
-        }.disabled(true)
-    }
-    
-    var justificationContainer: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            VStack(alignment: .leading, spacing: 3) {
-                Text("Justification")
-                    .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                    .foregroundStyle(.oceanBlue)
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(.ourLightGray)
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(.oceanBlue, lineWidth: 1)
-                    HStack {
-                        TextField("---", text: $justification)
-                            .font(Font.custom("Poppins", size: 16).weight(.semibold))
-                            .foregroundStyle(.oceanBlue)
-                    }.padding(.horizontal)
-                    if !isEditable {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.black)
-                            .opacity(0.15)
-                    }
-                }.frame(height: 41)
-                .disabled(!isEditable)
-            }
-        }
-    }
-    
-    var saveButton: some View {
-        Button(action: {
-            submitItem()
-        }, label: {
-            ZStack {
-                RoundedRectangle(cornerRadius: 14)
-                    .foregroundStyle(.oceanBlue)
-                Text("Save")
-                    .foregroundStyle(.white)
-                    .font(Font.custom("Poppins", size: 18).weight(.semibold))
-            }
-        }).frame(height: 41)
-        .disabled(!isEditable)
-    }
-    
+
     func submitItem() {
         guard let accessToken = authManager.accessToken else {
             print("Access token not found")
             return
         }
-        
+
         isLoading = true
-        
+
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let formattedDate = dateFormatter.string(from: date)
         let fileName = selectedFileURL?.lastPathComponent ?? ""
-        
+
         let newItem = CreateExpenseItemRequest(
-            expenseType: expenseReport.expenseType,
+            expenseType: expenseItem.expenseType.rawValue,
             expenseDate: formattedDate,
             receiptAmount: amount,
             receiptCurrency: selectedCurrency,
@@ -991,8 +245,8 @@ struct EditExpenseForm: View {
             carrier: carrier.isEmpty ? nil : carrier,
             distance: distance.isEmpty ? nil : distance
         )
-        
-        dao.addExpenseItemToReport(reportId: report.id, expenseItemData: newItem, accessToken: accessToken, selectedFileURL: selectedFileURL) { result in
+
+        dao.updateExpenseItem(reportId: report.id, itemId: expenseItem.id, expenseItemData: newItem, accessToken: accessToken) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success:
@@ -1005,107 +259,81 @@ struct EditExpenseForm: View {
             }
         }
     }
-    
-    private func handleAction() {
-        guard let action = fileAction else { return }
 
-        switch action {
-        case .downloadView:
-            downloadAndViewFile()
-        case .delete:
-            deleteFile()
-        case .add:
-            addNewFile()
-        }
-    }
-
-    private func downloadAndViewFile() {
-        guard let url = URL(string: "https://example.com/image.jpg") else { return }
-
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let data = data {
-                DispatchQueue.main.async {
-//                    self.expenseReport.imageData = data
-                    self.saveImageToGallery(imageData: data)
-                }
-            } else {
-                print("Failed to download image: \(error?.localizedDescription ?? "Unknown error")")
-            }
-        }.resume()
-    }
-
-    private func deleteFile() {
-        // Implement the logic to delete the file
-        print("Deleting the file")
-//            expenseReport.imageData = nil
-    }
-
-    private func addNewFile() {
-        showImagePicker(sourceType: .photoLibrary)
-    }
-    
-    private func showImagePicker(sourceType: UIImagePickerController.SourceType) {
-        guard UIImagePickerController.isSourceTypeAvailable(sourceType) else {
-            return
-        }
-        isShowingImagePicker = true
-    }
-    
-    private func saveImageToGallery(imageData: Data) {
-        guard let image = UIImage(data: imageData) else { return }
-        
-        PHPhotoLibrary.shared().performChanges({
-            PHAssetChangeRequest.creationRequestForAsset(from: image)
-        }) { success, error in
-            DispatchQueue.main.async {
-                if success {
-                    self.alertMessage = "Image successfully saved to gallery."
-                } else {
-                    self.alertMessage = "Failed to save image: \(error?.localizedDescription ?? "Unknown error")"
-                }
-                self.showAlert = true
-            }
-        }
-    }
-    
     private var selectedTypeRequiresCity: Bool {
-        switch expenseReport.expenseType {
-        case "entertainment", "entertainmentLevi", "hotel":
+        switch expenseItem.expenseType {
+        case .entertainment, .entertainmentLevi, .hotel:
             return true
         default:
             return false
         }
     }
     
+    private func getPreviewLink() {
+        guard let accessToken = authManager.accessToken else {
+            print("Access token not found")
+            return
+        }
+    }
+
     private func loadExpenseData() {
-        self.selectedCity = expenseReport.city ?? ""
-        self.date = DateFormatter.apiDate.date(from: expenseReport.expenseDate) ?? Date()
-        self.selectedCurrency = expenseReport.receiptCurrency
-        self.amount = expenseReport.receiptAmount
-        self.justification = expenseReport.justification
-        self.airline = expenseReport.airline ?? ""
-        self.origin = expenseReport.originDestination ?? ""
-        self.rentalAgency = expenseReport.rentalAgency ?? ""
-        self.carType = expenseReport.carType ?? ""
-        self.mealCategory = expenseReport.mealCategory ?? ""
-        self.employeeNames = expenseReport.employeeNames ?? ""
-        self.establishmentName = expenseReport.nameOfEstablishment ?? ""
-        self.businessTopic = expenseReport.businessTopic ?? ""
-        self.totalAttendees = expenseReport.totalAttendees ?? 0
-        self.relationshipToPAI = expenseReport.relationshipToPAI ?? ""
-        self.hotelName = expenseReport.hotelName ?? ""
-        self.hotelDailyBaseRate = expenseReport.hotelDailyBaseRate ?? ""
-        self.distance = expenseReport.distance ?? ""
-        self.mileageRate = expenseReport.mileageRate ?? ""
-        self.carrier = expenseReport.carrier ?? ""
-        self.companyCustomerName = expenseReport.companyCustomerName ?? ""
+        isLoading = true
+        guard let accessToken = authManager.accessToken else {
+            print("Access token not found")
+            return
+        }
+        if (expenseItem.filename != nil) {
+            dao.getImagePreviewLink(reportId: report.id, itemId: expenseItem.id, accessToken: accessToken) { result in
+                switch result {
+                case .success(let preview):
+                    print(preview)
+                    self.selectedFileURL = URL(string: preview.presignedURL)
+                    initializeData()
+                case .failure:
+                    self.selectedFileURL = nil
+                    initializeData()
+                }
+            }
+        } else {
+            self.selectedFileURL = nil
+            initializeData()
+        }
+        isLoading = false
+    }
+    
+    private func initializeData() {
+        self.selectedCity = expenseItem.city ?? ""
+        self.date = DateFormatter.apiDate.date(from: expenseItem.expenseDate) ?? Date()
+        self.selectedCurrency = expenseItem.receiptCurrency
+        self.amount = expenseItem.receiptAmount
+        self.justification = expenseItem.justification
+        self.airline = expenseItem.airline ?? ""
+        self.origin = expenseItem.originDestination ?? ""
+        self.rentalAgency = expenseItem.rentalAgency ?? ""
+        self.carType = expenseItem.carType ?? ""
+        self.mealCategory = expenseItem.mealCategory ?? ""
+        self.employeeNames = expenseItem.employeeNames ?? ""
+        self.establishmentName = expenseItem.nameOfEstablishment ?? ""
+        self.businessTopic = expenseItem.businessTopic ?? ""
+        self.totalAttendees = expenseItem.totalAttendees ?? 0
+        self.relationshipToPAI = expenseItem.relationshipToPAI ?? ""
+        self.hotelName = expenseItem.hotelName ?? ""
+        self.hotelDailyBaseRate = expenseItem.hotelDailyBaseRate?.amount ?? ""
+        self.distance = expenseItem.distance ?? ""
+        self.mileageRate = expenseItem.mileageRate?.rate ?? ""
+        self.carrier = expenseItem.carrier ?? ""
+        self.companyCustomerName = expenseItem.companyCustomerName ?? ""
+//        self.selectedFileURL = (expenseItem.filename != nil) ? URL(string: expenseItem.filename ?? "") : nil
+
     }
 }
 
 #Preview {
-    EditExpenseForm(report: Report(
+    EditExpenseForm(
+        allowEdit: true,
+        report: Report(
         id: "3",
-        user: (dao.user?.first_name ?? "") + (dao.user?.last_name ?? ""),
+        user: "user@gmail.com",
         reportNumber: "RPT789012",
         reportStatus: "Rejected",
         reportSubmitDate: "2023-03-10",
@@ -1119,7 +347,7 @@ struct EditExpenseForm: View {
         reportCurrency: "USD",
         createdAt: "2023-03-08T09:00:00Z",
         updatedAt: "2023-03-10T14:00:00Z"
-    ), expenseReport: ExpenseItem(
+    ), expenseItem: ExpenseItem(
         id: "1",
         airline: "Delta",
         rentalAgency: "Hertz",
@@ -1127,11 +355,11 @@ struct EditExpenseForm: View {
         mealCategory: "Lunch",
         relationshipToPAI: "Business",
         city: "New York",
-        hotelDailyBaseRate: "200",
-        mileageRate: "0.58",
+        hotelDailyBaseRate: nil,
+        mileageRate: nil,
         presignedURL: nil,
         filename: "receipt.pdf",
-        expenseType: "hotel",
+        expenseType: ExpenseType.hotel,
         expenseDate: "2023-06-08",
         receiptAmount: "500",
         receiptCurrency: "USD",
@@ -1153,4 +381,5 @@ struct EditExpenseForm: View {
         report: 3
     ))
     .environmentObject(AuthenticationManager())
+    .environmentObject(MockCommonDataManager())
 }

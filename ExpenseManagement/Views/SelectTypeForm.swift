@@ -15,6 +15,9 @@ struct SelectTypeForm: View {
     @State private var searchText = ""
     
     @Binding var isShowingSelf: Bool
+    
+    private let dao = DAO.instance
+    
     let report: Report
     
     var filteredExpenseTypes: [ExpenseType] {
@@ -158,7 +161,7 @@ struct SelectTypeForm: View {
 #Preview {
     SelectTypeForm(isShowingSelf: .constant(true), report: Report(
         id: "3",
-        user: (dao.user?.first_name ?? "") + (dao.user?.last_name ?? ""),
+        user: "something@something.com",
         reportNumber: "RPT789012",
         reportStatus: "Rejected",
         reportSubmitDate: "2023-03-10",

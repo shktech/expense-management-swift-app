@@ -8,22 +8,50 @@
 import Foundation
 
 struct User: Codable {
+    var id: String
+    var first_name: String
+    var last_name: String
+    var email: String
+    var phone_number: String
+    var department: String?
+    var currency: String
+    var creditCard: CreditCard?
+    
+    enum CodingKeys: String, CodingKey {
+        case id, first_name, last_name, email, phone_number, department, currency
+        case creditCard = "cc_card"
+    }
+
+}
+
+struct CreditCard: Codable {
+    var cardNumber: String
+    var expirationDate: String
+    
+    enum CodingKeys: String, CodingKey {
+        case cardNumber = "card_number"
+        case expirationDate = "expiration_date"
+    }
+}
+
+struct RegisterUser: Codable {
+    var first_name: String?
+    var last_name: String?
+    var email: String?
+    var password: String?
+    var phone_number: String?
+    var department: String?
+    var currency: String?
+}
+
+struct RegisterResponse: Codable {
+    var detail: String?
     var first_name: String?
     var last_name: String?
     var email: String?
     var phone_number: String?
     var department: String?
     var currency: String?
-//    var reports: [Report]?
-    var paymentMethods: [CreditCard]?
-    var defaultPaymentMethod: Int?
-}
-
-struct CreditCard: Codable, Identifiable {
-    var id = UUID()
-    
-    var cardNumber: String
-    var expirationDate: Date
 }
 
 struct CreateReportRequest: Codable {
@@ -31,7 +59,6 @@ struct CreateReportRequest: Codable {
     let expenseType: String
     let purpose: String
     let paymentMethod: String
-    let reportAmount: Double
     let reportCurrency: String
     
     enum CodingKeys: String, CodingKey {
@@ -39,14 +66,13 @@ struct CreateReportRequest: Codable {
         case expenseType = "expense_type"
         case purpose
         case paymentMethod = "payment_method"
-        case reportAmount = "report_amount"
         case reportCurrency = "report_currency"
     }
 }
 
-struct Report: Codable {
+struct Report: Identifiable, Codable {
     let id: String
-    let user: String
+    let user: String?
     let reportNumber: String
     let reportStatus: String
     let reportSubmitDate: String?
@@ -220,18 +246,18 @@ struct CreateExpenseItemRequest: Codable {
 
 
 struct ExpenseItem: Codable {
-    let id: String?
+    let id: String
     let airline: String?
     let rentalAgency: String?
     let carType: String?
     let mealCategory: String?
     let relationshipToPAI: String?
     let city: String?
-    let hotelDailyBaseRate: String?
-    let mileageRate: String?
+    let hotelDailyBaseRate: HotelDailyBaseRate?
+    let mileageRate: MileageRate?
     let presignedURL: String?
     let filename: String?
-    let expenseType: String
+    let expenseType: ExpenseType
     let expenseDate: String
     let receiptAmount: String
     let receiptCurrency: String
@@ -251,9 +277,6 @@ struct ExpenseItem: Codable {
     let createdAt: String?
     let updatedAt: String?
     let report: Int?
-    // How I recomend storing the image
-    // If we want to allow the user to update more than one image, this should be an array
-//    var imageData: Data?
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -290,7 +313,7 @@ struct ExpenseItem: Codable {
     }
 }
 
-enum ExpenseType: String, CaseIterable, Identifiable {
+enum ExpenseType: String, CaseIterable, Codable, Identifiable {
     case airFare = "AirFare"
     case airlineClubMembershipDues = "Airline Club Membership Dues"
     case airlineFees = "Airline Fees"
@@ -373,4 +396,25 @@ struct RelationshipToPAI: Codable {
 
 struct RentalAgency: Codable {
     let value: String
+}
+
+struct ExchangeRates: Codable {
+    let rates: [String: Double]
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.rates = try container.decode([String: Double].self, forKey: .rates)
+    }
+    
+    private enum CodingKeys: CodingKey {
+        case rates
+    }
+}
+
+struct Preview: Codable {
+    let presignedURL: String
+    
+    enum CodingKeys: String, CodingKey {
+        case presignedURL = "presigned_url"
+    }
 }

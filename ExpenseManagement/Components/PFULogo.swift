@@ -1,10 +1,3 @@
-//
-//  PFULogo.swift
-//  ExpenseManagement
-//
-//  Created by infra on 30/05/24.
-//
-
 import SwiftUI
 
 struct PFULogo: View {
@@ -13,6 +6,8 @@ struct PFULogo: View {
             HStack {
                 Spacer()
                 Image("pfuLogo")
+                    .resizable()
+                    .frame(width: 80, height: 40)
                     .padding(.top, UIScreen.main.bounds.height / 10)
                     .padding(.trailing, 20)
             }

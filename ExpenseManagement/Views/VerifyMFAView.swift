@@ -12,7 +12,7 @@ struct VerifyMFAView: View {
             ZStack {
                 Color(uiColor: .systemGray6).ignoresSafeArea()
                 ZStack {
-                    ourPfu
+                    PFULogo()
                     content
                 }
             }
@@ -22,16 +22,6 @@ struct VerifyMFAView: View {
             }
             
         }
-    }
-    
-    var ourPfu: some View {
-        VStack {
-            HStack {
-                Spacer()
-                Image("pfuLogo")
-            }
-            Spacer()
-        }.ignoresSafeArea().padding()
     }
     
     var content: some View {
@@ -44,7 +34,7 @@ struct VerifyMFAView: View {
                         .font(Font.custom("Poppins", size: 30).weight(.bold))
                         .foregroundColor(.black)
                     
-                    Text("We’ve sent an SMS with an activation code to your phone +12622820129")
+                    Text("We’ve sent an SMS with an activation code to the registered phone number")
                         .font(Font.custom("Inter", size: 16))
                         .foregroundColor(Color.black.opacity(0.70))
                         .multilineTextAlignment(.center)
@@ -101,6 +91,7 @@ struct VerifyMFAView: View {
     }
 }
 
-//#Preview {
-//    VerifyMFAView()
-//}
+#Preview {
+    VerifyMFAView()
+        .environmentObject(AuthenticationManager())
+}

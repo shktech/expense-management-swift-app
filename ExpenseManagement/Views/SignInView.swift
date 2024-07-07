@@ -3,6 +3,8 @@ import SwiftUI
 enum NavigationDestination {
     case mainView
     case verifyMFAView
+    case signInView
+    case signUpView
 }
 
 struct SignInView: View {
@@ -13,14 +15,17 @@ struct SignInView: View {
     @State private var keyboardHeight: CGFloat = 0
     @State private var isLoading = false
     @State private var navigationDestination: NavigationDestination? = nil
+    @State private var isBiometricsEnabled: Bool = false
     @EnvironmentObject var authManager: AuthenticationManager
+    @EnvironmentObject var globalState: GlobalStateManager
+    @StateObject private var biometricAuthViewModel = BiometricAuthenticationProvider()
     
     var body: some View {
         NavigationStack {
             ZStack {
                 BackgroundImage(opacity: 0.3)
                 PFULogo()
-                content.loadingOverlay(isLoading: $isLoading)
+                content
                 NavigationLink(
                     tag: NavigationDestination.mainView,
                     selection: $navigationDestination,
@@ -33,47 +38,77 @@ struct SignInView: View {
                     destination: { VerifyMFAView() },
                     label: { EmptyView() }
                 )
+                NavigationLink(
+                    tag: NavigationDestination.signInView,
+                    selection: $navigationDestination,
+                    destination: { SignInView() },
+                    label: { EmptyView() }
+                )
+                NavigationLink(
+                    tag: NavigationDestination.signUpView,
+                    selection: $navigationDestination,
+                    destination: { SignUpView() },
+                    label: { EmptyView() }
+                )
             }
             .navigationBarHidden(true)
-//            .navigationDestination(for: NavigationDestination?.self) { destination in
-//                switch destination {
-//                case .mainView:
-//                    TabViewContainer()
-//                case .verifyMFAView:
-//                    VerifyMFAView()
-//                default:
-//                    EmptyView()
-//                }
-//            }
+            .loadingOverlay(isLoading: $isLoading)
+        }
+        .onAppear {
+            if let credentials = KeychainHelper.load(key: emailField) as? [String: Any] {
+                rememberMe = credentials["rememberEmail"] as? Bool ?? false
+                if rememberMe {
+                    emailField = credentials["email"] as? String ?? ""
+                }
+                biometricAuthViewModel.isBiometricEnabled = credentials["biometricEnabled"] as? Bool ?? false
+                if biometricAuthViewModel.isBiometricEnabled {
+                    biometricAuthViewModel.authenticate { success in
+                        if success {
+                            passwordField = credentials["password"] as? String ?? ""
+                            signIn()
+                        }
+                    }
+                }
+            }
         }
     }
-    
+
     var content: some View {
         VStack(spacing: 50) {
             signInText
-            if authManager.loginFailed {
-                Text("Incorrect email or password")
-                    .foregroundStyle(.red)
-                    .font(.system(size: 14).weight(.semibold))
-            }
             fields
             bottomContent
+            signUpText
         }.padding()
     }
-    
+
     var signInText: some View {
         Text("Sign in")
             .font(.system(size: 32).weight(.semibold))
             .foregroundStyle(Color(uiColor: .darkGray))
     }
-    
+
+    var signUpText: some View {
+        HStack {
+            Text("Don’t have an account? ")
+                .font(.system(size: 13))
+                .foregroundColor(.black)
+            Text("Sign up")
+                .font(.system(size: 13).weight(.bold))
+                .foregroundColor(.black)
+                .onTapGesture {
+                    navigationDestination = .signUpView
+                }
+        }
+    }
+
     var fields: some View {
         VStack(spacing: 20) {
             emailContainer
             passwordContainer
         }
     }
-    
+
     var emailContainer: some View {
         VStack(alignment: .leading) {
             Text("Email")
@@ -82,7 +117,7 @@ struct SignInView: View {
             TextField("", text: $emailField)
                 .autocapitalization(.none)
                 .autocorrectionDisabled(true) // Disable autocorrect
-                .frame(height: 40)
+                .frame(height: 50)
                 .padding(.horizontal, 10)
                 .overlay(
                     RoundedRectangle(cornerRadius: 10)
@@ -90,32 +125,36 @@ struct SignInView: View {
                 )
         }
     }
-    
+
     var passwordContainer: some View {
         VStack(alignment: .leading) {
             Text("Password")
                 .font(.system(size: 13).weight(.semibold))
                 .foregroundStyle(.black)
             passwordFieldContainer
-            HStack {
-                Button(action: {
-                    withAnimation(Animation.linear(duration: 0.2)) {
-                        rememberMe.toggle()
+            VStack(alignment: .leading, spacing: 10) {
+                HStack {
+                    Toggle(isOn: $rememberMe) {
+                        Text("Remember Me")
+                            .font(.system(size: 13).weight(.semibold))
+                            .foregroundStyle(.black)
                     }
-                }) {
-                    Image(systemName: rememberMe ? "checkmark.square.fill" : "square")
-                        .foregroundStyle(rememberMe ? .white : Color.secondary, Color(UIColor.systemBlue))
+                    .toggleStyle(SmallToggleStyle())
                 }
-                .buttonStyle(PlainButtonStyle())
-                
-                Text("Remember Me")
-                    .fontWeight(.medium)
-                    .foregroundColor(.primary)
-                Spacer()
+                HStack {
+                    Toggle(isOn: $isBiometricsEnabled) {
+                        Text("Enable Biometric Login")
+                            .font(.system(size: 13).weight(.semibold))
+                            .foregroundStyle(.black)
+                    }
+                    .toggleStyle(SmallToggleStyle())
+                }
             }
+            .padding(.top, 10)
         }
+        .padding(.vertical)
     }
-    
+
     var passwordFieldContainer: some View {
         ZStack(alignment: .trailing) {
             if isPasswordVisible {
@@ -134,41 +173,31 @@ struct SignInView: View {
                     .foregroundColor(.gray)
             }
         }
-        .frame(height: 40)
+        .frame(height: 50)
         .padding(.horizontal, 10)
         .overlay(
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color.gray, lineWidth: 1)
         )
     }
-    
+
     var bottomContent: some View {
         VStack {
             Button(action: {
-                isLoading = true
-                authManager.signIn(email: emailField, password: passwordField) { result in
-                    print("setting isloading to false")
-                    isLoading = false
-                    switch result {
-                    case .success(_):
-                        navigationDestination = .mainView
-                    case .failure(let error):
-                        if let nsError = error as NSError?, nsError.code == -1, nsError.userInfo["code"] as? String == "second_factor_required" {
-                            print("Setting navigationDestination to verifyMFA")
-                            navigationDestination = .verifyMFAView                        }
-                        //                        print(error)
-                    }
+                if isBiometricsEnabled {
+                    signInWithBiometrics()
+                } else {
+                    signIn()
                 }
             }, label: {
                 Text("Sign In")
                     .font(.system(size: 17).weight(.semibold))
                     .foregroundColor(.white)
                     .frame(width: 349, height: 55)
-                    .background(Color.blue)
+                    .background(Color.oceanBlue)
                     .cornerRadius(14)
             })
             Button(action: {
-                // Forgot Password
             }, label: {
                 Text("Forgot Password?")
                     .foregroundStyle(.black)
@@ -177,35 +206,50 @@ struct SignInView: View {
             .padding()
         }
     }
-}
 
-struct KeyboardProvider: ViewModifier {
-    
-    var keyboardHeight: Binding<CGFloat>
-    
-    func body(content: Content) -> some View {
-        content
-            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification),
-                       perform: { notification in
-                guard let userInfo = notification.userInfo,
-                      let keyboardRect = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
-                
-                self.keyboardHeight.wrappedValue = keyboardRect.height
-                
-            }).onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification),
-                         perform: { _ in
-                self.keyboardHeight.wrappedValue = 0
-            })
+    private func signInWithBiometrics() {
+        biometricAuthViewModel.authenticate {
+            success in
+            if success {
+                biometricAuthViewModel.saveBiometricEnabled(true, for: emailField)
+                signIn()
+            }
+        }
     }
-}
 
-
-public extension View {
-    func keyboardHeight(_ state: Binding<CGFloat>) -> some View {
-        self.modifier(KeyboardProvider(keyboardHeight: state))
+    private func signIn() {
+        isLoading = true
+        authManager.signIn(email: emailField, password: passwordField) { result in
+            switch result {
+            case .success(_):
+                if biometricAuthViewModel.isBiometricEnabled || rememberMe {
+                    biometricAuthViewModel.saveCredentials(email: emailField, password: passwordField, biometricEnabled: isBiometricsEnabled, rememberEmail: rememberMe)
+                }
+//                if rememberMe {
+//                    KeychainHelper.save(rememberMe, forKey: "rememberMe")
+//                    KeychainHelper.save(emailField, forKey: "email")
+//                } else {
+//                    KeychainHelper.save(rememberMe, forKey: "rememberMe")
+//                    KeychainHelper.delete(key: "email")
+//                }
+                isLoading = false
+                navigationDestination = .mainView
+            case .failure(let error):
+                if let nsError = error as NSError?, nsError.code == -1, nsError.userInfo["code"] as? String == "second_factor_required" {
+                    print("Setting navigationDestination to verifyMFA")
+                    isLoading = false
+                    navigationDestination = .verifyMFAView
+                } else {
+                    isLoading = false
+                    globalState.showMessage(title: "Error", message: "Incorrect email or password", type: .error)
+                }
+            }
+        }
     }
 }
 
 #Preview {
-    SignInView().environmentObject(AuthenticationManager())
+    SignInView()
+        .environmentObject(AuthenticationManager())
+        .environmentObject(GlobalStateManager())
 }

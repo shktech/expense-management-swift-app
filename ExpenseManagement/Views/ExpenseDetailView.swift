@@ -136,7 +136,7 @@ struct ExpenseDetailView: View {
 
 #Preview {
     ExpenseDetailView(expense: ExpenseItem(
-        id: nil,
+        id: "1",
         airline: nil,
         rentalAgency: nil,
         carType: nil,
@@ -147,7 +147,7 @@ struct ExpenseDetailView: View {
         mileageRate: nil,
         presignedURL: nil,
         filename: nil,
-        expenseType: "Airline",
+        expenseType: ExpenseType.airFare,
         expenseDate: "2024-06-24",
         receiptAmount: "120.99",
         receiptCurrency: "USD",

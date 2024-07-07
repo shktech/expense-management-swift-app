@@ -1,161 +1,177 @@
-//
-//  NewCreditCardForm.swift
-//  ExpenseManagement
-//
-//  Created by infra on 02/06/24.
-//
-
 import SwiftUI
 
+class CreditCardViewModel: ObservableObject {
+    @Published var creditCardNumberField: String
+    @Published var expDate: String
+    @Published var cardType: String = ""
+    @Published var cardIcon: String = "creditcard"
+    @Published var readonly: Bool
+    
+    init(creditCardNumber: String = "", expDate: String = "", readonly: Bool = false) {
+        self.creditCardNumberField = creditCardNumber
+        self.expDate = expDate
+        self.readonly = readonly
+        formatCreditCardNumber()
+        determineCardType()
+    }
+
+    func formatCreditCardNumber() {
+        let digits = creditCardNumberField.filter { $0.isNumber }
+        let formattedNumber = digits.chunked(by: 4).map { String($0) }.joined(separator: " ")
+        if formattedNumber != creditCardNumberField {
+            creditCardNumberField = formattedNumber
+        }
+    }
+
+    func determineCardType() {
+        let digits = creditCardNumberField.filter { $0.isNumber }
+        if digits.hasPrefix("4") {
+            cardType = "Visa"
+            cardIcon = "visa"
+        } else if digits.hasPrefix("5") {
+            cardType = "MasterCard"
+            cardIcon = "mastercard"
+        } else if digits.hasPrefix("3") && digits.count > 1 && (digits[digits.index(digits.startIndex, offsetBy: 1)] == "4" || digits[digits.index(digits.startIndex, offsetBy: 1)] == "7") {
+            cardType = "American Express"
+            cardIcon = "amex"
+        } else if digits.hasPrefix("6") {
+            cardType = "Discover"
+            cardIcon = "discover"
+        } else {
+            cardType = "Unknown"
+            cardIcon = "creditcard"
+        }
+    }
+}
+
 struct NewCreditCardForm: View {
-    
-    @Environment(\.dismiss) var dismiss
-    
-//    let user: User?
-    
-    @State var creditCardNumberField: String = ""
-    
-    @State var expDate: String = ""
-    
-    @State var cvv: String = ""
+    @StateObject var viewModel: CreditCardViewModel
     @EnvironmentObject var authManager: AuthenticationManager
+    @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var globalState: GlobalStateManager
     
+    init(viewModel: CreditCardViewModel = CreditCardViewModel()) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
+
     var body: some View {
         ZStack {
-            Color(uiColor: .systemGray6)
-                .ignoresSafeArea()
-            ourPfu
             VStack {
                 content
             }.padding()
-        }.navigationBarBackButtonHidden()
-    }
-    
-    var ourPfu: some View {
-        VStack {
-            HStack {
-                Spacer()
-                Image("pfuLogo")
-                    .padding(.top, 40)
-                    .padding(.trailing, 20)
-            }
-            Spacer()
-        }.ignoresSafeArea()
-    }
-    
-    var content: some View {
-        VStack {
-            headerContent
-            line
-            creditCardNumberContainer
-            HStack {
-                expDateContainer
-                cvvContainer
-            }
-            Spacer()
-            saveButton
-            backButton
-        }.padding()
-    }
-    
-    var headerContent: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 10) {
-                Text(authManager.user?.first_name ?? "")
-                    .font(.system(size: 17).weight(.semibold))
-                Text(authManager.user?.department ?? "")
-                    .font(.system(size: 17).weight(.semibold))
-                    .foregroundStyle(Color.black.opacity(0.5))
-            }
-            .padding(.bottom)
-            Spacer()
         }
     }
-    
-    var line: some View {
-        RoundedRectangle(cornerRadius: 10)
-            .frame(height: 1)
-            .foregroundStyle(Color.gray.opacity(0.4))
+
+    var content: some View {
+        VStack {
+            creditCardNumberContainer
+            expDateContainer
+            Spacer()
+            if !viewModel.readonly {
+                saveButton
+            }
+        }.padding()
     }
-    
+
     var creditCardNumberContainer: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Card Number")
-            TextField("xxxx.xxxx.xxxx.xxxx", text: $creditCardNumberField)
-                .autocapitalization(.none)
-                .autocorrectionDisabled(true) // Disable autocorrect
-                .frame(height: 40)
-                .padding(.horizontal, 10)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.gray, lineWidth: 2)
-                )
-        }.padding(.top)
+            HStack {
+                if viewModel.cardIcon == "creditcard" {
+                    Image(systemName: viewModel.cardIcon)
+                        .foregroundColor(.gray)
+                } else {
+                    Image(viewModel.cardIcon)
+                        .resizable()
+                        .frame(width: 30, height: 24)
+                }
+                if viewModel.readonly {
+                    Text(viewModel.creditCardNumberField)
+                        .frame(height: 40)
+                } else {
+                    TextField("Credit card number", text: $viewModel.creditCardNumberField)
+                        .keyboardType(.numberPad)
+                        .autocapitalization(.none)
+                        .autocorrectionDisabled(true)
+                        .frame(height: 40)
+                }
+            }.padding(.horizontal)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.gray, lineWidth: 2)
+            )
+        }.padding(.vertical)
     }
-    
+
     var expDateContainer: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Expiration Date")
-            TextField("MM/YY", text: $expDate)
-                .autocapitalization(.none)
-                .autocorrectionDisabled(true) // Disable autocorrect
-                .frame(height: 40)
-                .padding(.horizontal, 10)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.gray, lineWidth: 2)
-                )
+            if viewModel.readonly {
+                Text(viewModel.expDate)
+                    .frame(height: 40)
+                    .padding(.horizontal, 10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color.gray, lineWidth: 2)
+                    )
+            } else {
+                TextField("MM/YY", text: $viewModel.expDate)
+                    .autocapitalization(.none)
+                    .autocorrectionDisabled(true)
+                    .frame(height: 40)
+                    .padding(.horizontal, 10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color.gray, lineWidth: 2)
+                    )
+            }
         }.padding(.top)
     }
-    
-    var cvvContainer: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text("CVV")
-            TextField("ex: 123", text: $cvv)
-                .autocapitalization(.none)
-                .autocorrectionDisabled(true) // Disable autocorrect
-                .frame(height: 40)
-                .padding(.horizontal, 10)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.gray, lineWidth: 2)
-                )
-        }.padding(.top)
-    }
-    
+
     var saveButton: some View {
         Button(action: {
-            // save new credit card
+            addCreditCard()
         }, label: {
             ZStack {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 14)
-                        .foregroundStyle(.blue)
-                    Text("Save")
-                        .foregroundStyle(.white)
-                        .font(.system(size: 17).weight(.semibold))
-                }
+                RoundedRectangle(cornerRadius: 14)
+                    .foregroundStyle(.oceanBlue)
+                Text("Save")
+                    .foregroundStyle(.white)
+                    .font(Font.custom("Poppins", size: 18).weight(.semibold))
             }
-        }).frame(height: 41)
+        }).frame(height: 50)
+    }
+
+    func addCreditCard() {
+        let cardNumber = viewModel.creditCardNumberField.replacingOccurrences(of: " ", with: "")
+        let expirationDate = formatExpirationDate(viewModel.expDate)
+        
+        authManager.createCreditCard(cardNumber: cardNumber, expirationDate: expirationDate) { result in
+            switch result {
+            case .success:
+                DispatchQueue.main.async {
+                    globalState.showMessage(title: "Success", message: "Successfully added credit card information", type: .success)
+                    self.presentationMode.wrappedValue.dismiss()
+                }
+            case .failure(let error):
+                globalState.showMessage(title: "Error", message: "Failed to add credit card information: \(error.localizedDescription)", type: .error)
+            }
+        }
     }
     
-    var backButton: some View {
-        Button(action: {
-            dismiss()
-        }, label: {
-            ZStack {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 14)
-                        .foregroundStyle(.gray)
-                    Text("Cancel")
-                        .foregroundStyle(.white)
-                        .font(.system(size: 17).weight(.semibold))
-                }
-            }
-        }).frame(height: 41)
+    func formatExpirationDate(_ expDate: String) -> String {
+        let components = expDate.split(separator: "/")
+        guard components.count == 2,
+              let month = components.first,
+              let year = components.last else {
+            return expDate
+        }
+        return "20\(year)-\(month)-01"
     }
 }
 
 #Preview {
     NewCreditCardForm()
+        .environmentObject(AuthenticationManager())
+        .environmentObject(GlobalStateManager())
 }

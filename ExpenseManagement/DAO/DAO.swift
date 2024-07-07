@@ -1,7 +1,4 @@
 import Foundation
-//import CodableExtensions
-
-let dao = DAO.instance
 
 @Observable class DAO: Codable {
     static var instance = DAO()
@@ -9,13 +6,9 @@ let dao = DAO.instance
     private let apiBaseUrl: String
     
     var lastLoginDate: Date?
-    
     var isPassed = false
-    
     var user: User?
-    
     var isAuthenticated: Bool = false
-    
     var cities: [City]?
     
     private init() {
@@ -90,7 +83,6 @@ let dao = DAO.instance
             return
         }
         request.httpBody = jsonData
-
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 DispatchQueue.main.async {
@@ -144,17 +136,39 @@ let dao = DAO.instance
         }.resume()
     }
     
-    func hasThirtyMinutesPassed(since date: Date) {
-        let currentDate = Date()
-        let thirtyMinutes: TimeInterval = 30 * 60
-        
-        let timeElapsed = currentDate.timeIntervalSince(date)
-        
-        if timeElapsed >= thirtyMinutes {
-            isAuthenticated = false
+    func refreshAccessToken(refreshToken: String, completion: @escaping (Result<LoginResponseData, Error>) -> Void) {
+        let url = URL(string: "\(apiBaseUrl)/auth/refresh/")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let parameters: [String: Any] = ["refresh": refreshToken]
+
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
+        } catch {
+            completion(.failure(error))
+            return
         }
-        
-        return
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+
+            guard let data = data else {
+                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data received"])))
+                return
+            }
+
+            do {
+                let loginResponse = try JSONDecoder().decode(LoginResponseData.self, from: data)
+                completion(.success(loginResponse))
+            } catch {
+                completion(.failure(error))
+            }
+        }.resume()
     }
     
     func fetchUserData(accessToken: String, completion: @escaping (Result<User, Error>) -> Void) {
@@ -196,6 +210,43 @@ let dao = DAO.instance
                     completion(.failure(NSError(domain: "", code: httpResponse?.statusCode ?? -1, userInfo: [NSLocalizedDescriptionKey: errorDescription])))
                 }
             }
+        }.resume()
+    }
+    
+    func createCreditCard(creditCard: CreditCard, accessToken: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let url = URL(string: "\(apiBaseUrl)/auth/credit-card/")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        
+        do {
+            print(creditCard.expirationDate)
+            let jsonData = try JSONEncoder().encode(creditCard)
+            request.httpBody = jsonData
+            print("Encoded JSON: \(String(data: jsonData, encoding: .utf8) ?? "")")
+        } catch {
+            completion(.failure(error))
+            return
+        }
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid response"])))
+                return
+            }
+            
+            guard (200...299).contains(httpResponse.statusCode) else {
+                completion(.failure(NSError(domain: "", code: httpResponse.statusCode, userInfo: [NSLocalizedDescriptionKey: "Server error: \(httpResponse.statusCode)"])))
+                return
+            }
+            
+            completion(.success(()))
         }.resume()
     }
     
@@ -249,6 +300,50 @@ let dao = DAO.instance
         }.resume()
     }
     
+    func fetchReport(reportId: String, accessToken: String, completion: @escaping (Result<Report, Error>) -> Void) {
+        let url = URL(string: "\(apiBaseUrl)/reports/\(reportId)/")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+                return
+            }
+            
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data received"])))
+                }
+                return
+            }
+            
+            let httpResponse = response as? HTTPURLResponse
+            if httpResponse?.statusCode == 200 {
+                do {
+                    let report = try JSONDecoder().decode(Report.self, from: data)
+                    DispatchQueue.main.async {
+                        completion(.success(report))
+                    }
+                } catch {
+                    print(error)
+                    DispatchQueue.main.async {
+                        completion(.failure(error))
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    let errorDescription = HTTPURLResponse.localizedString(forStatusCode: httpResponse?.statusCode ?? -1)
+                    completion(.failure(NSError(domain: "", code: httpResponse?.statusCode ?? -1, userInfo: [NSLocalizedDescriptionKey: errorDescription])))
+                }
+            }
+        }.resume()
+    }
+
+    
     func fetchReports(accessToken: String, completion: @escaping (Result<[Report], Error>) -> Void) {
         let url = URL(string: "\(apiBaseUrl)/reports/")!
         var request = URLRequest(url: url)
@@ -281,6 +376,50 @@ let dao = DAO.instance
                 }
             }
         }.resume()
+    }
+    
+    func submitReport(reportId: String, accessToken: String, completion: @escaping (Result<Report, Error>) -> Void) {
+        guard let url = URL(string: "\(apiBaseUrl)/reports/\(reportId)/submit/") else {
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "PATCH"
+        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+
+            guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+                let statusCode = (response as? HTTPURLResponse)?.statusCode ?? -1
+                let error = NSError(domain: "", code: statusCode, userInfo: [NSLocalizedDescriptionKey: "Server error with status code \(statusCode)"])
+                completion(.failure(error))
+                return
+            }
+
+            guard let data = data else {
+                let error = NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data received"])
+                completion(.failure(error))
+                return
+            }
+
+            do {
+                let reports = try JSONDecoder().decode(Report.self, from: data)
+                DispatchQueue.main.async {
+                    completion(.success(reports))
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+            }
+        }
+
+        task.resume()
     }
 
     func fetchReportItems(reportId: String, accessToken: String, completion: @escaping (Result<[ExpenseItem], Error>) -> Void) {
@@ -383,7 +522,7 @@ let dao = DAO.instance
     }
     
     func updateExpenseItem(reportId: String, itemId: String, expenseItemData: CreateExpenseItemRequest, accessToken: String, completion: @escaping (Result<ExpenseItem, Error>) -> Void) {
-        let url = URL(string: "\(apiBaseUrl)/reports/\(reportId)/items/\(itemId)")!
+        let url = URL(string: "\(apiBaseUrl)/reports/\(reportId)/items/\(itemId)/")!
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -455,6 +594,87 @@ let dao = DAO.instance
         task.resume()
     }
     
+    func getImagePreviewLink(reportId: String, itemId: String, accessToken: String, completion: @escaping (Result<Preview, Error>) -> Void) {
+        let url = URL(string: "\(apiBaseUrl)/reports/\(reportId)/items/\(itemId)/download-receipt/")!
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+                return
+            }
+
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data received"])))
+                }
+                return
+            }
+
+            let httpResponse = response as? HTTPURLResponse
+            if httpResponse?.statusCode == 200 {
+                do {
+                    let preview = try JSONDecoder().decode(Preview.self, from: data)
+                    DispatchQueue.main.async {
+                        completion(.success(preview))
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        completion(.failure(error))
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    let errorDescription = HTTPURLResponse.localizedString(forStatusCode: httpResponse?.statusCode ?? -1)
+                    completion(.failure(NSError(domain: "", code: httpResponse?.statusCode ?? -1, userInfo: [NSLocalizedDescriptionKey: errorDescription])))
+                }
+            }
+        }.resume()
+    }
+    
+    func fetchExchangeRates(base: String, accessToken: String, completion: @escaping (Result<[String: Double], Error>) -> Void) {
+        let urlString = "\(apiBaseUrl)/common/exchange-rates/?base=\(base)"
+        guard let url = URL(string: urlString) else {
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+                return
+            }
+            
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data received"])))
+                }
+                return
+            }
+            
+            do {
+                let rates = try JSONDecoder().decode([String: Double].self, from: data)
+                DispatchQueue.main.async {
+                    completion(.success(rates))
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+            }
+        }.resume()
+    }
+    
     func fetchData<T: Decodable>(endpoint: String, accessToken: String, completion: @escaping (Result<T, Error>) -> Void) {
 
         let url = URL(string: "\(apiBaseUrl)/\(endpoint)")!
@@ -497,45 +717,61 @@ let dao = DAO.instance
             }
         }.resume()
     }
-}
 
-enum BundleDecodingError: Error, CustomStringConvertible {
-    case fileNotFound(String)
-    case couldNotLoadData(String)
-    case decodingFailure(String, Error)
-    
-    var description: String {
-        switch self {
-        case .fileNotFound(let message),
-             .couldNotLoadData(let message):
-            return message
-        case .decodingFailure(let message, let error):
-            return "\(message): \(error)"
-        }
-    }
-}
-
-extension Bundle {
-    func decode<T: Decodable>(file: String) throws -> T {
-        guard let url = self.url(forResource: file, withExtension: nil) else {
-            throw BundleDecodingError.fileNotFound("Could not find \(file) in bundle.")
-        }
+    // Register User Function
+    func registerUser(_ user: RegisterUser, completion: @escaping (Result<RegisterResponse, Error>) -> Void) {
+        let url = URL(string: "\(apiBaseUrl)/auth/register/")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        print("Found file at url: \(url)")
-        
-        guard let data = try? Data(contentsOf: url) else {
-            throw BundleDecodingError.couldNotLoadData("Could not load \(file) from bundle.")
-        }
-        
-        print("Loaded data: \(data)")
-        
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
         do {
-            let loadedData = try decoder.decode(T.self, from: data)
-            return loadedData
+            let jsonData = try JSONEncoder().encode(user)
+            request.httpBody = jsonData
+            print("Encoded JSON: \(String(data: jsonData, encoding: .utf8) ?? "")")
         } catch {
-            throw BundleDecodingError.decodingFailure("Could not decode \(file) from bundle", error)
+            completion(.failure(error))
+            return
         }
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+                return
+            }
+            
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data received"])))
+                }
+                return
+            }
+            
+            let httpResponse = response as? HTTPURLResponse
+            if httpResponse?.statusCode == 201 {
+                do {
+                    let registerResponse = try JSONDecoder().decode(RegisterResponse.self, from: data)
+                    DispatchQueue.main.async {
+                        completion(.success(registerResponse))
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        completion(.failure(error))
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    do {
+                        let errorResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                        let errorMessage = errorResponse?["error"] as? String ?? "Unknown error"
+                        completion(.failure(NSError(domain: "", code: httpResponse?.statusCode ?? -1, userInfo: [NSLocalizedDescriptionKey: errorMessage])))
+                    } catch {
+                        completion(.failure(error))
+                    }
+                }
+            }
+        }.resume()
     }
 }
