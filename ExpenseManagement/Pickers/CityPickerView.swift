@@ -35,7 +35,7 @@ struct CityPickerView<CommonDataManager: CommonDataManagerProtocol>: View {
                 }
                 .padding(.horizontal)
             }
-            .frame(height: 41)
+            .frame(height: 40)
             .onTapGesture {
                 if isEditable {
                     showCityPicker.toggle()

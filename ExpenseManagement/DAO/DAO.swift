@@ -534,6 +534,9 @@ import Foundation
             return
         }
         request.httpBody = jsonData
+        
+        print("HERE")
+        print("Encoded JSON: \(String(data: jsonData, encoding: .utf8) ?? "")")
 
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {

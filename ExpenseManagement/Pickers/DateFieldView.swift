@@ -14,7 +14,7 @@ struct DateFieldView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 8)
                     .foregroundStyle(.ourLightGray2)
-                    .frame(height: 40)
+                    .frame(height: 45)
                 HStack {
                     Text("\(date.formatted(date: .abbreviated, time: .omitted))")
                         .font(Font.custom("Nunito", size: 16))

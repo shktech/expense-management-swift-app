@@ -30,13 +30,13 @@ struct NewReportView: View {
             newReportNameField.padding(.vertical)
             DateFieldView(title: "Date", date: $date, isEditable: .constant(true))
             PickerField(title: "Expense Type", options: ["Domestic", "International"], selectedOption: $expenseType, isEditable: .constant(true))
-            TextInputView(title: "Purpose", text: $purposeField, isEditable: .constant(true), placeholder: "ex: New Conference")
+            TextInputView(title: "Purpose", text: $purposeField, isEditable: .constant(true), validation: nil, placeholder: "ex: New Conference")
                 .focused($isPurposeFieldFocused)
                 .onAppear {
                     isPurposeFieldFocused = true
                 }
             PickerField(title: "Preferred Payment Method", options: ["Cash", "Credit card"], selectedOption: $selectedPaymentMethod, isEditable: .constant(true))
-            CurrencyPicker(selectedCurrency: $selectedCurrency, isEditable: .constant(true))
+            CurrencyPicker(selectedCurrency: $selectedCurrency, isEditable: .constant(true), title: "Default Concurrency")
             Spacer()
             addButton
         }.padding()

@@ -2,15 +2,15 @@ import Foundation
 
 class Utilities {
     struct CurrencyConverter {
-        static func convert(amount: Double, from: String, to: String, accessToken: String, completion: @escaping (Double) -> Void) {
+        static func convert(amount: Double, from: String, to: String, accessToken: String, completion: @escaping (Double, Double) -> Void) {
             CommonDataManager.instance.fetchExchangeRates(base: from, accessToken: accessToken) { result in
                 switch result {
                 case .success(let rates):
                     let exchangeRate = rates[to] ?? 1.0
                     let convertedAmount = amount * exchangeRate
-                    completion(convertedAmount)
+                    completion(convertedAmount, exchangeRate)
                 case .failure:
-                    completion(amount)
+                    completion(amount, 0.0)
                 }
             }
         }

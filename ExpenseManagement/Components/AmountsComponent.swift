@@ -5,22 +5,29 @@ struct AllAmountsComponent: View {
     @Binding var amount: String
     @Binding var selectedCurrency: String
     @Binding var convertedAmount: Double
+    @Binding var isEditable: Bool
     var targetCurrency: String
     var accessToken: String
     
     @State private var isLoading: Bool = false
+    @State private var conversionRate: Double?
     
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundStyle(.ourLightBlue)
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(.oceanBlue, lineWidth: 1)
+//            RoundedRectangle(cornerRadius: 10)
+//                .foregroundStyle(.ourLightBlue)
             VStack {
                 receiptAmountContainer
+                Text(conversionRateText)
+                    .font(Font.custom("Nunito", size: 14).weight(.bold))
+                    .frame(maxWidth: .infinity, alignment: .trailing)
                 convertedCurrency
-            }.padding()
-        }
+            }
+        }.padding()
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .foregroundStyle(.ourLightBlue)
+        )
         .onAppear {
             convertCurrency()
         }
@@ -32,48 +39,31 @@ struct AllAmountsComponent: View {
         }
     }
     
+    var conversionRateText: String {
+        if let rate = conversionRate {
+            return "1 \(selectedCurrency) = \(rate) \(targetCurrency)"
+        } else {
+            return "Conversion rate not available"
+        }
+    }
+    
     var receiptAmountContainer: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text("Receipt Amount")
                 .foregroundStyle(.oceanBlue)
                 .font(Font.custom("Nunito", size: 16).weight(.bold))
             HStack {
-                Menu {
-                    ForEach(currencies, id: \.code) { currency in
-                        Button(action: {
-                            selectedCurrency = currency.code
-                        }, label: {
-                            Text("\(currency.flag) \(currency.code)")
-                        })
-                    }
-                } label: {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.ourLightGray)
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.oceanBlue, lineWidth: 1)
-                        HStack {
-                            Text(currencyFlag(for: selectedCurrency))
-                            Text(selectedCurrency)
-                                .foregroundStyle(.oceanBlue)
-                                .fontWeight(.semibold)
-                            Image(systemName: "chevron.down")
-                                .foregroundStyle(.oceanBlue)
-                                .fontWeight(.semibold)
-                        }
-                    }
-                }
-                .frame(width: 100)
+                CurrencyPicker(selectedCurrency: $selectedCurrency, isEditable: $isEditable)
+                .frame(width: 140)
                 ZStack {
                     RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(.ourLightGray)
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.oceanBlue, lineWidth: 1)
+                        .foregroundStyle(isEditable ? .ourLightGray : .black.opacity(0.15))
                     TextField("", text: $amount)
                         .padding(.horizontal)
-                        .keyboardType(.decimalPad) // Ensure keyboard is suitable for currency input
+                        .keyboardType(.decimalPad)
+                        .disabled(!isEditable)
                 }
-            }.frame(height: 41)
+            }.frame(height: 45)
         }
     }
     
@@ -83,24 +73,11 @@ struct AllAmountsComponent: View {
                 .foregroundStyle(.oceanBlue)
                 .font(Font.custom("Nunito", size: 16).weight(.semibold))
             HStack {
+                CurrencyPicker(selectedCurrency: .constant(targetCurrency), isEditable: .constant(false))
+                .frame(width: 140)
                 ZStack {
                     RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(.ourLightGray)
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.oceanBlue, lineWidth: 1)
-                    HStack {
-                        Text(currencyFlag(for: targetCurrency))
-                        Text(targetCurrency)
-                            .foregroundStyle(.oceanBlue)
-                            .fontWeight(.semibold)
-                    }
-                }
-                .frame(width: 100)
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(.ourLightGray)
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.oceanBlue, lineWidth: 1)
+                        .foregroundStyle(.black.opacity(0.15))
                     if isLoading {
                         ProgressView()
                             .frame(maxWidth: .infinity)
@@ -110,42 +87,35 @@ struct AllAmountsComponent: View {
                             .fontWeight(.semibold)
                     }
                 }
-            }.frame(height: 41)
+            }.frame(height: 45)
         }.disabled(true)
     }
     
     private func convertCurrency() {
-        guard let amountValue = Double(amount) else {
-            convertedAmount = 0.0
-            return
-        }
+        var amountValue: Double = 0.0
         
+        if let value = Double(amount) {
+            amountValue = value
+        } else {
+            convertedAmount = 0.0
+        }
+
         isLoading = true
         
-        Utilities.CurrencyConverter.convert(amount: amountValue, from: selectedCurrency, to: targetCurrency, accessToken: accessToken) { converted in
+        Utilities.CurrencyConverter.convert(amount: amountValue, from: selectedCurrency, to: targetCurrency, accessToken: accessToken) { converted, rate in
             convertedAmount = converted
+            conversionRate = rate
             isLoading = false
         }
-    }
-    
-    private var currencies: [(code: String, flag: String)] {
-        [
-            ("USD", "🇺🇸"),
-            ("CAD", "🇨🇦"),
-            ("JPY", "🇯🇵")
-        ]
-    }
-    
-    private func currencyFlag(for currencyCode: String) -> String {
-        return currencies.first { $0.code == currencyCode }?.flag ?? "🏳️"
     }
 }
 
 #Preview {
     AllAmountsComponent(
-        amount: .constant("1200"),
+        amount: .constant(""),
         selectedCurrency: .constant("USD"),
         convertedAmount: .constant(0.0),
+        isEditable: .constant(false),
         targetCurrency: "USD",
         accessToken: ""
     )

@@ -38,7 +38,7 @@ struct PickerField: View {
                             .opacity(0.15)
                     }
                 }
-                .frame(height: 41)
+                .frame(height: 40)
             }
             .disabled(!isEditable)
         }

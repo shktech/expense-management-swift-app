@@ -26,7 +26,7 @@ struct MealCategoriesPickerView<CommonDataManager: CommonDataManagerProtocol>: V
                 }
                 .padding(.horizontal)
             }
-            .frame(height: 41)
+            .frame(height: 40)
             .onTapGesture {
                 if isEditable {
                     showMealPicker.toggle()
