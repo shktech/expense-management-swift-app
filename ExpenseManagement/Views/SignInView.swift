@@ -55,7 +55,7 @@ struct SignInView: View {
             .loadingOverlay(isLoading: $isLoading)
         }
         .onAppear {
-            if let credentials = KeychainHelper.load(key: emailField) as? [String: Any] {
+            if let credentials = KeychainHelper.load(key: "default") as? [String: Any] {
                 rememberMe = credentials["rememberEmail"] as? Bool ?? false
                 if rememberMe {
                     emailField = credentials["email"] as? String ?? ""

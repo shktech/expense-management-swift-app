@@ -41,7 +41,6 @@
 		0FCD00E12C0CE91600A49C62 /* ExpenseComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00E02C0CE91600A49C62 /* ExpenseComponent.swift */; };
 		0FCD00E32C0D28B800A49C62 /* NewExpenseForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00E22C0D28B800A49C62 /* NewExpenseForm.swift */; };
 		0FCD00E52C0D2B1400A49C62 /* NewReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00E42C0D2B1400A49C62 /* NewReportView.swift */; };
-		0FFCC97B2C0F2AD1003CBEC1 /* ExpenseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FFCC97A2C0F2AD1003CBEC1 /* ExpenseDetailView.swift */; };
 		0FFCC9832C0FA0A0003CBEC1 /* reports.json in Resources */ = {isa = PBXBuildFile; fileRef = 0FFCC9822C0FA0A0003CBEC1 /* reports.json */; };
 		0FFCC9852C0FA0A8003CBEC1 /* report_items.json in Resources */ = {isa = PBXBuildFile; fileRef = 0FFCC9842C0FA0A8003CBEC1 /* report_items.json */; };
 		0FFCC9872C0FA0B0003CBEC1 /* commons.json in Resources */ = {isa = PBXBuildFile; fileRef = 0FFCC9862C0FA0B0003CBEC1 /* commons.json */; };
@@ -67,6 +66,8 @@
 		B50D30FE2C35CF9900AE8880 /* DateFilterPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50D30FD2C35CF9900AE8880 /* DateFilterPicker.swift */; };
 		B50D31002C38EB0200AE8880 /* ContentUnavailableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50D30FF2C38EB0200AE8880 /* ContentUnavailableView.swift */; };
 		B50D31022C38F1D800AE8880 /* MockAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50D31012C38F1D800AE8880 /* MockAuthManager.swift */; };
+		B50D31042C3CDDA100AE8880 /* PasswordInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50D31032C3CDDA100AE8880 /* PasswordInput.swift */; };
+		B50D31072C3CE33F00AE8880 /* SignupForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50D31062C3CE33F00AE8880 /* SignupForm.swift */; };
 		B559AD912C1116D100CE4CF1 /* LoadingOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = B559AD902C1116D100CE4CF1 /* LoadingOverlay.swift */; };
 		B59BD5EF2C112A900027E599 /* Auth.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD5EE2C112A900027E599 /* Auth.swift */; };
 		B59BD5F22C113CE90027E599 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59BD5F12C113CE90027E599 /* AuthManager.swift */; };
@@ -127,7 +128,6 @@
 		0FCD00E02C0CE91600A49C62 /* ExpenseComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseComponent.swift; sourceTree = "<group>"; };
 		0FCD00E22C0D28B800A49C62 /* NewExpenseForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewExpenseForm.swift; sourceTree = "<group>"; };
 		0FCD00E42C0D2B1400A49C62 /* NewReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewReportView.swift; sourceTree = "<group>"; };
-		0FFCC97A2C0F2AD1003CBEC1 /* ExpenseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseDetailView.swift; sourceTree = "<group>"; };
 		0FFCC9822C0FA0A0003CBEC1 /* reports.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = reports.json; sourceTree = "<group>"; };
 		0FFCC9842C0FA0A8003CBEC1 /* report_items.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = report_items.json; sourceTree = "<group>"; };
 		0FFCC9862C0FA0B0003CBEC1 /* commons.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = commons.json; sourceTree = "<group>"; };
@@ -151,6 +151,8 @@
 		B50D30FD2C35CF9900AE8880 /* DateFilterPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFilterPicker.swift; sourceTree = "<group>"; };
 		B50D30FF2C38EB0200AE8880 /* ContentUnavailableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentUnavailableView.swift; sourceTree = "<group>"; };
 		B50D31012C38F1D800AE8880 /* MockAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAuthManager.swift; sourceTree = "<group>"; };
+		B50D31032C3CDDA100AE8880 /* PasswordInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordInput.swift; sourceTree = "<group>"; };
+		B50D31062C3CE33F00AE8880 /* SignupForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupForm.swift; sourceTree = "<group>"; };
 		B559AD8B2C10162900CE4CF1 /* Local.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Local.xcconfig; sourceTree = "<group>"; };
 		B559AD8C2C10163400CE4CF1 /* Test.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Test.xcconfig; sourceTree = "<group>"; };
 		B559AD8D2C10164700CE4CF1 /* Prod.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Prod.xcconfig; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 				B50D30F42C331E2B00AE8880 /* DateFieldView.swift */,
 				B50D30FB2C34F13300AE8880 /* PickerField.swift */,
 				B50D30FD2C35CF9900AE8880 /* DateFilterPicker.swift */,
+				B50D31032C3CDDA100AE8880 /* PasswordInput.swift */,
 			);
 			path = Pickers;
 			sourceTree = "<group>";
@@ -235,6 +238,7 @@
 		0FCD00A52C08CAAF00A49C62 /* ExpenseManagement */ = {
 			isa = PBXGroup;
 			children = (
+				B50D31052C3CE32D00AE8880 /* Forms */,
 				B50D30EB2C313BC700AE8880 /* Mocks */,
 				B50D30D72C2B463100AE8880 /* Extensions */,
 				0F4684D32C28C68B00406B9A /* Pickers */,
@@ -282,7 +286,6 @@
 				0FCD00DE2C0CD5A800A49C62 /* NewCreditCardForm.swift */,
 				0FCD00E22C0D28B800A49C62 /* NewExpenseForm.swift */,
 				0FCD00E42C0D2B1400A49C62 /* NewReportView.swift */,
-				0FFCC97A2C0F2AD1003CBEC1 /* ExpenseDetailView.swift */,
 				B559AD902C1116D100CE4CF1 /* LoadingOverlay.swift */,
 				B59BD6032C11AFD20027E599 /* FilePicker.swift */,
 				B59BD6052C11B86C0027E599 /* ImagePicker.swift */,
@@ -366,6 +369,14 @@
 				B50D31012C38F1D800AE8880 /* MockAuthManager.swift */,
 			);
 			path = Mocks;
+			sourceTree = "<group>";
+		};
+		B50D31052C3CE32D00AE8880 /* Forms */ = {
+			isa = PBXGroup;
+			children = (
+				B50D31062C3CE33F00AE8880 /* SignupForm.swift */,
+			);
+			path = Forms;
 			sourceTree = "<group>";
 		};
 		B59BD5F72C1172C00027E599 /* Utils */ = {
@@ -511,13 +522,13 @@
 				0FCD00DB2C0A53E900A49C62 /* ReportsDetailView.swift in Sources */,
 				B50D30DD2C2CDA4E00AE8880 /* FilePickerButton.swift in Sources */,
 				0FCD00E32C0D28B800A49C62 /* NewExpenseForm.swift in Sources */,
+				B50D31072C3CE33F00AE8880 /* SignupForm.swift in Sources */,
 				B559AD912C1116D100CE4CF1 /* LoadingOverlay.swift in Sources */,
 				B50D30F52C331E2B00AE8880 /* DateFieldView.swift in Sources */,
 				B50D31022C38F1D800AE8880 /* MockAuthManager.swift in Sources */,
 				0F4684DF2C28D5C300406B9A /* MileageRatePickerView.swift in Sources */,
 				B59BD60A2C1B70A70027E599 /* VerifyMFAView.swift in Sources */,
 				0FCD00BF2C08E69300A49C62 /* PFULogo.swift in Sources */,
-				0FFCC97B2C0F2AD1003CBEC1 /* ExpenseDetailView.swift in Sources */,
 				0F4684E12C2A378500406B9A /* EditExpenseForm.swift in Sources */,
 				0FCD00D92C0A51AB00A49C62 /* ReportComponent.swift in Sources */,
 				0FCD00BD2C08E66500A49C62 /* BackgroundImage.swift in Sources */,
@@ -531,6 +542,7 @@
 				0FCD00CD2C0A350900A49C62 /* Models.swift in Sources */,
 				B59BD6062C11B86C0027E599 /* ImagePicker.swift in Sources */,
 				B50D30F32C33166600AE8880 /* SearchBar.swift in Sources */,
+				B50D31042C3CDDA100AE8880 /* PasswordInput.swift in Sources */,
 				B50D30FE2C35CF9900AE8880 /* DateFilterPicker.swift in Sources */,
 				0FCD00B82C08D91500A49C62 /* SignInView.swift in Sources */,
 				0F4684D52C28C6A900406B9A /* carRentalPickerView.swift in Sources */,
@@ -673,16 +685,17 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ExpenseManagement/Preview Content\"";
-				DEVELOPMENT_TEAM = 973F3TA6FW;
+				DEVELOPMENT_TEAM = RCZ5P2WV27;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ExpenseManagement/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "We use Face ID to quickly log you into your account.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -711,11 +724,12 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ExpenseManagement/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "We use Face ID to quickly log you into your account.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -809,11 +823,12 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ExpenseManagement/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "We use Face ID to quickly log you into your account.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

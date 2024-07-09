@@ -46,7 +46,9 @@ struct ReportsDetailView: View {
                             }
                             .confirmationDialog("Delete Report",
                                                 isPresented: $isShowingDeleteConfirmation, titleVisibility: .visible) {
-                                Button("Delete", role: .destructive) {}
+                                Button("Delete", role: .destructive) {
+                                    //Delete
+                                }
                             } message: {
                                 Text("Are you sure you want to delete this report")
                             }

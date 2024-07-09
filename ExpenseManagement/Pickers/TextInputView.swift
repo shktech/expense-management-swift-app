@@ -1,9 +1,11 @@
 import SwiftUI
+import FormValidator
 
 struct TextInputView: View {
     let title: String
     @Binding var text: String
     @Binding var isEditable: Bool
+    let validation: ValidationContainer?
     let placeholder: String
 
     var body: some View {
@@ -26,13 +28,14 @@ struct TextInputView: View {
                         .opacity(0.15)
                 }
             }
-            .frame(height: 41)
+            .frame(height: 45)
+            .validation(validation)
         }
     }
 }
 
 struct TextInputView_Previews: PreviewProvider {
     static var previews: some View {
-        TextInputView(title: "Hotel Name", text: .constant(""), isEditable: .constant(true), placeholder: "---")
+        TextInputView(title: "Hotel Name", text: .constant(""), isEditable: .constant(true), validation: nil, placeholder: "---")
     }
 }

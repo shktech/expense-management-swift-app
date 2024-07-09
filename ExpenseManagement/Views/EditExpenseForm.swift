@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct EditExpenseForm: View {
+    @Environment(\.presentationMode) var presentationMode
     let allowEdit: Bool
     let report: Report
     @State var selectedCity: String = ""
@@ -16,6 +17,7 @@ struct EditExpenseForm: View {
     @State var isShowingActionSheet: Bool = false
     @StateObject private var commonDataManager = CommonDataManager.instance
     @EnvironmentObject var authManager: AuthenticationManager
+    @EnvironmentObject var globalState: GlobalStateManager
     private let dao = DAO.instance
 
     // Editing fields
@@ -77,7 +79,7 @@ struct EditExpenseForm: View {
                 }
                 WarningMessageView(expenseType: expenseItem.expenseType)
                 DateFieldView(title: "Date", date: $date, isEditable: $isEditable)
-                AllAmountsComponent(amount: $amount, selectedCurrency: $selectedCurrency, convertedAmount: $convertedAmount, targetCurrency: authManager.user?.currency ?? "USD", accessToken: authManager.accessToken ?? "")
+                AllAmountsComponent(amount: $amount, selectedCurrency: $selectedCurrency, convertedAmount: $convertedAmount, isEditable: $isEditable, targetCurrency: authManager.user?.currency ?? "USD", accessToken: authManager.accessToken ?? "")
                 if selectedTypeRequiresCity {
                     CityPickerView<CommonDataManager>(selectedCity: $selectedCity, isEditable: $isEditable)
                 }
@@ -114,8 +116,8 @@ struct EditExpenseForm: View {
     var airFareFields: some View {
         VStack(alignment: .leading, spacing: 15) {
             AirlinePickerView<CommonDataManager>(selectedAirline: $airline, isEditable: $isEditable)
-            TextInputView(title: "Origin", text: $origin, isEditable: $isEditable, placeholder: "---")
-            TextInputView(title: "Destination", text: $destination, isEditable: $isEditable, placeholder: "---")
+            TextInputView(title: "Origin", text: $origin, isEditable: $isEditable, validation: nil, placeholder: "---")
+            TextInputView(title: "Destination", text: $destination, isEditable: $isEditable, validation: nil, placeholder: "---")
         }
     }
 
@@ -132,40 +134,40 @@ struct EditExpenseForm: View {
 
     var entertainmentFields: some View {
         VStack(alignment: .leading, spacing: 10) {
-            TextInputView(title: "Name of Establishment", text: $establishmentName, isEditable: $isEditable, placeholder: "---")
-            TextInputView(title: "City", text: $selectedCity, isEditable: $isEditable, placeholder: "---")
-            TextInputView(title: "Business Topic", text: $businessTopic, isEditable: $isEditable, placeholder: "---")
+            TextInputView(title: "Name of Establishment", text: $establishmentName, isEditable: $isEditable, validation: nil, placeholder: "---")
+            TextInputView(title: "City", text: $selectedCity, isEditable: $isEditable, validation: nil, placeholder: "---")
+            TextInputView(title: "Business Topic", text: $businessTopic, isEditable: $isEditable, validation: nil, placeholder: "---")
             TextInputView(title: "Total Attendees", text: Binding(
                 get: { String(totalAttendees) },
                 set: { totalAttendees = Int($0) ?? 0 }
-            ), isEditable: $isEditable, placeholder: "---")
+            ), isEditable: $isEditable, validation: nil, placeholder: "---")
             if expenseItem.expenseType == .entertainment {
                 RelashionshipToPaiPickerView<CommonDataManager>(selectedRelation: $relationshipToPAI, isEditable: $isEditable)
             } else {
-                TextInputView(title: "Attendees (Names)", text: $employeeNames, isEditable: $isEditable, placeholder: "---")
+                TextInputView(title: "Attendees (Names)", text: $employeeNames, isEditable: $isEditable, validation: nil, placeholder: "---")
             }
         }
     }
 
     var hotelFields: some View {
-        TextInputView(title: "Hotel Name", text: $hotelName, isEditable: $isEditable, placeholder: "---")
+        TextInputView(title: "Hotel Name", text: $hotelName, isEditable: $isEditable, validation: nil, placeholder: "---")
     }
 
     var mileageFields: some View {
         VStack(alignment: .leading, spacing: 10) {
-            TextInputView(title: "Origin", text: $origin, isEditable: $isEditable, placeholder: "---")
-            TextInputView(title: "Destination", text: $destination, isEditable: $isEditable, placeholder: "---")
-            TextInputView(title: "Distance", text: $distance, isEditable: $isEditable, placeholder: "---")
+            TextInputView(title: "Origin", text: $origin, isEditable: $isEditable, validation: nil, placeholder: "---")
+            TextInputView(title: "Destination", text: $destination, isEditable: $isEditable, validation: nil, placeholder: "---")
+            TextInputView(title: "Distance", text: $distance, isEditable: $isEditable, validation: nil, placeholder: "---")
             MileageRatePickerView<CommonDataManager>(selectedMileage: $mileageRate, isEditable: $isEditable)
         }
     }
 
     var telephoneCellFields: some View {
-        TextInputView(title: "Carrier", text: $carrier, isEditable: $isEditable, placeholder: "---")
+        TextInputView(title: "Carrier", text: $carrier, isEditable: $isEditable, validation: nil, placeholder: "---")
     }
 
     var justificationContainer: some View {
-        TextInputView(title: "Justification", text: $justification, isEditable: $isEditable, placeholder: "")
+        TextInputView(title: "Justification", text: $justification, isEditable: $isEditable, validation: nil, placeholder: "")
     }
 
     var saveButton: some View {
@@ -250,10 +252,10 @@ struct EditExpenseForm: View {
             DispatchQueue.main.async {
                 switch result {
                 case .success:
-                    print("Created expense item successfully.")
                     isLoading = false
+                    presentationMode.wrappedValue.dismiss()
                 case .failure(let error):
-                    print("Failed to create expense item: \(error.localizedDescription)")
+                    globalState.showMessage(title: "Error", message: "Failed to update expense item", type: .error)
                     isLoading = false
                 }
             }
@@ -382,4 +384,5 @@ struct EditExpenseForm: View {
     ))
     .environmentObject(AuthenticationManager())
     .environmentObject(MockCommonDataManager())
+    .environmentObject(GlobalStateManager())
 }

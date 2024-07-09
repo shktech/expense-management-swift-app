@@ -40,7 +40,7 @@ struct UserView<AuthenticationManager: AuthenticationManagerProtocol>: View {
             creditCardView
             line
             HStack {
-                CurrencyPicker(selectedCurrency: $selectedCurrency, isEditable: $isEditable)
+                CurrencyPicker(selectedCurrency: $selectedCurrency, isEditable: $isEditable, title: "Default Concurrency")
                 Button(action: {
                     isEditable.toggle()
                 }) {

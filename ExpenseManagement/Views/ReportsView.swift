@@ -124,7 +124,7 @@ struct ReportsView: View {
             }) {
                 Image(systemName: "plus.circle.fill")
                     .resizable()
-                    .frame(width: 55, height: 55)
+                    .frame(width: 45, height: 45)
                     .foregroundColor(.oceanBlue)
             }
             .zIndex(1)
@@ -133,16 +133,6 @@ struct ReportsView: View {
     
     var datePickerContainer: some View {
         DateFilterPicker(initialDate: $initialDate, finalDate: $finalDate, isEditable: .constant(true))
-//        HStack {
-//            DatePicker("", selection: $initialDate, displayedComponents: [.date] )
-//                .labelsHidden()
-//            RoundedRectangle(cornerRadius: 10)
-//                .frame(width: 20, height: 1)
-//                .foregroundStyle(Color.gray.opacity(0.4))
-//            DatePicker("", selection: $finalDate, displayedComponents: [.date])
-//                .labelsHidden()
-//            Spacer()
-//        }.padding(.bottom, 10)
     }
     
     var scrollViewReports: some View {
