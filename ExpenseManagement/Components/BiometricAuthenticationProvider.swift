@@ -41,7 +41,7 @@ class BiometricAuthenticationProvider: ObservableObject {
             "biometricEnabled": biometricEnabled,
             "rememberEmail": rememberEmail
         ]
-        KeychainHelper.save(credentials, forKey: email)
+        KeychainHelper.save(credentials, forKey: "default")
     }
 
     func getCredentials(for email: String) -> (password: String, biometricEnabled: Bool, rememberEmail: Bool)? {

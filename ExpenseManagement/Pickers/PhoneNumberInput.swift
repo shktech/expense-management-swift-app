@@ -12,11 +12,11 @@ struct PhoneNumberInputView: View {
     private let phoneNumberKit = PhoneNumberKit()
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 3) {
             Text("Phone Number")
                 .font(Font.custom("Nunito", size: 16).weight(.bold))
                 .foregroundStyle(.oceanBlue)
-            VStack(spacing: 3) {
+            ZStack {
                 HStack(spacing: 0) {
                     Menu {
                         ForEach(countryCodes, id: \.0) { country in
@@ -33,10 +33,10 @@ struct PhoneNumberInputView: View {
                             Text(countryCode)
                                 .foregroundColor(.primary)
                             Image(systemName: "chevron.down")
-                                .foregroundColor(.gray)
+                                .foregroundColor(.oceanBlue)
                         }
                         .padding(.horizontal, 10)
-                        .frame(height: 50)
+                        .frame(height: 45)
                     }
                     
                     Divider()
@@ -46,20 +46,21 @@ struct PhoneNumberInputView: View {
                     TextField("Enter your phone number", text: $phoneNumber)
                         .keyboardType(.phonePad)
                         .padding(.horizontal, 10)
-                        .frame(height: 50)
+                        .frame(height: 45)
                         .onChange(of: phoneNumber) { newValue in
                             parsePhoneNumber()
                         }
                 }
                 .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.gray, lineWidth: 1)
+                    RoundedRectangle(cornerRadius: 8)
+                        .foregroundStyle(.ourLightGray)
                 )
-                if let validationMessage = validationMessage {
-                    Text(validationMessage)
-                        .foregroundColor(.red)
-                        .font(.system(size: 13).weight(.semibold))
-                }
+                .frame(height: 45)
+            }
+            if let validationMessage = validationMessage {
+                Text(validationMessage)
+                    .foregroundColor(.red)
+                    .font(.system(size: 13).weight(.semibold))
             }
         }
     }
@@ -69,7 +70,6 @@ struct PhoneNumberInputView: View {
             let fullNumber = "\(countryCode)\(phoneNumber)"
             let parsedPhoneNumber = try phoneNumberKit.parse(fullNumber)
             fullPhoneNumber = fullNumber
-            print(fullNumber)
             validationMessage = nil
         } catch {
             validationMessage = "Invalid phone number"

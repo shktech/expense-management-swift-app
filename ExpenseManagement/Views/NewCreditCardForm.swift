@@ -87,13 +87,13 @@ struct NewCreditCardForm: View {
                 }
                 if viewModel.readonly {
                     Text(viewModel.creditCardNumberField)
-                        .frame(height: 40)
+                        .frame(height: 45)
                 } else {
                     TextField("Credit card number", text: $viewModel.creditCardNumberField)
                         .keyboardType(.numberPad)
                         .autocapitalization(.none)
                         .autocorrectionDisabled(true)
-                        .frame(height: 40)
+                        .frame(height: 45)
                 }
             }.padding(.horizontal)
             .overlay(
@@ -108,7 +108,7 @@ struct NewCreditCardForm: View {
             Text("Expiration Date")
             if viewModel.readonly {
                 Text(viewModel.expDate)
-                    .frame(height: 40)
+                    .frame(height: 45)
                     .padding(.horizontal, 10)
                     .overlay(
                         RoundedRectangle(cornerRadius: 10)
@@ -118,7 +118,7 @@ struct NewCreditCardForm: View {
                 TextField("MM/YY", text: $viewModel.expDate)
                     .autocapitalization(.none)
                     .autocorrectionDisabled(true)
-                    .frame(height: 40)
+                    .frame(height: 45)
                     .padding(.horizontal, 10)
                     .overlay(
                         RoundedRectangle(cornerRadius: 10)

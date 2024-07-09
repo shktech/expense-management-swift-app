@@ -26,7 +26,7 @@ struct RelashionshipToPaiPickerView<CommonDataManager: CommonDataManagerProtocol
                 }
                 .padding(.horizontal)
             }
-            .frame(height: 41)
+            .frame(height: 45)
             .onTapGesture {
                 showRelationPicker.toggle()
             }

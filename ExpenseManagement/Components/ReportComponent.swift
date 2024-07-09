@@ -31,12 +31,12 @@ struct ReportComponent: View {
                     HStack{
                         VStack(alignment: .leading) {
                             Text(report.purpose)
-                                .font(Font.custom("Poppins", size: 14).weight(.semibold))
+                                .font(Font.custom("Nunito", size: 14).weight(.bold))
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
                                 .foregroundStyle(.oceanBlue)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             Text("\(Utilities.CurrencyFormatter.formatCurrency(amount: report.reportAmount, currencyCode: report.reportCurrency)) \(report.reportCurrency)")
-                                .font(Font.custom("Poppins", size: 14).weight(.semibold))
+                                .font(Font.custom("Nunito", size: 14).weight(.semibold))
                                 .foregroundStyle(.black)
                             VStack(alignment: .leading) {
                                 if let submitDate = DateFormatter.apiDate.date(from: report.reportSubmitDate ?? "") {

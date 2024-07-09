@@ -35,7 +35,7 @@ struct AirlinePickerView<CommonDataManager: CommonDataManagerProtocol>: View {
                 }
                 .padding(.horizontal)
             }
-            .frame(height: 41)
+            .frame(height: 45)
             .onTapGesture {
                 if isEditable {
                     showAirlinePicker.toggle()

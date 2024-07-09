@@ -26,7 +26,7 @@ struct CarTypeInputField<CommonDataManager: CommonDataManagerProtocol>: View {
                 }
                 .padding(.horizontal)
             }
-            .frame(height: 40)
+            .frame(height: 45)
         }
         .onTapGesture {
             if isEditable {

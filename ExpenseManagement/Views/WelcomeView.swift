@@ -31,7 +31,7 @@ struct WelcomeView: View {
         VStack(spacing: 16) {
             Spacer()
             NavigationLink(destination: SignInView()) {
-                Text("Sign in")
+                Text("SIGN IN")
                     .font(.system(size: 17).weight(.semibold))
                     .foregroundColor(.white)
                     .frame(width: 349, height: 55)

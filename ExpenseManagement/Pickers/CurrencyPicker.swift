@@ -4,6 +4,7 @@ struct CurrencyPicker: View {
     @Binding var selectedCurrency: String
     @Binding var isEditable: Bool
     @State private var showCurrencyPicker = false
+    var title: String?
 
     let currencies = [
         ("$", "USD", "🇺🇸"),
@@ -16,9 +17,11 @@ struct CurrencyPicker: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 3) {
-            Text("Default Currency")
-                .font(Font.custom("Nunito", size: 16).weight(.bold))
-                .foregroundStyle(.oceanBlue)
+            if (title != nil) {
+                Text(title ?? "Default Concurrency")
+                    .font(Font.custom("Nunito", size: 16).weight(.bold))
+                    .foregroundStyle(.oceanBlue)
+            }
             ZStack {
                 RoundedRectangle(cornerRadius: 8)
                     .foregroundStyle(isEditable ? .ourLightGray : .black.opacity(0.15))
@@ -38,7 +41,7 @@ struct CurrencyPicker: View {
                 }
                 .padding(.horizontal)
             }
-            .frame(height: 41)
+            .frame(height: 45)
             .onTapGesture {
                 if isEditable {
                     showCurrencyPicker.toggle()
@@ -95,6 +98,6 @@ struct CurrencyPicker: View {
 
 struct CurrencyPicker_Previews: PreviewProvider {
     static var previews: some View {
-        CurrencyPicker(selectedCurrency: .constant("USD"), isEditable: .constant(false))
+        CurrencyPicker(selectedCurrency: .constant("USD"), isEditable: .constant(true), title: "Passed in title")
     }
 }

@@ -64,7 +64,7 @@ struct NewExpenseForm: View {
                 if selectedTypeRequiresCity {
                     CityPickerView<CommonDataManager>(selectedCity: $selectedCity, isEditable: .constant(true))
                 }
-                AllAmountsComponent(amount: $amount, selectedCurrency: $selectedCurrency, convertedAmount: $convertedAmount, targetCurrency: authManager.user?.currency ?? "USD", accessToken: authManager.accessToken ?? "")
+                AllAmountsComponent(amount: $amount, selectedCurrency: $selectedCurrency, convertedAmount: $convertedAmount, isEditable: .constant(true), targetCurrency: authManager.user?.currency ?? "USD", accessToken: authManager.accessToken ?? "")
                 specificFields
                 justificationContainer
                 FilePickerButton(allowEdit: true, selectedFileURL: $selectedFileURL, isShowingFilePicker: $isShowingFilePicker, isShowingImagePicker: $isShowingImagePicker, isShowingActionSheet: $isShowingActionSheet, showAlert: $showAlert, alertMessage: $alertMessage, isEditable: .constant(true))
@@ -98,8 +98,8 @@ struct NewExpenseForm: View {
     var airFareFields: some View {
         VStack(alignment: .leading, spacing: 15) {
             AirlinePickerView<CommonDataManager>(selectedAirline: $airline, isEditable: .constant(true))
-            TextInputView(title: "Origin", text: $origin, isEditable: .constant(true), placeholder: "---")
-            TextInputView(title: "Destination", text: $destination, isEditable: .constant(true), placeholder: "---")
+            TextInputView(title: "Origin", text: $origin, isEditable: .constant(true), validation: nil, placeholder: "---")
+            TextInputView(title: "Destination", text: $destination, isEditable: .constant(true), validation: nil, placeholder: "---")
         }
     }
     
@@ -116,40 +116,40 @@ struct NewExpenseForm: View {
     
     var entertainmentFields: some View {
         VStack(alignment: .leading, spacing: 10) {
-            TextInputView(title: "Name of Establishment", text: $establishmentName, isEditable: .constant(true), placeholder: "---")
-            TextInputView(title: "City", text: $selectedCity, isEditable: .constant(true), placeholder: "---")
-            TextInputView(title: "Business Topic", text: $businessTopic, isEditable: .constant(true), placeholder: "---")
+            TextInputView(title: "Name of Establishment", text: $establishmentName, isEditable: .constant(true), validation: nil, placeholder: "---")
+            TextInputView(title: "City", text: $selectedCity, isEditable: .constant(true), validation: nil, placeholder: "---")
+            TextInputView(title: "Business Topic", text: $businessTopic, isEditable: .constant(true), validation: nil, placeholder: "---")
             TextInputView(title: "Total Attendees", text: Binding(
                 get: { String(totalAttendees) },
                 set: { totalAttendees = Int($0) ?? 0 }
-            ), isEditable: .constant(true), placeholder: "---")
+            ), isEditable: .constant(true), validation: nil, placeholder: "---")
             if selectedType == .entertainment {
                 RelashionshipToPaiPickerView<CommonDataManager>(selectedRelation: $relationshipToPAI, isEditable: .constant(true))
             } else {
-                TextInputView(title: "Attendees (Names)", text: $employeeNames, isEditable: .constant(true), placeholder: "---")
+                TextInputView(title: "Attendees (Names)", text: $employeeNames, isEditable: .constant(true), validation: nil, placeholder: "---")
             }
         }
     }
     
     var hotelFields: some View {
-        TextInputView(title: "Hotel Name", text: $hotelName, isEditable: .constant(true), placeholder: "---")
+        TextInputView(title: "Hotel Name", text: $hotelName, isEditable: .constant(true), validation: nil, placeholder: "---")
     }
     
     var mileageFields: some View {
         VStack(alignment: .leading, spacing: 10) {
-            TextInputView(title: "Origin", text: $origin, isEditable: .constant(true), placeholder: "---")
-            TextInputView(title: "Destination", text: $destination, isEditable: .constant(true), placeholder: "---")
-            TextInputView(title: "Distance", text: $distance, isEditable: .constant(true), placeholder: "---")
+            TextInputView(title: "Origin", text: $origin, isEditable: .constant(true), validation: nil, placeholder: "---")
+            TextInputView(title: "Destination", text: $destination, isEditable: .constant(true), validation: nil, placeholder: "---")
+            TextInputView(title: "Distance", text: $distance, isEditable: .constant(true), validation: nil, placeholder: "---")
             MileageRatePickerView<CommonDataManager>(selectedMileage: $mileageRate, isEditable: .constant(true))
         }
     }
     
     var telephoneCellFields: some View {
-        TextInputView(title: "Carrier", text: $carrier, isEditable: .constant(true), placeholder: "---")
+        TextInputView(title: "Carrier", text: $carrier, isEditable: .constant(true), validation: nil, placeholder: "---")
     }
     
     var justificationContainer: some View {
-        TextInputView(title: "Justification", text: $justification, isEditable: .constant(true), placeholder: "")
+        TextInputView(title: "Justification", text: $justification, isEditable: .constant(true), validation: nil, placeholder: "")
     }
     
     var saveButton: some View {
