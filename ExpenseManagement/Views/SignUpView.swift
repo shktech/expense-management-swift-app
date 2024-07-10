@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct SignUpView: View {
-    @ObservedObject var form = SignUpForm()
+    @ObservedObject var form = FormValidatorManager()
     @State var isPasswordVisible: Bool = false
     @State var isConfirmPasswordVisible: Bool = false
     @State var selectedCurrency: String = "USD"

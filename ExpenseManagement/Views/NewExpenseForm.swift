@@ -1,4 +1,5 @@
 import SwiftUI
+import FormValidator
 
 struct NewExpenseForm: View {
     @Binding var isShowingSelf: Bool
@@ -43,6 +44,8 @@ struct NewExpenseForm: View {
     
     private let dao = DAO.instance
     
+    @ObservedObject var form = FormValidatorManager()
+    
     var body: some View {
         ZStack {
             VStack {
@@ -63,10 +66,21 @@ struct NewExpenseForm: View {
                 DateFieldView(title: "Date", date: $date, isEditable: .constant(true))
                 if selectedTypeRequiresCity {
                     CityPickerView<CommonDataManager>(selectedCity: $selectedCity, isEditable: .constant(true))
+                        .validation(form.cityValidation) { message in
+                            Text(message.uppercased())
+                                .foregroundColor(.red)
+                                .font(.system(size: 14))
+                        }
+                        .onChange(of: selectedCity) { newValue in
+                            form.updateCity(newValue)
+                        }
                 }
                 AllAmountsComponent(amount: $amount, selectedCurrency: $selectedCurrency, convertedAmount: $convertedAmount, isEditable: .constant(true), targetCurrency: authManager.user?.currency ?? "USD", accessToken: authManager.accessToken ?? "")
                 specificFields
-                justificationContainer
+                TextInputView(title: "Justification", text: $justification, isEditable: .constant(true), validation: form.justificationValidation, placeholder: "")
+                    .onChange(of: justification) { newValue in
+                        form.updateJustification(newValue)
+                    }
                 FilePickerButton(allowEdit: true, selectedFileURL: $selectedFileURL, isShowingFilePicker: $isShowingFilePicker, isShowingImagePicker: $isShowingImagePicker, isShowingActionSheet: $isShowingActionSheet, showAlert: $showAlert, alertMessage: $alertMessage, isEditable: .constant(true))
             }.padding()
         }
@@ -98,58 +112,151 @@ struct NewExpenseForm: View {
     var airFareFields: some View {
         VStack(alignment: .leading, spacing: 15) {
             AirlinePickerView<CommonDataManager>(selectedAirline: $airline, isEditable: .constant(true))
-            TextInputView(title: "Origin", text: $origin, isEditable: .constant(true), validation: nil, placeholder: "---")
-            TextInputView(title: "Destination", text: $destination, isEditable: .constant(true), validation: nil, placeholder: "---")
+                .validation(form.airlineValidation) { message in
+                    Text(message.uppercased())
+                        .foregroundColor(.red)
+                        .font(.system(size: 14))
+                }
+                .onChange(of: airline) { newValue in
+                    form.updateAirline(newValue)
+                }
+            TextInputView(title: "Origin", text: $origin, isEditable: .constant(true), validation: form.originValidation, placeholder: "---")
+                .onChange(of: origin) { newValue in
+                    form.updateOrigin(newValue)
+                }
+            TextInputView(title: "Destination", text: $destination, isEditable: .constant(true), validation: form.destinationValidation, placeholder: "---")
+                .onChange(of: destination) { newValue in
+                    form.updateDestination(newValue)
+                }
         }
     }
     
     var autoRentalFields: some View {
         VStack(alignment: .leading, spacing: 10) {
             CarRentalPickerView<CommonDataManager>(selectedRental: $rentalAgency, isEditable: .constant(true))
+                .validation(form.rentalAgencyValidation) { message in
+                    Text(message.uppercased())
+                        .foregroundColor(.red)
+                        .font(.system(size: 14))
+                }
+                .onChange(of: rentalAgency) { newValue in
+                    form.updateRentalAgency(newValue)
+                }
             CarTypeInputField<CommonDataManager>(selectedCar: $carType, isEditable: .constant(true))
+                .validation(form.carTypeValidation) { message in
+                    Text(message.uppercased())
+                        .foregroundColor(.red)
+                        .font(.system(size: 14))
+                }
+                .onChange(of: carType) { newValue in
+                    form.updateCarType(newValue)
+                }
         }
     }
     
     var businessMealsFields: some View {
         MealCategoriesPickerView<CommonDataManager>(selectedMeal: $mealCategory, isEditable: .constant(true))
+            .validation(form.mealCategoryValidation) { message in
+                Text(message.uppercased())
+                    .foregroundColor(.red)
+                    .font(.system(size: 14))
+            }
+            .onChange(of: mealCategory) { newValue in
+                form.updateMealCategory(newValue)
+            }
     }
     
     var entertainmentFields: some View {
         VStack(alignment: .leading, spacing: 10) {
-            TextInputView(title: "Name of Establishment", text: $establishmentName, isEditable: .constant(true), validation: nil, placeholder: "---")
-            TextInputView(title: "City", text: $selectedCity, isEditable: .constant(true), validation: nil, placeholder: "---")
-            TextInputView(title: "Business Topic", text: $businessTopic, isEditable: .constant(true), validation: nil, placeholder: "---")
+            TextInputView(title: "Name of Establishment", text: $establishmentName, isEditable: .constant(true), validation: form.establishmentNameValidation, placeholder: "---")
+                .onChange(of: establishmentName) { newValue in
+                    form.updateEstablishmentName(newValue)
+                }
+            TextInputView(title: "City", text: $selectedCity, isEditable: .constant(true), validation: form.cityValidation, placeholder: "---")
+                .onChange(of: selectedCity) { newValue in
+                    form.updateCity(newValue)
+                }
+            TextInputView(title: "Business Topic", text: $businessTopic, isEditable: .constant(true), validation: form.businessTopicValidation, placeholder: "---")
+                .onChange(of: businessTopic) { newValue in
+                    form.updateBusinessTopic(newValue)
+                }
             TextInputView(title: "Total Attendees", text: Binding(
                 get: { String(totalAttendees) },
                 set: { totalAttendees = Int($0) ?? 0 }
-            ), isEditable: .constant(true), validation: nil, placeholder: "---")
+            ), isEditable: .constant(true), validation: form.totalAttendeesValidation, placeholder: "---")
+                .onChange(of: totalAttendees) { newValue in
+                    form.updateTotalAttendees(String(newValue))
+                }
             if selectedType == .entertainment {
                 RelashionshipToPaiPickerView<CommonDataManager>(selectedRelation: $relationshipToPAI, isEditable: .constant(true))
+                    .validation(form.relationshipToPAIValidation) { message in
+                        Text(message.uppercased())
+                            .foregroundColor(.red)
+                            .font(.system(size: 14))
+                    }
+                    .onChange(of: relationshipToPAI) { newValue in
+                        form.updateRelationshipToPAI(newValue)
+                    }
             } else {
-                TextInputView(title: "Attendees (Names)", text: $employeeNames, isEditable: .constant(true), validation: nil, placeholder: "---")
+                TextInputView(title: "Attendees (Names)", text: $employeeNames, isEditable: .constant(true), validation: form.employeeNamesValidation, placeholder: "---")
+                    .onChange(of: employeeNames) { newValue in
+                        form.updateEmployeeNames(newValue)
+                    }
             }
         }
     }
     
     var hotelFields: some View {
-        TextInputView(title: "Hotel Name", text: $hotelName, isEditable: .constant(true), validation: nil, placeholder: "---")
+        VStack(alignment: .leading, spacing: 10) {
+            TextInputView(title: "Hotel Name", text: $hotelName, isEditable: .constant(true), validation: form.hotelNameValidation, placeholder: "---")
+                .onChange(of: hotelName) { newValue in
+                    form.updateHotelName(newValue)
+                }
+            TextInputView(title: "Hotel Daily Base Rate", text: $hotelDailyBaseRate, isEditable: .constant(true), validation: form.hotelDailyBaseRateValidation, placeholder: "---")
+                .onChange(of: hotelDailyBaseRate) { newValue in
+                    form.updateHotelDailyBaseRate(newValue)
+                }
+        }
     }
     
     var mileageFields: some View {
         VStack(alignment: .leading, spacing: 10) {
-            TextInputView(title: "Origin", text: $origin, isEditable: .constant(true), validation: nil, placeholder: "---")
-            TextInputView(title: "Destination", text: $destination, isEditable: .constant(true), validation: nil, placeholder: "---")
-            TextInputView(title: "Distance", text: $distance, isEditable: .constant(true), validation: nil, placeholder: "---")
+            TextInputView(title: "Origin", text: $origin, isEditable: .constant(true), validation: form.originValidation, placeholder: "---")
+                .onChange(of: origin) { newValue in
+                    form.updateOrigin(newValue)
+                }
+            TextInputView(title: "Destination", text: $destination, isEditable: .constant(true), validation: form.destinationValidation, placeholder: "---")
+                .onChange(of: destination) { newValue in
+                    form.updateDestination(newValue)
+                }
+            TextInputView(title: "Distance", text: $distance, isEditable: .constant(true), validation: form.distanceValidation, placeholder: "---")
+                .onChange(of: distance) { newValue in
+                    form.updateDistance(newValue)
+                }
             MileageRatePickerView<CommonDataManager>(selectedMileage: $mileageRate, isEditable: .constant(true))
+                .validation(form.mileageRateValidation) { message in
+                    Text(message.uppercased())
+                        .foregroundColor(.red)
+                        .font(.system(size: 14))
+                }
+                .onChange(of: mileageRate) { newValue in
+                    form.updateMileageRate(newValue)
+                }
         }
     }
     
     var telephoneCellFields: some View {
-        TextInputView(title: "Carrier", text: $carrier, isEditable: .constant(true), validation: nil, placeholder: "---")
+        TextInputView(title: "Carrier", text: $carrier, isEditable: .constant(true), validation: form.carrierValidation, placeholder: "---")
+            .onChange(of: carrier) { newValue in
+                form.updateCarrier(newValue)
+            }
     }
     
     var justificationContainer: some View {
-        TextInputView(title: "Justification", text: $justification, isEditable: .constant(true), validation: nil, placeholder: "")
+        TextInputView(title: "Justification", text: $justification, isEditable: .constant(true), validation: form.justificationValidation, placeholder: "")
+            .onChange(of: justification) { newValue in
+                form.updateJustification(newValue)
+            }
     }
     
     var saveButton: some View {

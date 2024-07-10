@@ -1,4 +1,5 @@
 import SwiftUI
+import FormValidator
 
 class CreditCardViewModel: ObservableObject {
     @Published var creditCardNumberField: String
@@ -50,6 +51,8 @@ struct NewCreditCardForm: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var globalState: GlobalStateManager
     
+    @ObservedObject var form = FormValidatorManager()
+    
     init(viewModel: CreditCardViewModel = CreditCardViewModel()) {
         _viewModel = StateObject(wrappedValue: viewModel)
     }
@@ -63,7 +66,7 @@ struct NewCreditCardForm: View {
     }
 
     var content: some View {
-        VStack {
+        VStack(spacing: 20) {
             creditCardNumberContainer
             expDateContainer
             Spacer()
@@ -74,58 +77,79 @@ struct NewCreditCardForm: View {
     }
 
     var creditCardNumberContainer: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 3) {
             Text("Card Number")
-            HStack {
-                if viewModel.cardIcon == "creditcard" {
-                    Image(systemName: viewModel.cardIcon)
-                        .foregroundColor(.gray)
-                } else {
-                    Image(viewModel.cardIcon)
-                        .resizable()
-                        .frame(width: 30, height: 24)
-                }
-                if viewModel.readonly {
-                    Text(viewModel.creditCardNumberField)
-                        .frame(height: 45)
-                } else {
-                    TextField("Credit card number", text: $viewModel.creditCardNumberField)
-                        .keyboardType(.numberPad)
-                        .autocapitalization(.none)
-                        .autocorrectionDisabled(true)
-                        .frame(height: 45)
-                }
-            }.padding(.horizontal)
-            .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.gray, lineWidth: 2)
-            )
-        }.padding(.vertical)
+                .font(Font.custom("Nunito", size: 16).weight(.bold))
+                .foregroundStyle(.oceanBlue)
+            ZStack {
+                RoundedRectangle(cornerRadius: 8)
+                    .foregroundStyle(.ourLightGray)
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(.oceanBlue, lineWidth: 1.5)
+                HStack {
+                    if viewModel.cardIcon == "creditcard" {
+                        Image(systemName: viewModel.cardIcon)
+                            .foregroundColor(.gray)
+                    } else {
+                        Image(viewModel.cardIcon)
+                            .resizable()
+                            .frame(width: 30, height: 24)
+                    }
+                    if viewModel.readonly {
+                        Text(viewModel.creditCardNumberField)
+                            .frame(height: 45)
+                    } else {
+                        TextField("Credit card number", text: $viewModel.creditCardNumberField)
+                            .keyboardType(.numberPad)
+                            .autocapitalization(.none)
+                            .autocorrectionDisabled(true)
+                            .frame(height: 45)
+                    }
+                }.padding(.horizontal)
+            }
+            .frame(height: 45)
+        }
+        .validation(form.ccNumberValidation) { message in
+            Text(message)
+                .foregroundColor(.red)
+                .font(.system(size: 14))
+        }
+        .onChange(of: viewModel.creditCardNumberField) { newValue in
+            form.updateCCNumber(newValue)
+        }
     }
 
     var expDateContainer: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 3) {
             Text("Expiration Date")
-            if viewModel.readonly {
-                Text(viewModel.expDate)
-                    .frame(height: 45)
-                    .padding(.horizontal, 10)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.gray, lineWidth: 2)
-                    )
-            } else {
-                TextField("MM/YY", text: $viewModel.expDate)
-                    .autocapitalization(.none)
-                    .autocorrectionDisabled(true)
-                    .frame(height: 45)
-                    .padding(.horizontal, 10)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.gray, lineWidth: 2)
-                    )
-            }
-        }.padding(.top)
+                .font(Font.custom("Nunito", size: 16).weight(.bold))
+                .foregroundStyle(.oceanBlue)
+            ZStack {
+                RoundedRectangle(cornerRadius: 8)
+                    .foregroundStyle(.ourLightGray)
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(.oceanBlue, lineWidth: 1.5)
+                if viewModel.readonly {
+                    Text(viewModel.expDate)
+                        .frame(height: 45)
+                        .padding(.horizontal, 10)
+                } else {
+                    TextField("MM/YY", text: $viewModel.expDate)
+                        .autocapitalization(.none)
+                        .autocorrectionDisabled(true)
+                        .frame(height: 45)
+                        .padding(.horizontal, 10)
+                }
+            }.frame(height: 45)
+        }
+        .validation(form.expDateValidation) { message in
+            Text(message)
+                .foregroundColor(.red)
+                .font(.system(size: 14))
+        }
+        .onChange(of: viewModel.expDate) { newValue in
+            form.updateExpDate(newValue)
+        }
     }
 
     var saveButton: some View {
@@ -138,7 +162,7 @@ struct NewCreditCardForm: View {
                 Text("Save")
                     .foregroundStyle(.white)
                     .font(Font.custom("Poppins", size: 18).weight(.semibold))
-            }
+            }.opacity((viewModel.creditCardNumberField.count < 16 || viewModel.expDate == "") ? 0.5 : 1)
         }).frame(height: 50)
     }
 

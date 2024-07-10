@@ -1,4 +1,5 @@
 import SwiftUI
+import FormValidator
 
 struct NewReportView: View {
     
@@ -17,6 +18,8 @@ struct NewReportView: View {
     @EnvironmentObject var authManager: AuthenticationManager
     private let dao = DAO.instance
     
+    @ObservedObject var form = FormValidatorManager()
+    
     var body: some View {
         ZStack {
             ZStack {
@@ -26,11 +29,11 @@ struct NewReportView: View {
     }
     
     var content: some View {
-        VStack {
+        VStack(spacing: 20) {
             newReportNameField.padding(.vertical)
             DateFieldView(title: "Date", date: $date, isEditable: .constant(true))
-            PickerField(title: "Expense Type", options: ["Domestic", "International"], selectedOption: $expenseType, isEditable: .constant(true))
-            TextInputView(title: "Purpose", text: $purposeField, isEditable: .constant(true), validation: nil, placeholder: "ex: New Conference")
+            PickerField(title: "Report Type", options: ["Domestic", "International"], selectedOption: $expenseType, isEditable: .constant(true))
+            TextInputView(title: "Purpose", text: $purposeField, isEditable: .constant(true), validation: form.purposeValidation, placeholder: "ex: New Conference")
                 .focused($isPurposeFieldFocused)
                 .onAppear {
                     isPurposeFieldFocused = true
@@ -40,6 +43,12 @@ struct NewReportView: View {
             Spacer()
             addButton
         }.padding()
+        .onChange(of: purposeField) { newValue in
+            form.updatePurpose(newValue)
+        }
+        .onChange(of: expenseType) { newValue in
+            form.updateReportType(newValue)
+        }
     }
     
     var headerContent: some View {
@@ -82,6 +91,7 @@ struct NewReportView: View {
                     .foregroundStyle(.white)
                     .font(Font.custom("Poppins", size: 18).weight(.semibold))
             }
+            .opacity((expenseType != "" && purposeField != "") ? 1 : 0.5)
         }).frame(height: 50)
     }
     
@@ -119,9 +129,7 @@ struct NewReportView: View {
     }
 }
 
-struct NewReportView_Previews: PreviewProvider {
-    static var previews: some View {
-        NewReportView(isShowing: .constant(true))
-            .environmentObject(AuthenticationManager())
-    }
+#Preview {
+    NewReportView(isShowing: .constant(true))
+        .environmentObject(AuthenticationManager())
 }

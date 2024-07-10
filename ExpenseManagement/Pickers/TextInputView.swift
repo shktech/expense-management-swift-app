@@ -16,12 +16,16 @@ struct TextInputView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 8)
                     .foregroundStyle(.ourLightGray)
-                HStack {
-                    TextField(placeholder, text: $text)
-                        .font(Font.custom("Nunito", size: 16))
-                        .foregroundStyle(.oceanBlue)
-                        .disabled(!isEditable)
-                }.padding(.horizontal)
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(.oceanBlue, lineWidth: 1.5)
+                VStack {
+                    HStack {
+                        TextField(placeholder, text: $text)
+                            .font(Font.custom("Nunito", size: 16))
+                            .foregroundStyle(.oceanBlue)
+                            .disabled(!isEditable)
+                    }.padding(.horizontal)
+                }
                 if !isEditable {
                     RoundedRectangle(cornerRadius: 8)
                         .foregroundStyle(.black)
@@ -29,7 +33,12 @@ struct TextInputView: View {
                 }
             }
             .frame(height: 45)
-            .validation(validation)
+            .validation(validation) { message in
+                Text(message)
+                    .foregroundColor(.red)
+                    .opacity(0.7)
+                    .font(.system(size: 14))
+            }
         }
     }
 }
