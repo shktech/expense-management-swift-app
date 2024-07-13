@@ -17,6 +17,7 @@
 		0F4684DD2C28D44100406B9A /* HotelBaseRatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4684DC2C28D44100406B9A /* HotelBaseRatePickerView.swift */; };
 		0F4684DF2C28D5C300406B9A /* MileageRatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4684DE2C28D5C300406B9A /* MileageRatePickerView.swift */; };
 		0F4684E12C2A378500406B9A /* EditExpenseForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4684E02C2A378500406B9A /* EditExpenseForm.swift */; };
+		0F756A512C3C41AD006F7504 /* FormValidatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F756A502C3C41AD006F7504 /* FormValidatorManager.swift */; };
 		0FBD331C2C21E388000502B0 /* SelectTypeForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FBD331B2C21E388000502B0 /* SelectTypeForm.swift */; };
 		0FCD00A72C08CAAF00A49C62 /* ExpenseManagementApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00A62C08CAAF00A49C62 /* ExpenseManagementApp.swift */; };
 		0FCD00A92C08CAAF00A49C62 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD00A82C08CAAF00A49C62 /* ContentView.swift */; };
@@ -102,6 +103,7 @@
 		0F4684DC2C28D44100406B9A /* HotelBaseRatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotelBaseRatePickerView.swift; sourceTree = "<group>"; };
 		0F4684DE2C28D5C300406B9A /* MileageRatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MileageRatePickerView.swift; sourceTree = "<group>"; };
 		0F4684E02C2A378500406B9A /* EditExpenseForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditExpenseForm.swift; sourceTree = "<group>"; };
+		0F756A502C3C41AD006F7504 /* FormValidatorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormValidatorManager.swift; sourceTree = "<group>"; };
 		0FBD331B2C21E388000502B0 /* SelectTypeForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTypeForm.swift; sourceTree = "<group>"; };
 		0FCD00A32C08CAAF00A49C62 /* ExpenseManagement.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExpenseManagement.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FCD00A62C08CAAF00A49C62 /* ExpenseManagementApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseManagementApp.swift; sourceTree = "<group>"; };
@@ -322,6 +324,7 @@
 				B59BD5F52C1163A80027E599 /* ExpenseDataManager.swift */,
 				B59BD5FD2C1184110027E599 /* DataLoader.swift */,
 				B59BD62C2C28ED9D0027E599 /* KeyChainHelper.swift */,
+				0F756A502C3C41AD006F7504 /* FormValidatorManager.swift */,
 			);
 			path = DAO;
 			sourceTree = "<group>";
@@ -514,6 +517,7 @@
 				0FCD00DD2C0BE28200A49C62 /* ManagePaymentView.swift in Sources */,
 				B50D30F12C3315CD00AE8880 /* TextInputView.swift in Sources */,
 				B50D30DF2C2DF2FA00AE8880 /* MessagesProvider.swift in Sources */,
+				0F756A512C3C41AD006F7504 /* FormValidatorManager.swift in Sources */,
 				B50D30EF2C330C3000AE8880 /* CityPickerView.swift in Sources */,
 				0FCD00DB2C0A53E900A49C62 /* ReportsDetailView.swift in Sources */,
 				B50D30DD2C2CDA4E00AE8880 /* FilePickerButton.swift in Sources */,
@@ -682,7 +686,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ExpenseManagement/Preview Content\"";
-				DEVELOPMENT_TEAM = RCZ5P2WV27;
+				DEVELOPMENT_TEAM = 973F3TA6FW;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ExpenseManagement/Info.plist;
@@ -699,7 +703,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "pfu.us.ricoh.expense-management";
+				PRODUCT_BUNDLE_IDENTIFIER = "pfu.us.ricoh.expense-management.felipe";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -734,7 +738,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "pfu.us.ricoh.expense-management";
+				PRODUCT_BUNDLE_IDENTIFIER = "pfu.us.ricoh.expense-management.felipe";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -833,7 +837,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "pfu.us.ricoh.expense-management";
+				PRODUCT_BUNDLE_IDENTIFIER = "pfu.us.ricoh.expense-management.felipe";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
