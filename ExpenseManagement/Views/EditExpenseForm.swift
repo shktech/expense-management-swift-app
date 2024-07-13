@@ -218,7 +218,15 @@ struct EditExpenseForm: View {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let formattedDate = dateFormatter.string(from: date)
-        let fileName = selectedFileURL?.lastPathComponent ?? ""
+        
+        var fileName: String? = nil
+        var fileURL: URL? = selectedFileURL
+
+        if let url = selectedFileURL, !url.absoluteString.contains("s3.amazonaws.com") {
+            fileName = url.lastPathComponent
+        } else {
+            fileURL = nil
+        }
 
         let newItem = CreateExpenseItemRequest(
             expenseType: expenseItem.expenseType.rawValue,
@@ -227,7 +235,7 @@ struct EditExpenseForm: View {
             receiptCurrency: selectedCurrency,
             justification: justification.isEmpty ? nil : justification,
             note: "N/A",
-            fileName: fileName.isEmpty ? nil : fileName,
+            fileName: fileName,
             airline: airline.isEmpty ? nil : airline,
             rentalAgency: rentalAgency.isEmpty ? nil : rentalAgency,
             carType: carType.isEmpty ? nil : carType,
@@ -248,7 +256,7 @@ struct EditExpenseForm: View {
             distance: distance.isEmpty ? nil : distance
         )
 
-        dao.updateExpenseItem(reportId: report.id, itemId: expenseItem.id, expenseItemData: newItem, accessToken: accessToken) { result in
+        dao.updateExpenseItem(reportId: report.id, itemId: expenseItem.id, expenseItemData: newItem, accessToken: accessToken, selectedFileURL: selectedFileURL) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success:

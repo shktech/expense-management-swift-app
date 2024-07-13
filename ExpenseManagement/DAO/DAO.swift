@@ -521,7 +521,7 @@ import Foundation
         }.resume()
     }
     
-    func updateExpenseItem(reportId: String, itemId: String, expenseItemData: CreateExpenseItemRequest, accessToken: String, completion: @escaping (Result<ExpenseItem, Error>) -> Void) {
+    func updateExpenseItem(reportId: String, itemId: String, expenseItemData: CreateExpenseItemRequest, accessToken: String, selectedFileURL: URL?, completion: @escaping (Result<ExpenseItem, Error>) -> Void) {
         let url = URL(string: "\(apiBaseUrl)/reports/\(reportId)/items/\(itemId)/")!
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
@@ -556,9 +556,28 @@ import Foundation
             let httpResponse = response as? HTTPURLResponse
             if httpResponse?.statusCode == 200 {
                 do {
-                    let updatedExpenseItem = try JSONDecoder().decode(ExpenseItem.self, from: data)
-                    DispatchQueue.main.async {
-                        completion(.success(updatedExpenseItem))
+                    var editedExpenseItem = try JSONDecoder().decode(ExpenseItem.self, from: data)
+                    print("======================")
+                    print(editedExpenseItem.presignedURL)
+                    print(selectedFileURL)
+                    print("======================")
+                    if let presignedURLString = editedExpenseItem.presignedURL, let presignedURL = URL(string: presignedURLString), let selectedFileURL = selectedFileURL {
+                        self.uploadFileToS3(presignedURL: presignedURL, fileURL: selectedFileURL) { result in
+                            switch result {
+                            case .success:
+                                DispatchQueue.main.async {
+                                    completion(.success(editedExpenseItem))
+                                }
+                            case .failure(let error):
+                                DispatchQueue.main.async {
+                                    completion(.failure(error))
+                                }
+                            }
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            completion(.success(editedExpenseItem))
+                        }
                     }
                 } catch {
                     DispatchQueue.main.async {
