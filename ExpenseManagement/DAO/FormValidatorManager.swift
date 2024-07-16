@@ -1,9 +1,3 @@
-//
-//  FormValidatorManager.swift
-//  ExpenseManagement
-//
-//  Created by infra on 08/07/24.
-//
 import Foundation
 import FormValidator
 

@@ -1,5 +1,5 @@
 {
-  "originHash" : "1d3338b55066ccfb97c453fcc1a40156f44ec7c580f51fb93db3da4f19426a43",
+  "originHash" : "cc816dee5410053fd59a39f6d90ba6d18aa4ad570d58008c171911a7c8794fad",
   "pins" : [
     {
       "identity" : "jwtdecode.swift",

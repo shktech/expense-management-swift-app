@@ -154,4 +154,6 @@ struct SignUpView: View {
 
 #Preview {
     SignUpView()
+        .environmentObject(AuthenticationManager())
+        .environmentObject(GlobalStateManager())
 }

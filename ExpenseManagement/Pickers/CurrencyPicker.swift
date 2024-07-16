@@ -26,7 +26,7 @@ struct CurrencyPicker: View {
                 RoundedRectangle(cornerRadius: 8)
                     .foregroundStyle(isEditable ? .ourLightGray : .black.opacity(0.15))
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(.oceanBlue, lineWidth: 1)
+                    .stroke(.ourLightGray, lineWidth: 1)
                 HStack {
                     if let selectedCurrencyDetails = currencies.first(where: { $0.1 == selectedCurrency }) {
                         Text("\(selectedCurrencyDetails.2) \(selectedCurrencyDetails.1) \(selectedCurrencyDetails.0)")
