@@ -20,6 +20,9 @@ struct NewReportView: View {
     
     @ObservedObject var form = FormValidatorManager()
     
+    @State private var isPurposeFocused: Bool = false
+    @State private var isDefaultCurrencyFocused: Bool = false
+    
     var body: some View {
         ZStack {
             ZStack {
@@ -33,13 +36,13 @@ struct NewReportView: View {
             newReportNameField.padding(.vertical)
             DateFieldView(title: "Date", date: $date, isEditable: .constant(true))
             PickerField(title: "Report Type", options: ["Domestic", "International"], selectedOption: $expenseType, isEditable: .constant(true))
-            TextInputView(title: "Purpose", text: $purposeField, isEditable: .constant(true), validation: form.purposeValidation, placeholder: "ex: New Conference")
+            TextInputView(title: "Purpose", text: $purposeField, isEditable: .constant(true), validation: form.purposeValidation, placeholder: "ex: New Conference", isFocused: $isPurposeFocused)
                 .focused($isPurposeFieldFocused)
                 .onAppear {
                     isPurposeFieldFocused = true
                 }
             PickerField(title: "Preferred Payment Method", options: ["Cash", "Credit card"], selectedOption: $selectedPaymentMethod, isEditable: .constant(true))
-            CurrencyPicker(selectedCurrency: $selectedCurrency, isEditable: .constant(true), title: "Default Concurrency")
+            CurrencyPicker(selectedCurrency: $selectedCurrency, isEditable: .constant(true), title: "Default Concurrency", isFocused: $isDefaultCurrencyFocused)
             Spacer()
             addButton
         }.padding()

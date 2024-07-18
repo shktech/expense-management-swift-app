@@ -14,6 +14,10 @@ struct CurrencyPicker: View {
         ("£", "GBP", "🇬🇧"),
         ("₹", "INR", "🇮🇳")
     ]
+    
+    @Binding var isFocused: Bool
+
+    @FocusState private var fieldIsFocused: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 3) {
@@ -26,7 +30,7 @@ struct CurrencyPicker: View {
                 RoundedRectangle(cornerRadius: 8)
                     .foregroundStyle(isEditable ? .ourLightGray : .black.opacity(0.15))
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(.ourLightGray, lineWidth: 1)
+                    .stroke(.oceanBlue, lineWidth: isFocused ? 1 : 0)
                 HStack {
                     if let selectedCurrencyDetails = currencies.first(where: { $0.1 == selectedCurrency }) {
                         Text("\(selectedCurrencyDetails.2) \(selectedCurrencyDetails.1) \(selectedCurrencyDetails.0)")
@@ -49,6 +53,10 @@ struct CurrencyPicker: View {
                     showCurrencyPicker.toggle()
                 }
             }
+        }
+        .focused($fieldIsFocused)
+        .onChange(of: fieldIsFocused) { newValue in
+            isFocused = newValue
         }
         .sheet(isPresented: $showCurrencyPicker) {
             VStack(spacing: 15) {
@@ -98,8 +106,8 @@ struct CurrencyPicker: View {
     }
 }
 
-struct CurrencyPicker_Previews: PreviewProvider {
-    static var previews: some View {
-        CurrencyPicker(selectedCurrency: .constant("USD"), isEditable: .constant(true), title: "Passed in title")
-    }
-}
+//struct CurrencyPicker_Previews: PreviewProvider {
+//    static var previews: some View {
+//        CurrencyPicker(selectedCurrency: .constant("USD"), isEditable: .constant(true), title: "Passed in title")
+//    }
+//}

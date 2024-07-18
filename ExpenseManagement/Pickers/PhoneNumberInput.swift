@@ -11,6 +11,10 @@ struct PhoneNumberInputView: View {
     @State private var validationMessage: String?
     private let phoneNumberKit = PhoneNumberKit()
     
+    @Binding var isFocused: Bool // Binding para o estado de foco
+
+    @FocusState private var fieldIsFocused: Bool // FocusState para o TextField
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 3) {
             Text("Phone Number")
@@ -47,14 +51,20 @@ struct PhoneNumberInputView: View {
                         .keyboardType(.phonePad)
                         .padding(.horizontal, 10)
                         .frame(height: 45)
+                        .focused($fieldIsFocused) // Vinculando o FocusState ao TextField
                         .onChange(of: phoneNumber) { newValue in
                             parsePhoneNumber()
                         }
                 }
-                .background(
+                .onChange(of: fieldIsFocused) { newValue in
+                    isFocused = newValue // Atualizando o estado de foco externo
+                }
+                .background {
                     RoundedRectangle(cornerRadius: 8)
                         .foregroundStyle(.ourLightGray)
-                )
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(.oceanBlue, lineWidth: isFocused ? 1 : 0)
+                }
                 .frame(height: 45)
             }
             if let validationMessage = validationMessage {
@@ -63,6 +73,7 @@ struct PhoneNumberInputView: View {
                     .font(.system(size: 13).weight(.semibold))
             }
         }
+        .animation(Animation.easeInOut(duration: 0.1), value: fieldIsFocused)
     }
     
     private func parsePhoneNumber() {
@@ -83,10 +94,10 @@ struct PhoneNumberInputView: View {
     ]
 }
 
-struct PhoneNumberInputView_Previews: PreviewProvider {
-    @State static var fullPhoneNumber: String = ""
-
-    static var previews: some View {
-        PhoneNumberInputView(fullPhoneNumber: $fullPhoneNumber)
-    }
-}
+//struct PhoneNumberInputView_Previews: PreviewProvider {
+//    @State static var fullPhoneNumber: String = ""
+//
+//    static var previews: some View {
+//        PhoneNumberInputView(fullPhoneNumber: $fullPhoneNumber)
+//    }
+//}

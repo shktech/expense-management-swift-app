@@ -1,6 +1,7 @@
 import SwiftUI
 import FormValidator
 
+
 struct NewExpenseForm: View {
     @Binding var isShowingSelf: Bool
     let report: Report
@@ -46,6 +47,21 @@ struct NewExpenseForm: View {
     
     @ObservedObject var form = FormValidatorManager()
     
+    // Focus State Variables
+    @State private var isAirlineFocused: Bool = false
+    @State private var isOriginFocused: Bool = false
+    @State private var isDestinationFocused: Bool = false
+    @State private var isJustificationFocused: Bool = false
+    @State private var isEstablishmentNameFocused: Bool = false
+    @State private var isBusinessTopicFocused: Bool = false
+    @State private var isHotelNameFocused: Bool = false
+    @State private var isHotelDailyBaseRateFocused: Bool = false
+    @State private var isDistanceFocused: Bool = false
+    @State private var isCarrierFocused: Bool = false
+    @State private var isCityFocused: Bool = false
+    @State private var isTotalAtendeesFocused: Bool = false
+    @State private var isAtendeesNamesFocused: Bool = false
+
     var body: some View {
         ZStack {
             VStack {
@@ -77,7 +93,7 @@ struct NewExpenseForm: View {
                 }
                 AllAmountsComponent(amount: $amount, selectedCurrency: $selectedCurrency, convertedAmount: $convertedAmount, isEditable: .constant(true), targetCurrency: authManager.user?.currency ?? "USD", accessToken: authManager.accessToken ?? "")
                 specificFields
-                TextInputView(title: "Justification", text: $justification, isEditable: .constant(true), validation: form.justificationValidation, placeholder: "")
+                TextInputView(title: "Justification", text: $justification, isEditable: .constant(true), validation: form.justificationValidation, placeholder: "", isFocused: $isJustificationFocused)
                     .onChange(of: justification) { newValue in
                         form.updateJustification(newValue)
                     }
@@ -120,11 +136,11 @@ struct NewExpenseForm: View {
                 .onChange(of: airline) { newValue in
                     form.updateAirline(newValue)
                 }
-            TextInputView(title: "Origin", text: $origin, isEditable: .constant(true), validation: form.originValidation, placeholder: "---")
+            TextInputView(title: "Origin", text: $origin, isEditable: .constant(true), validation: form.originValidation, placeholder: "---", isFocused: $isOriginFocused)
                 .onChange(of: origin) { newValue in
                     form.updateOrigin(newValue)
                 }
-            TextInputView(title: "Destination", text: $destination, isEditable: .constant(true), validation: form.destinationValidation, placeholder: "---")
+            TextInputView(title: "Destination", text: $destination, isEditable: .constant(true), validation: form.destinationValidation, placeholder: "---", isFocused: $isDestinationFocused)
                 .onChange(of: destination) { newValue in
                     form.updateDestination(newValue)
                 }
@@ -168,22 +184,22 @@ struct NewExpenseForm: View {
     
     var entertainmentFields: some View {
         VStack(alignment: .leading, spacing: 10) {
-            TextInputView(title: "Name of Establishment", text: $establishmentName, isEditable: .constant(true), validation: form.establishmentNameValidation, placeholder: "---")
+            TextInputView(title: "Name of Establishment", text: $establishmentName, isEditable: .constant(true), validation: form.establishmentNameValidation, placeholder: "---", isFocused: $isEstablishmentNameFocused)
                 .onChange(of: establishmentName) { newValue in
                     form.updateEstablishmentName(newValue)
                 }
-            TextInputView(title: "City", text: $selectedCity, isEditable: .constant(true), validation: form.cityValidation, placeholder: "---")
+            TextInputView(title: "City", text: $selectedCity, isEditable: .constant(true), validation: form.cityValidation, placeholder: "---", isFocused: $isCityFocused)
                 .onChange(of: selectedCity) { newValue in
                     form.updateCity(newValue)
                 }
-            TextInputView(title: "Business Topic", text: $businessTopic, isEditable: .constant(true), validation: form.businessTopicValidation, placeholder: "---")
+            TextInputView(title: "Business Topic", text: $businessTopic, isEditable: .constant(true), validation: form.businessTopicValidation, placeholder: "---", isFocused: $isBusinessTopicFocused)
                 .onChange(of: businessTopic) { newValue in
                     form.updateBusinessTopic(newValue)
                 }
             TextInputView(title: "Total Attendees", text: Binding(
                 get: { String(totalAttendees) },
                 set: { totalAttendees = Int($0) ?? 0 }
-            ), isEditable: .constant(true), validation: form.totalAttendeesValidation, placeholder: "---")
+            ), isEditable: .constant(true), validation: form.totalAttendeesValidation, placeholder: "---", isFocused: $isTotalAtendeesFocused)
                 .onChange(of: totalAttendees) { newValue in
                     form.updateTotalAttendees(String(newValue))
                 }
@@ -198,7 +214,7 @@ struct NewExpenseForm: View {
                         form.updateRelationshipToPAI(newValue)
                     }
             } else {
-                TextInputView(title: "Attendees (Names)", text: $employeeNames, isEditable: .constant(true), validation: form.employeeNamesValidation, placeholder: "---")
+                TextInputView(title: "Attendees (Names)", text: $employeeNames, isEditable: .constant(true), validation: form.employeeNamesValidation, placeholder: "---", isFocused: $isAtendeesNamesFocused)
                     .onChange(of: employeeNames) { newValue in
                         form.updateEmployeeNames(newValue)
                     }
@@ -208,11 +224,11 @@ struct NewExpenseForm: View {
     
     var hotelFields: some View {
         VStack(alignment: .leading, spacing: 10) {
-            TextInputView(title: "Hotel Name", text: $hotelName, isEditable: .constant(true), validation: form.hotelNameValidation, placeholder: "---")
+            TextInputView(title: "Hotel Name", text: $hotelName, isEditable: .constant(true), validation: form.hotelNameValidation, placeholder: "---", isFocused: $isHotelNameFocused)
                 .onChange(of: hotelName) { newValue in
                     form.updateHotelName(newValue)
                 }
-            TextInputView(title: "Hotel Daily Base Rate", text: $hotelDailyBaseRate, isEditable: .constant(true), validation: form.hotelDailyBaseRateValidation, placeholder: "---")
+            TextInputView(title: "Hotel Daily Base Rate", text: $hotelDailyBaseRate, isEditable: .constant(true), validation: form.hotelDailyBaseRateValidation, placeholder: "---", isFocused: $isHotelDailyBaseRateFocused)
                 .onChange(of: hotelDailyBaseRate) { newValue in
                     form.updateHotelDailyBaseRate(newValue)
                 }
@@ -221,15 +237,15 @@ struct NewExpenseForm: View {
     
     var mileageFields: some View {
         VStack(alignment: .leading, spacing: 10) {
-            TextInputView(title: "Origin", text: $origin, isEditable: .constant(true), validation: form.originValidation, placeholder: "---")
+            TextInputView(title: "Origin", text: $origin, isEditable: .constant(true), validation: form.originValidation, placeholder: "---", isFocused: $isOriginFocused)
                 .onChange(of: origin) { newValue in
                     form.updateOrigin(newValue)
                 }
-            TextInputView(title: "Destination", text: $destination, isEditable: .constant(true), validation: form.destinationValidation, placeholder: "---")
+            TextInputView(title: "Destination", text: $destination, isEditable: .constant(true), validation: form.destinationValidation, placeholder: "---", isFocused: $isDestinationFocused)
                 .onChange(of: destination) { newValue in
                     form.updateDestination(newValue)
                 }
-            TextInputView(title: "Distance", text: $distance, isEditable: .constant(true), validation: form.distanceValidation, placeholder: "---")
+            TextInputView(title: "Distance", text: $distance, isEditable: .constant(true), validation: form.distanceValidation, placeholder: "---", isFocused: $isDistanceFocused)
                 .onChange(of: distance) { newValue in
                     form.updateDistance(newValue)
                 }
@@ -246,14 +262,14 @@ struct NewExpenseForm: View {
     }
     
     var telephoneCellFields: some View {
-        TextInputView(title: "Carrier", text: $carrier, isEditable: .constant(true), validation: form.carrierValidation, placeholder: "---")
+        TextInputView(title: "Carrier", text: $carrier, isEditable: .constant(true), validation: form.carrierValidation, placeholder: "---", isFocused: $isCarrierFocused)
             .onChange(of: carrier) { newValue in
                 form.updateCarrier(newValue)
             }
     }
     
     var justificationContainer: some View {
-        TextInputView(title: "Justification", text: $justification, isEditable: .constant(true), validation: form.justificationValidation, placeholder: "")
+        TextInputView(title: "Justification", text: $justification, isEditable: .constant(true), validation: form.justificationValidation, placeholder: "", isFocused: $isJustificationFocused)
             .onChange(of: justification) { newValue in
                 form.updateJustification(newValue)
             }
