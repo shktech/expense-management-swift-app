@@ -24,7 +24,7 @@ struct PickerField: View {
                     RoundedRectangle(cornerRadius: 8)
                         .foregroundStyle(.ourLightGray)
                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(.oceanBlue, lineWidth: 1.5)
+                        .stroke(.oceanBlue, lineWidth: 1)
                     HStack {
                         Text(selectedOption.isEmpty ? "Select \(title)" : selectedOption)
                             .foregroundStyle(selectedOption.isEmpty ? .gray : .oceanBlue)

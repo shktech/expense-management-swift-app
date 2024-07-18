@@ -20,6 +20,12 @@ struct SignInView: View {
     @EnvironmentObject var globalState: GlobalStateManager
     @StateObject private var biometricAuthViewModel = BiometricAuthenticationProvider()
     
+    enum FocusFields {
+        case email, passwordField
+    }
+    
+    @FocusState private var focusField: FocusFields?
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -80,6 +86,7 @@ struct SignInView: View {
             bottomContent
             signUpText
         }.padding()
+        .animation(Animation.easeInOut(duration: 0.1), value: focusField)
     }
 
     var signInText: some View {
@@ -119,9 +126,10 @@ struct SignInView: View {
                 .autocorrectionDisabled(true) // Disable autocorrect
                 .frame(height: 50)
                 .padding(.horizontal, 10)
+                .focused($focusField, equals: .email)
                 .overlay(
                     RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.gray, lineWidth: 1)
+                        .stroke(focusField == .email ? .oceanBlue : Color.gray, lineWidth: 1)
                 )
         }
     }
@@ -175,9 +183,10 @@ struct SignInView: View {
         }
         .frame(height: 50)
         .padding(.horizontal, 10)
+        .focused($focusField, equals: .passwordField)
         .overlay(
             RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.gray, lineWidth: 1)
+                .stroke(focusField == .passwordField ? .oceanBlue : Color.gray, lineWidth: 1)
         )
     }
 

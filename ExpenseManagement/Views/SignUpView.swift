@@ -10,6 +10,20 @@ struct SignUpView: View {
     @State private var navigationDestination: NavigationDestination? = nil
     @EnvironmentObject var authManager: AuthenticationManager
     @EnvironmentObject var globalState: GlobalStateManager
+    
+    // Estados de foco para cada campo de texto
+    @State private var isFirstNameFocused: Bool = false
+    @State private var isLastNameFocused: Bool = false
+    @State private var isEmailFocused: Bool = false
+    @State private var isDepartmentFocused: Bool = false
+    @State private var isPhoneNumberFocused: Bool = false
+    @State private var isCurrencyFocused: Bool = false
+    
+    enum FocusFields {
+        case firstName, lastName, email, passwordField, confirmPasswordField, phoneNumberField, department, defaultCurrency
+    }
+    
+    @FocusState var focusField: FocusFields?
 
     var body: some View {
         ScrollView {
@@ -83,41 +97,56 @@ struct SignUpView: View {
             confirmPasswordContainer
             phoneNumberInputView
             departmentContainer
-            CurrencyPicker(selectedCurrency: $selectedCurrency, isEditable: .constant(true), title: "Default Currency")
+            CurrencyPicker(selectedCurrency: $selectedCurrency, isEditable: .constant(true), title: "Default Currency", isFocused: $isCurrencyFocused)
+                .onTapGesture {
+                    focusField = .defaultCurrency
+                }
         }
     }
 
     var firstNameLastNameContainer: some View {
-        HStack(spacing: 10) {
-            TextInputView(title: "First Name", text: $form.firstName, isEditable: .constant(true), validation: form.firstNameValidation, placeholder: "")
-            TextInputView(title: "Last Name", text: $form.lastName, isEditable: .constant(true), validation: form.lastNameValidation, placeholder: "")
+        HStack(alignment: .top, spacing: 10) {
+            TextInputView(title: "First Name", text: $form.firstName, isEditable: .constant(true), validation: form.firstNameValidation, placeholder: "", isFocused: $isFirstNameFocused)
+            TextInputView(title: "Last Name", text: $form.lastName, isEditable: .constant(true), validation: form.lastNameValidation, placeholder: "", isFocused: $isLastNameFocused)
         }
     }
 
     var emailContainer: some View {
-        TextInputView(title: "Email", text: $form.email, isEditable: .constant(true), validation: form.emailValidation, placeholder: "example@pfu-us.ricoh.com")
+        TextInputView(title: "Email", text: $form.email, isEditable: .constant(true), validation: form.emailValidation, placeholder: "example@pfu-us.ricoh.com", isFocused: $isEmailFocused)
     }
 
     var passwordContainer: some View {
         PasswordInputView(title: "Password", password: $form.password, isPasswordVisible: $isPasswordVisible, isEditable: .constant(true), validation: form.passwordValidation, placeholder: "must be 9 characters or longer")
+            .focused($focusField, equals: .passwordField)
+            .overlay {
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(focusField == .passwordField ? .oceanBlue : Color.gray, lineWidth: focusField == .passwordField ? 1 : 0) // Mudança de cor do stroke
+                    .frame(height: 45)
+            }
     }
 
     var confirmPasswordContainer: some View {
         PasswordInputView(title: "Confirm Password", password: $form.confirmPassword, isPasswordVisible: $isConfirmPasswordVisible, isEditable: .constant(true), validation: form.confirmPasswordValidation, placeholder: "repeat password")
+            .focused($focusField, equals: .confirmPasswordField)
+            .overlay {
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(focusField == .confirmPasswordField ? .oceanBlue : Color.gray, lineWidth: focusField == .confirmPasswordField ? 1 : 0) // Mudança de cor do stroke
+                    .frame(height: 45)
+            }
     }
 
     var departmentContainer: some View {
-        TextInputView(title: "Department", text: $form.department, isEditable: .constant(true), validation: form.departmentValidation, placeholder: "")
+        TextInputView(title: "Department", text: $form.department, isEditable: .constant(true), validation: form.departmentValidation, placeholder: "", isFocused: $isDepartmentFocused)
     }
 
     var phoneNumberInputView: some View {
-        PhoneNumberInputView(fullPhoneNumber: $phoneNumber)
+        PhoneNumberInputView(fullPhoneNumber: $phoneNumber, isFocused: $isPhoneNumberFocused)
     }
 
     var bottomContent: some View {
         VStack {
             Button(action: {
-            var formValid: Bool = form.manager.triggerValidation()
+                let formValid: Bool = form.manager.triggerValidation()
                 if (formValid) {
                     isLoading = true
                     signUp()

@@ -15,9 +15,6 @@ struct DateFieldView: View {
                 RoundedRectangle(cornerRadius: 8)
                     .foregroundStyle(.ourLightGray2)
                     .frame(height: 45)
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(.oceanBlue, lineWidth: 1.5)
-                    .frame(height: 45)
                 HStack {
                     Text("\(date.formatted(date: .abbreviated, time: .omitted))")
                         .font(Font.custom("Nunito", size: 16))

@@ -56,6 +56,11 @@ struct NewCreditCardForm: View {
     init(viewModel: CreditCardViewModel = CreditCardViewModel()) {
         _viewModel = StateObject(wrappedValue: viewModel)
     }
+    
+    enum FocusStates {
+        case ccNumber, expDate
+    }
+    @FocusState private var focusField: FocusStates?
 
     var body: some View {
         ZStack {
@@ -84,8 +89,6 @@ struct NewCreditCardForm: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 8)
                     .foregroundStyle(.ourLightGray)
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(.oceanBlue, lineWidth: 1.5)
                 HStack {
                     if viewModel.cardIcon == "creditcard" {
                         Image(systemName: viewModel.cardIcon)
@@ -104,10 +107,15 @@ struct NewCreditCardForm: View {
                             .autocapitalization(.none)
                             .autocorrectionDisabled(true)
                             .frame(height: 45)
+                            .focused($focusField, equals: .ccNumber)
                     }
                 }.padding(.horizontal)
             }
             .frame(height: 45)
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(focusField == .ccNumber ? .oceanBlue : Color.gray, lineWidth: 1)
+            )
         }
         .validation(form.ccNumberValidation) { message in
             Text(message)
@@ -128,7 +136,7 @@ struct NewCreditCardForm: View {
                 RoundedRectangle(cornerRadius: 8)
                     .foregroundStyle(.ourLightGray)
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(.oceanBlue, lineWidth: 1.5)
+                    .stroke(.oceanBlue, lineWidth: 1)
                 if viewModel.readonly {
                     Text(viewModel.expDate)
                         .frame(height: 45)
@@ -139,8 +147,14 @@ struct NewCreditCardForm: View {
                         .autocorrectionDisabled(true)
                         .frame(height: 45)
                         .padding(.horizontal, 10)
+                        .focused($focusField, equals: .expDate)
                 }
-            }.frame(height: 45)
+            }
+            .frame(height: 45)
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(focusField == .expDate ? .oceanBlue : Color.gray, lineWidth: 1)
+            )
         }
         .validation(form.expDateValidation) { message in
             Text(message)

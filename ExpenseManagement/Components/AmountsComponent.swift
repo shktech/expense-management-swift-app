@@ -12,6 +12,8 @@ struct AllAmountsComponent: View {
     @State private var isLoading: Bool = false
     @State private var conversionRate: Double?
     
+    @State private var isCurrencyFocused: Bool = false
+    
     var body: some View {
         ZStack {
 //            RoundedRectangle(cornerRadius: 10)
@@ -53,7 +55,7 @@ struct AllAmountsComponent: View {
                 .foregroundStyle(.oceanBlue)
                 .font(Font.custom("Nunito", size: 16).weight(.bold))
             HStack {
-                CurrencyPicker(selectedCurrency: $selectedCurrency, isEditable: $isEditable)
+                CurrencyPicker(selectedCurrency: $selectedCurrency, isEditable: $isEditable, isFocused: $isCurrencyFocused)
                 .frame(width: 140)
                 ZStack {
                     RoundedRectangle(cornerRadius: 8)
@@ -73,7 +75,7 @@ struct AllAmountsComponent: View {
                 .foregroundStyle(.oceanBlue)
                 .font(Font.custom("Nunito", size: 16).weight(.semibold))
             HStack {
-                CurrencyPicker(selectedCurrency: .constant(targetCurrency), isEditable: .constant(false))
+                CurrencyPicker(selectedCurrency: .constant(targetCurrency), isEditable: .constant(false), isFocused: $isCurrencyFocused)
                 .frame(width: 140)
                 ZStack {
                     RoundedRectangle(cornerRadius: 8)

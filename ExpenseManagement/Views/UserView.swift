@@ -8,6 +8,8 @@ struct UserView<AuthenticationManager: AuthenticationManagerProtocol>: View {
     @State private var isEditable = false
     @EnvironmentObject var authManager: AuthenticationManager
     
+    @State private var isDefaultCurrencyFocused: Bool = false
+    
     var body: some View {
         ZStack {
             Color(uiColor: .systemGray6)
@@ -40,7 +42,7 @@ struct UserView<AuthenticationManager: AuthenticationManagerProtocol>: View {
             creditCardView
             line
             HStack {
-                CurrencyPicker(selectedCurrency: $selectedCurrency, isEditable: $isEditable, title: "Default Concurrency")
+                CurrencyPicker(selectedCurrency: $selectedCurrency, isEditable: $isEditable, title: "Default Concurrency", isFocused: $isDefaultCurrencyFocused)
                 Button(action: {
                     isEditable.toggle()
                 }) {

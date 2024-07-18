@@ -7,6 +7,9 @@ struct TextInputView: View {
     @Binding var isEditable: Bool
     let validation: ValidationContainer?
     let placeholder: String
+    @Binding var isFocused: Bool // Binding para o estado de foco
+
+    @FocusState private var fieldIsFocused: Bool // FocusState para o TextField
 
     var body: some View {
         VStack(alignment: .leading, spacing: 3) {
@@ -17,14 +20,18 @@ struct TextInputView: View {
                 RoundedRectangle(cornerRadius: 8)
                     .foregroundStyle(.ourLightGray)
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(.oceanBlue, lineWidth: 1.5)
+                    .stroke(isFocused ? .oceanBlue : Color.gray, lineWidth: isFocused ? 1 : 0) // Mudança de cor do stroke
                 VStack {
                     HStack {
                         TextField(placeholder, text: $text)
                             .font(Font.custom("Nunito", size: 16))
                             .foregroundStyle(.oceanBlue)
                             .disabled(!isEditable)
+                            .focused($fieldIsFocused) // Vinculando o FocusState ao TextField
                     }.padding(.horizontal)
+                }
+                .onChange(of: fieldIsFocused) { newValue in
+                    isFocused = newValue // Atualizando o estado de foco externo
                 }
                 if !isEditable {
                     RoundedRectangle(cornerRadius: 8)
@@ -40,11 +47,12 @@ struct TextInputView: View {
                     .font(.system(size: 14))
             }
         }
+        .animation(Animation.easeInOut(duration: 0.1), value: fieldIsFocused)
     }
 }
 
 struct TextInputView_Previews: PreviewProvider {
     static var previews: some View {
-        TextInputView(title: "Hotel Name", text: .constant(""), isEditable: .constant(true), validation: nil, placeholder: "---")
+        TextInputView(title: "Hotel Name", text: .constant(""), isEditable: .constant(true), validation: nil, placeholder: "---", isFocused: .constant(false))
     }
 }
