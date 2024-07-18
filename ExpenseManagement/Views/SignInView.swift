@@ -74,18 +74,17 @@ struct SignInView: View {
     }
 
     var content: some View {
-        VStack(spacing: 50) {
+        VStack(alignment: .leading, spacing: 20) {
             signInText
             fields
             bottomContent
-            signUpText
+//            signUpText
         }.padding()
     }
 
     var signInText: some View {
-        Text("Sign in")
-            .font(.system(size: 32).weight(.semibold))
-            .foregroundStyle(Color(uiColor: .darkGray))
+        Text("Sign In")
+            .font(.system(size: 24).weight(.semibold))
     }
 
     var signUpText: some View {
@@ -103,7 +102,7 @@ struct SignInView: View {
     }
 
     var fields: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 10) {
             emailContainer
             passwordContainer
         }
@@ -132,6 +131,13 @@ struct SignInView: View {
                 .font(.system(size: 13).weight(.semibold))
                 .foregroundStyle(.black)
             passwordFieldContainer
+            Button(action: {
+            }, label: {
+                Text("Forgot Password?")
+                    .foregroundStyle(.black)
+                    .font(.system(size: 13).weight(.semibold))
+            })
+            .frame(maxWidth: .infinity, alignment: .trailing)
             VStack(alignment: .leading, spacing: 10) {
                 HStack {
                     Toggle(isOn: $rememberMe) {
@@ -191,19 +197,14 @@ struct SignInView: View {
                 }
             }, label: {
                 Text("Sign In")
-                    .font(.system(size: 17).weight(.semibold))
+                    .font(.system(size: 18).weight(.semibold))
                     .foregroundColor(.white)
                     .frame(width: 349, height: 55)
                     .background(Color.oceanBlue)
                     .cornerRadius(14)
             })
-            Button(action: {
-            }, label: {
-                Text("Forgot Password?")
-                    .foregroundStyle(.black)
-                    .font(.system(size: 13).weight(.semibold))
-            })
-            .padding()
+            signUpText
+                .padding(.top)
         }
     }
 

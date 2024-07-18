@@ -232,6 +232,7 @@
 			children = (
 				0FCD00A52C08CAAF00A49C62 /* ExpenseManagement */,
 				0FCD00A42C08CAAF00A49C62 /* Products */,
+				B53ED0D82C46FDB600D5E137 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -388,6 +389,13 @@
 				B50D31062C3CE33F00AE8880 /* SignupForm.swift */,
 			);
 			path = Forms;
+			sourceTree = "<group>";
+		};
+		B53ED0D82C46FDB600D5E137 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		B59BD5F72C1172C00027E599 /* Utils */ = {

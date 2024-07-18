@@ -93,9 +93,9 @@ struct ReportsView: View {
         HStack {
             VStack(alignment: .leading, spacing: 10) {
                 Text("\(authManager.user?.first_name ?? "") \(authManager.user?.last_name ?? "")")
-                    .font(.system(size: 17).weight(.semibold))
+                    .font(.system(size: 18).weight(.semibold))
                 Text(authManager.user?.department ?? "")
-                    .font(.system(size: 17).weight(.semibold))
+                    .font(.system(size: 18).weight(.semibold))
                     .foregroundStyle(Color.black.opacity(0.5))
             }
             .padding(.bottom)
@@ -112,7 +112,7 @@ struct ReportsView: View {
     var reportsTitle: some View {
         HStack {
             Text("Expense Reports")
-                .font(.system(size: 32).weight(.semibold))
+                .font(.system(size: 24).weight(.semibold))
             Spacer()
         }
     }
@@ -122,9 +122,9 @@ struct ReportsView: View {
             Button(action: {
                 isShowingAddReport.toggle()
             }) {
-                Image(systemName: "plus.circle.fill")
+                Image(systemName: "square.and.pencil.circle.fill")
                     .resizable()
-                    .frame(width: 45, height: 45)
+                    .frame(width: 50, height: 50)
                     .foregroundColor(.oceanBlue)
             }
             .zIndex(1)
