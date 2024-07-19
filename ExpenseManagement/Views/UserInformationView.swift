@@ -12,10 +12,12 @@ struct UserInformationView<AuthenticationManager: AuthenticationManagerProtocol>
     
     var body: some View {
         ZStack {
-            Image("whiteBackground")
+            Color.ourLightGray
                 .ignoresSafeArea()
-            content
-                .padding()
+            ZStack {
+                content
+            }
+            .padding()
         }
     }
     

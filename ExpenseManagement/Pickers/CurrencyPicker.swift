@@ -21,11 +21,11 @@ struct CurrencyPicker: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 3) {
-            if (title != nil) {
-                Text(title ?? "Default Concurrency")
-                    .font(Font.custom("Nunito", size: 16).weight(.bold))
-                    .foregroundStyle(.oceanBlue)
-            }
+//            if (title != nil) {
+//                Text(title ?? "Default Concurrency")
+//                    .font(Font.custom("Nunito", size: 16).weight(.bold))
+//                    .foregroundStyle(.oceanBlue)
+//            }
             ZStack {
                 RoundedRectangle(cornerRadius: 8)
                     .foregroundStyle(isEditable ? .ourLightGray : .black.opacity(0.15))

@@ -14,6 +14,8 @@
 		0F3F04702C416B7F00FD2609 /* Composio 1.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F3F046F2C416B7E00FD2609 /* Composio 1.json */; };
 		0F3F04762C45AE2600FD2609 /* PFUAnimation.json in Resources */ = {isa = PBXBuildFile; fileRef = 0F3F04752C45AE2600FD2609 /* PFUAnimation.json */; };
 		0F3F047A2C4AADB600FD2609 /* UserInformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F3F04792C4AADB600FD2609 /* UserInformationView.swift */; };
+		0F3F047C2C4ACC9400FD2609 /* PaymentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F3F047B2C4ACC9400FD2609 /* PaymentDetailView.swift */; };
+		0F3F047E2C4AD83400FD2609 /* DefaultCurrencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F3F047D2C4AD83400FD2609 /* DefaultCurrencyView.swift */; };
 		0F4684D22C2874FB00406B9A /* AirlinePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4684D12C2874FB00406B9A /* AirlinePickerView.swift */; };
 		0F4684D52C28C6A900406B9A /* carRentalPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4684D42C28C6A900406B9A /* carRentalPickerView.swift */; };
 		0F4684D72C28C91100406B9A /* CarTypesPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F4684D62C28C91100406B9A /* CarTypesPickerView.swift */; };
@@ -104,6 +106,8 @@
 		0F3F046F2C416B7E00FD2609 /* Composio 1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Composio 1.json"; sourceTree = "<group>"; };
 		0F3F04752C45AE2600FD2609 /* PFUAnimation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = PFUAnimation.json; sourceTree = "<group>"; };
 		0F3F04792C4AADB600FD2609 /* UserInformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInformationView.swift; sourceTree = "<group>"; };
+		0F3F047B2C4ACC9400FD2609 /* PaymentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentDetailView.swift; sourceTree = "<group>"; };
+		0F3F047D2C4AD83400FD2609 /* DefaultCurrencyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultCurrencyView.swift; sourceTree = "<group>"; };
 		0F4684D12C2874FB00406B9A /* AirlinePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirlinePickerView.swift; sourceTree = "<group>"; };
 		0F4684D42C28C6A900406B9A /* carRentalPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = carRentalPickerView.swift; sourceTree = "<group>"; };
 		0F4684D62C28C91100406B9A /* CarTypesPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarTypesPickerView.swift; sourceTree = "<group>"; };
@@ -306,6 +310,8 @@
 				B50D30FF2C38EB0200AE8880 /* ContentUnavailableView.swift */,
 				0F3F046B2C41690900FD2609 /* SplashScreenView.swift */,
 				0F3F04792C4AADB600FD2609 /* UserInformationView.swift */,
+				0F3F047B2C4ACC9400FD2609 /* PaymentDetailView.swift */,
+				0F3F047D2C4AD83400FD2609 /* DefaultCurrencyView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -525,8 +531,10 @@
 				0FCD00DF2C0CD5A800A49C62 /* NewCreditCardForm.swift in Sources */,
 				B59BD6312C2923510027E599 /* CurrencyPicker.swift in Sources */,
 				B59BD62F2C290A680027E599 /* AmountsComponent.swift in Sources */,
+				0F3F047C2C4ACC9400FD2609 /* PaymentDetailView.swift in Sources */,
 				B59BD6332C2940900027E599 /* Timeline.swift in Sources */,
 				0FCD00E12C0CE91600A49C62 /* ExpenseComponent.swift in Sources */,
+				0F3F047E2C4AD83400FD2609 /* DefaultCurrencyView.swift in Sources */,
 				0F4684D92C28CA9100406B9A /* MealCategoriesPickerView.swift in Sources */,
 				0F3F046C2C41690900FD2609 /* SplashScreenView.swift in Sources */,
 				0F4684DB2C28CDA700406B9A /* RelashionshipToPaiPickerView.swift in Sources */,
