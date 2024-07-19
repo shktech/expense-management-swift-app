@@ -20,6 +20,20 @@ struct PaymentDetailView<AuthenticationManager: AuthenticationManagerProtocol>: 
                 .ignoresSafeArea()
             ZStack {
                 content
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        Button {
+                            isShowingSheet.toggle()
+                        } label: {
+                            Image(systemName: "pencil.circle.fill")
+                                .foregroundStyle(.oceanBlue)
+                                .font(.system(size: 60))
+                        }
+
+                    }
+                }
             }.padding()
         }.sheet(isPresented: $isShowingSheet, onDismiss: {
             reloadUserData()
