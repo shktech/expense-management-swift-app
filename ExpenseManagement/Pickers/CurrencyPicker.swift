@@ -106,8 +106,8 @@ struct CurrencyPicker: View {
     }
 }
 
-//struct CurrencyPicker_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CurrencyPicker(selectedCurrency: .constant("USD"), isEditable: .constant(true), title: "Passed in title")
-//    }
-//}
+struct CurrencyPicker_Previews: PreviewProvider {
+    static var previews: some View {
+        CurrencyPicker(selectedCurrency: .constant("USD"), isEditable: .constant(true), title: "Passed in title", isFocused: .constant(true))
+    }
+}
